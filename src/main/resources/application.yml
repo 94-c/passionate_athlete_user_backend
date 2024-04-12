@@ -28,6 +28,8 @@ spring:
   data.rest:
     base-path: /api
     detection-strategy: annotated
+server:
+  port: 8081
 
 springdoc:
   swagger-ui:
@@ -43,3 +45,7 @@ springdoc:
   default-produces-media-type: application/json
   paths-to-match:
     - /v1/**
+
+jwt:
+  expiration_time: 86400000
+  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
