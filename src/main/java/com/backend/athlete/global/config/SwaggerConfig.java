@@ -1,4 +1,4 @@
-package com.backend.athlete.config;
+package com.backend.athlete.global.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -21,6 +21,7 @@ public class SwaggerConfig {
 
         return GroupedOpenApi.builder()
                 .pathsToMatch(paths)
+                .group("운동 기록 서비스 API 명세서")
                 .build();
     }
 }
