@@ -21,6 +21,7 @@ public class Role {
     private Long id;
 
     @Column(name = "role_name")
+    @Enumerated(EnumType.STRING)
     @Comment("권한 이름")
     private RoleType roleName;
 
