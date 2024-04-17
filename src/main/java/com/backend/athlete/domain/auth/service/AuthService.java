@@ -17,11 +17,8 @@ import java.util.Optional;
 public class AuthService {
 
     private AuthRepository authRepository;
-    private PasswordEncoder passwordEncoder;
-
     public AuthService(AuthRepository authRepository, PasswordEncoder passwordEncoder) {
         this.authRepository = authRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     public String login(LoginRequest request) {

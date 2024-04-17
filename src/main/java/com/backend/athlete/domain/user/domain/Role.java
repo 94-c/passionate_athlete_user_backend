@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "roles")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,6 +27,9 @@ public class Role {
     @Enumerated(EnumType.STRING)
     @Comment("권한 이름")
     private RoleType roleName;
+
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
 
     @Builder
     public Role(RoleType roleName) {
