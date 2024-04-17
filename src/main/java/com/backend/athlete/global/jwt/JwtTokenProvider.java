@@ -15,12 +15,12 @@ import java.util.Date;
 
 @Slf4j
 @Component
-public class JwtUtil {
+public class JwtTokenProvider {
 
     private final Key key;
     private final long accessTokenExpTime;
 
-    public JwtUtil(
+    public JwtTokenProvider(
             @Value("${jwt.secret}") String secretKey,
             @Value("${jwt.expiration_time}") long accessTokenExpTime
     ) {
@@ -28,6 +28,7 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.accessTokenExpTime = accessTokenExpTime;
     }
+
     public String createAccessToken(User user) {
         return createToken(user, accessTokenExpTime);
     }
@@ -49,14 +50,19 @@ public class JwtUtil {
                 .compact();
     }
 
-  public Long getUserId(String token) {
-        return parseClaims(token).get("userId", Long.class);
-  }
+    public String getUserIdFromJWT(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token)
+                .getBody();
 
-  public boolean validateToken(String token) {
+        return claims.getSubject();
+    }
+
+    public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return  true;
+            return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
         } catch (ExpiredJwtException e) {
@@ -67,14 +73,8 @@ public class JwtUtil {
             log.info("JWT claims string is empty", e);
         }
         return false;
-  }
+    }
 
-  public Claims parseClaims(String accessToken) {
-        try {
-            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
-        }
-  }
+
 
 }
