@@ -2,14 +2,8 @@ package com.backend.athlete.domain.user.domain;
 
 import com.backend.athlete.domain.user.domain.enums.RoleType;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Comment;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -27,9 +21,6 @@ public class Role {
     @Enumerated(EnumType.STRING)
     @Comment("권한 이름")
     private RoleType roleName;
-
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users = new HashSet<>();
 
     @Builder
     public Role(RoleType roleName) {

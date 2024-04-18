@@ -3,57 +3,55 @@ package com.backend.athlete.domain.auth.service;
 import com.backend.athlete.domain.auth.dto.LoginRequest;
 import com.backend.athlete.domain.auth.dto.SignUpRequest;
 import com.backend.athlete.domain.auth.repository.AuthRepository;
+import com.backend.athlete.domain.auth.repository.RoleRepository;
 import com.backend.athlete.domain.user.domain.Role;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.enums.RoleType;
+import com.backend.athlete.global.exception.AppException;
+import com.backend.athlete.global.exception.BadRequestException;
+import com.backend.athlete.global.payload.ApiResponse;
 import com.backend.athlete.global.util.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class AuthService {
 
-    private AuthRepository authRepository;
-    public AuthService(AuthRepository authRepository, PasswordEncoder passwordEncoder) {
+    private final AuthRepository authRepository;
+    private final RoleRepository roleRepository;
+
+    public AuthService(AuthRepository authRepository, RoleRepository roleRepository) {
         this.authRepository = authRepository;
+        this.roleRepository = roleRepository;
     }
 
-    public String login(LoginRequest request) {
-        String password = request.password();
+    public User signUp(SignUpRequest request) {
+       if (authRepository.existsByUserId(request.userId())) {
+           ApiResponse apiResponse = new ApiResponse(Boolean.FALSE, "User ID is already taken");
+           throw new BadRequestException(apiResponse);
+       }
 
-        Optional<User> existingUser = authRepository.findByUserId(request.userId());
-
-        if (existingUser.isPresent()) {
-            throw new RuntimeException("존재 하지 않는 사용자 입니다.");
-        }
-
-        return null;
-    }
-
-    public void signUp(SignUpRequest request) {
-        Optional<User> existingUser = authRepository.findByUserId(request.userId());
-
-        if (existingUser.isPresent()) {
-            throw new RuntimeException("이미 존재하는 사용자입니다.");
-        }
-
-        Role userRole = createUserRole();
+        List<Role> roles = new ArrayList<>();
+       roles.add(
+            roleRepository.findByRoleName(RoleType.USER)
+                    .orElseThrow(() -> new AppException("User Role not Set"))
+       );
 
         User newUser = User.builder()
                 .userId(request.userId())
                 .name(request.name())
                 .password(BCrypt.hashpw(request.password(), BCrypt.gensalt()))
-                .roles(Collections.singleton(userRole))
+                .roles(roles)
                 .build();
 
-        authRepository.save(newUser);
-    }
+        return authRepository.save(newUser);
 
-    private Role createUserRole() {
-        return Role.builder().roleName(RoleType.USER).build();
     }
 
 }
