@@ -1,39 +1,37 @@
 package com.backend.athlete.global.jwt;
 
+import com.backend.athlete.domain.user.domain.Role;
 import com.backend.athlete.domain.user.domain.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CustomUserDetails implements UserDetails {
+    @Getter
     private User user;
-    private Collection<? extends GrantedAuthority> authorities;
-
-    public CustomUserDetails(User user, Collection<? extends GrantedAuthority> authorities) {
+    private List<Role> roles;
+    public CustomUserDetails(User user, List<Role> roles) {
         this.user = user;
-        this.authorities = authorities;
+        this.roles = roles;
     }
-
-    public static CustomUserDetails create(User user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
-                .collect(Collectors.toList());
-
-        return new CustomUserDetails(user, authorities);
+    public static CustomUserDetails build(User user) {
+        return new CustomUserDetails(
+                user,
+                user.getRoles()
+        );
     }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities == null ? null : new ArrayList<>(authorities);
+        return this.roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
+                .collect(Collectors.toList());
     }
-    public Long id() {
-        return user.getId();
-    }
+
     @Override
     public String getPassword() {
         return user.getPassword();
@@ -58,7 +56,6 @@ public class CustomUserDetails implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
-
     @Override
     public boolean isEnabled() {
         return true;
