@@ -1,11 +1,13 @@
 package com.backend.athlete.domain.user.domain;
 
+import com.backend.athlete.domain.user.domain.enums.UserStatus;
 import com.backend.athlete.global.domain.AuditingFields;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import java.util.*;
@@ -36,14 +38,19 @@ public class User extends AuditingFields {
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
 
+    @Enumerated(EnumType.STRING)
+    @ColumnDefault("'WAIT'")
+    @Comment("인증 상태")
+    private UserStatus status;
+
     @Builder
-    private User(String userId, String name, String password, List<Role> roles) {
+    private User(String userId, String name, String password, List<Role> roles, UserStatus status) {
         this.userId = userId;
         this.name = name;
         this.password = password;
         this.roles = roles;
+        this.status = status;
     }
-
 
     public List<Role> getRoles() {
 
