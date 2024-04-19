@@ -3,6 +3,7 @@ package com.backend.athlete.domain.auth.controller;
 import com.backend.athlete.domain.auth.dto.LoginRequest;
 import com.backend.athlete.domain.auth.dto.LoginResponse;
 import com.backend.athlete.domain.auth.dto.SignUpRequest;
+import com.backend.athlete.domain.auth.dto.SignUpResponse;
 import com.backend.athlete.domain.auth.dto.data.LoginTokenData;
 import com.backend.athlete.domain.auth.service.AuthService;
 import com.backend.athlete.domain.user.domain.User;
@@ -33,12 +34,14 @@ public class AuthController {
                 return new ResponseEntity<>(response, HttpStatus.OK);
         }
         @PostMapping("/sign-up")
-        public ResponseEntity<User> joinUser(
+        public ResponseEntity<SignUpResponse> joinUser(
                 @Valid @RequestBody SignUpRequest request
         ) {
                 User newUser = authService.signUp(request);
 
-                return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+                SignUpResponse response = new SignUpResponse(newUser);
+
+                return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
 
 

@@ -12,13 +12,14 @@ import com.backend.athlete.domain.user.domain.enums.RoleType;
 import com.backend.athlete.domain.user.domain.enums.UserStatus;
 import com.backend.athlete.global.exception.AppException;
 import com.backend.athlete.global.exception.BadRequestException;
-import com.backend.athlete.global.jwt.CustomUserDetails;
 import com.backend.athlete.global.jwt.JwtTokenProvider;
+import com.backend.athlete.global.jwt.UserPrincipal;
 import com.backend.athlete.global.payload.ApiResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
@@ -40,10 +41,9 @@ public class AuthService {
 
     public LoginTokenData login(LoginRequest request) {
         Authentication authentication = getAuthentication(request.userId(), request.password());
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        User checkedUser = checkUserStatus(userDetails.getUser());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwtToke = jwtTokenProvider.createAccessToken(checkedUser);
+        String jwtToke = jwtTokenProvider.generateToken(authentication);
 
         return LoginTokenData.builder()
                 .accessToken(jwtToke)
@@ -63,8 +63,8 @@ public class AuthService {
                 .userId(request.userId())
                 .name(request.name())
                 .password(BCrypt.hashpw(request.password(), BCrypt.gensalt()))
-                .roles(roles)
                 .status(UserStatus.STOP)
+                .roles(roles)
                 .build();
 
         return authRepository.save(newUser);
