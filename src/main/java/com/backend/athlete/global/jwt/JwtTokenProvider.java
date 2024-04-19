@@ -1,12 +1,12 @@
 package com.backend.athlete.global.jwt;
 
-import com.backend.athlete.domain.user.domain.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -17,51 +17,38 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private final Key key;
-    private final long accessTokenExpTime;
 
-    public JwtTokenProvider(
-            @Value("${jwt.secret}") String secretKey,
-            @Value("${jwt.expiration_time}") long accessTokenExpTime
-    ) {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        this.key = Keys.hmacShaKeyFor(keyBytes);
-        this.accessTokenExpTime = accessTokenExpTime;
-    }
+    @Value("${jwt.secret}")
+    private String secretKey;
+    @Value("${jwt.expiration_time}")
+    private long accessTokenExpTime;
 
-    public String createAccessToken(User user) {
-        return createToken(user, accessTokenExpTime);
-    }
+    public String generateToken(Authentication authentication) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-    private String createToken(User user, long expireTime) {
-        Claims claims = Jwts.claims();
-        claims.put("userId", user.getUserId());
-        claims.put("name", user.getName());
-        claims.put("role", user.getRoles());
-
-        ZonedDateTime now = ZonedDateTime.now();
-        ZonedDateTime tokenValidity = now.plusSeconds(expireTime);
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + accessTokenExpTime);
 
         return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(Date.from(now.toInstant()))
-                .setExpiration(Date.from(tokenValidity.toInstant()))
-                .signWith(key, SignatureAlgorithm.HS256)
+                .setSubject(Long.toString(userPrincipal.getId()))
+                .setIssuedAt(new Date())
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
     }
 
-    public String getUserIdFromJWT(String token) {
+    public Long getUserIdFromJWT(String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey(key)
+                .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
 
-        return claims.getSubject();
+        return Long.valueOf(claims.getSubject());
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
             return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
@@ -74,7 +61,6 @@ public class JwtTokenProvider {
         }
         return false;
     }
-
 
 
 }
