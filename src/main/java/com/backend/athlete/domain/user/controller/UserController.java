@@ -24,9 +24,9 @@ public class UserController {
     public ResponseEntity<UserResponse> getCurrentUser(
             @CurrentUser UserPrincipal currentUser
     ) {
-        UserResponse response = new UserResponse(
-                currentUser.getId(), currentUser.getUserId(), currentUser.getName()
-        );
+        UserPrincipal user =  userService.getCurrentUser(currentUser);
+
+        UserResponse response = UserResponse.fromUserPrincipal(user);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
