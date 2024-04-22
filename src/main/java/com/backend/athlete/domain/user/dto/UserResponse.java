@@ -1,6 +1,7 @@
 package com.backend.athlete.domain.user.dto;
 
 
+import com.backend.athlete.domain.user.dto.data.UpdateUserData;
 import com.backend.athlete.global.jwt.UserPrincipal;
 import org.springframework.security.core.GrantedAuthority;
 
