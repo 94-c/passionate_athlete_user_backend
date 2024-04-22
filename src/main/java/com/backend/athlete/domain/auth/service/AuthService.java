@@ -72,14 +72,6 @@ public class AuthService {
     }
 
 
-    private User checkUserStatus(User user) {
-        if (user.getStatus() != UserStatus.STOP) {
-            ApiResponse apiResponse = new ApiResponse(Boolean.FALSE, "The user is not allowed.");
-            throw new DisabledUserException(apiResponse);
-        };
-        return user;
-    }
-
     private Authentication getAuthentication(String email, String password) {
         try {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
