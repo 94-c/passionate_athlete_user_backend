@@ -3,10 +3,7 @@ package com.backend.athlete.domain.user.domain;
 import com.backend.athlete.domain.user.domain.enums.UserStatus;
 import com.backend.athlete.global.domain.AuditingFields;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
@@ -16,6 +13,7 @@ import java.util.*;
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 public class User extends AuditingFields {
 
     @Id

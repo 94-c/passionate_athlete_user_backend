@@ -1,5 +1,6 @@
 package com.backend.athlete.domain.user.controller;
 
+import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.dto.UpdateUserRequest;
 import com.backend.athlete.domain.user.dto.UpdateUserResponse;
 import com.backend.athlete.domain.user.dto.UserResponse;
@@ -36,16 +37,14 @@ public class UserController {
 
     @PutMapping("/{userId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<UpdateUserResponse> updateUser(
+    public ResponseEntity<User> updateUser(
             @Valid @RequestBody UpdateUserRequest request,
             @PathVariable(value = "userId") String userId,
             @CurrentUser UserPrincipal currentUser
     ) {
-        UpdateUserData updateUser = userService.updateUser(userId, currentUser, request);
+        User updateUser = userService.updateUser(userId, currentUser, request);
 
-        UpdateUserResponse response = new UpdateUserResponse(updateUser);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(updateUser, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{userId}")

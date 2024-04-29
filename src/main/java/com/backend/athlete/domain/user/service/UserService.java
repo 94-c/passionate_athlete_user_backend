@@ -3,10 +3,10 @@ package com.backend.athlete.domain.user.service;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.enums.RoleType;
 import com.backend.athlete.domain.user.dto.UpdateUserRequest;
-import com.backend.athlete.domain.user.dto.data.UpdateUserData;
 import com.backend.athlete.domain.user.repository.UserRepository;
 import com.backend.athlete.global.exception.AccessDeniedException;
 import com.backend.athlete.global.exception.ResourceNotFoundException;
+import com.backend.athlete.global.exception.UnauthorizedException;
 import com.backend.athlete.global.jwt.UserPrincipal;
 import com.backend.athlete.global.payload.ApiResponse;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,25 +26,19 @@ public class UserService {
         return currentUser;
     }
 
-    public UpdateUserData updateUser(String userId, UserPrincipal currentUser, UpdateUserRequest request) {
-        User existingUser = userRepository.getUserByUserId(userId);
-        if (existingUser == null) {
-            throw new ResourceNotFoundException("User", "userId", userId);
+    public User updateUser(String userId, UserPrincipal currentUser, UpdateUserRequest request) {
+        User user = userRepository.getUserByUserId(userId);
+        if (user.getId().equals(currentUser.getId())
+                || currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleType.ADMIN.toString()))) {
+            user.setName(request.name());
+
+            return userRepository.save(user);
+
         }
 
-        if (!existingUser.getId().equals(currentUser.getId())) {
-            throw new ResourceNotFoundException("User", "userId", userId);
-        }
+        ApiResponse apiResponse = new ApiResponse(Boolean.FALSE, "You don't have permission to update profile of: " + userId);
+        throw new UnauthorizedException(apiResponse);
 
-        User updateUserInfo = User.builder()
-                .name(request.name())
-                .build();
-
-        User updatedUser = userRepository.save(updateUserInfo);
-
-        return UpdateUserData.builder()
-                .user(updatedUser)
-                .build();
     }
 
 
@@ -55,7 +49,7 @@ public class UserService {
         }
 
         if (!existingUser.getId().equals(currentUser.getId()) || !currentUser.getAuthorities()
-                .contains(new SimpleGrantedAuthority(RoleType.ADMIN.name()))) {
+                .contains(new SimpleGrantedAuthority(RoleType.ADMIN.toString()))) {
             ApiResponse apiResponse = new ApiResponse(Boolean.TRUE, "You don't have permission to delete profile of: " + userId);
             throw new AccessDeniedException(apiResponse);
         }
