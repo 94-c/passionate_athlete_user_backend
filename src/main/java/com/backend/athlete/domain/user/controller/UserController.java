@@ -7,6 +7,7 @@ import com.backend.athlete.domain.user.dto.data.UpdateUserData;
 import com.backend.athlete.domain.user.service.UserService;
 import com.backend.athlete.global.jwt.CurrentUser;
 import com.backend.athlete.global.jwt.UserPrincipal;
+import com.backend.athlete.global.payload.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,5 +48,15 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{userId}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse> deleteUser (
+            @PathVariable(value = "userId") String userId,
+            @CurrentUser UserPrincipal currentUser
+    ) {
+        ApiResponse response = userService.deleteUser(userId, currentUser);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 }
