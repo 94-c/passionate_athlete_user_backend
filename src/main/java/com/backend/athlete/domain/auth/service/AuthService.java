@@ -28,6 +28,9 @@ public class AuthService {
         isExistUserId(dto.getUserId());
         checkDuplicatePassword(dto.getPassword(), dto.getPasswordCheck());
 
+        String encodedPassword = passwordEncoder.encode(dto.getPassword());
+        dto.setPassword(encodedPassword);
+
         User registerUser = authRepository.save(
                 RegisterUserRequestDto.ofEntity(dto));
 
