@@ -1,13 +1,22 @@
 package com.backend.athlete.domain.auth.service;
 
+import com.backend.athlete.domain.auth.dto.request.LoginTokenRequestDto;
 import com.backend.athlete.domain.auth.dto.request.RegisterUserRequestDto;
+import com.backend.athlete.domain.auth.dto.response.LoginTokenResponseDto;
 import com.backend.athlete.domain.auth.dto.response.RegisterUserResponseDto;
 import com.backend.athlete.domain.auth.model.User;
 import com.backend.athlete.domain.auth.repository.AuthRepository;
 import com.backend.athlete.global.exception.AuthException;
+import com.backend.athlete.global.jwt.CustomUserDetailService;
+import com.backend.athlete.global.jwt.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +27,10 @@ public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
     private final AuthRepository authRepository;
+
+    private final AuthenticationManager authenticationManager;
+    private final CustomUserDetailService customUserDetailService;
+    private final JwtTokenUtil jwtTokenUtil;
 
     public HttpStatus checkUserIdDuplicate(String userId) {
         isExistUserId(userId);
@@ -37,7 +50,27 @@ public class AuthService {
         return RegisterUserResponseDto.fromEntity(registerUser);
     }
 
+    public LoginTokenResponseDto login(LoginTokenRequestDto dto) {
+        authenticate(dto.getUserId(), dto.getPassword());
+        UserDetails userDetails = customUserDetailService.loadUserByUsername(dto.getUserId());
+        checkEncodePassword(dto.getPassword(), userDetails.getPassword());
+        String token = jwtTokenUtil.generateToken(userDetails);
+        return LoginTokenResponseDto.fromEntity(userDetails, token);
+    }
 
+
+    /**
+     * 사용자 인증 여부
+     */
+    protected void authenticate(String userId, String password) {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userId, password));
+        } catch (DisabledException e) {
+            throw new AuthException("인증되지 않은 아이디입니다.", HttpStatus.BAD_REQUEST);
+        } catch (BadCredentialsException e) {
+            throw new AuthException("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+    }
     /**
      * 아이디 중복 체크 여부
      */

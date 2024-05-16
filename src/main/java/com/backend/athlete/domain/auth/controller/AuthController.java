@@ -1,6 +1,8 @@
 package com.backend.athlete.domain.auth.controller;
 
+import com.backend.athlete.domain.auth.dto.request.LoginTokenRequestDto;
 import com.backend.athlete.domain.auth.dto.request.RegisterUserRequestDto;
+import com.backend.athlete.domain.auth.dto.response.LoginTokenResponseDto;
 import com.backend.athlete.domain.auth.dto.response.RegisterUserResponseDto;
 import com.backend.athlete.domain.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +22,13 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<RegisterUserResponseDto> register(@RequestBody RegisterUserRequestDto dto) {
-        authService.register(dto);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        RegisterUserResponseDto register = authService.register(dto);
+        return ResponseEntity.status(HttpStatus.OK).body(register);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<LoginTokenResponseDto> login(@RequestBody LoginTokenRequestDto dto) {
+        LoginTokenResponseDto login = authService.login(dto);
+        return ResponseEntity.status(HttpStatus.OK).header(login.getToken()).body(login);
+    }
 }
