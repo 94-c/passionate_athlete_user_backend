@@ -21,7 +21,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public CustomUserDetailsImpl loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = authRepository.findByUserId(username).orElseThrow(
                 () -> new ResourceNotFoundException("USER", "User ID : " , username));
         return CustomUserDetailsImpl.build(user);
