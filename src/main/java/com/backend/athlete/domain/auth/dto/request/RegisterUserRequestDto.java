@@ -18,7 +18,6 @@ import java.util.Set;
 @Getter @Setter
 public class RegisterUserRequestDto {
 
-    @NotBlank
     private String code;
 
     @NotBlank(message = "아이디를 입력하세요.")
