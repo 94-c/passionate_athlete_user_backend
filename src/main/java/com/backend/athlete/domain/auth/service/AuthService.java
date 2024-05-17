@@ -4,10 +4,13 @@ import com.backend.athlete.domain.auth.dto.request.LoginTokenRequestDto;
 import com.backend.athlete.domain.auth.dto.request.RegisterUserRequestDto;
 import com.backend.athlete.domain.auth.dto.response.LoginTokenResponseDto;
 import com.backend.athlete.domain.auth.dto.response.RegisterUserResponseDto;
+import com.backend.athlete.domain.user.model.Role;
 import com.backend.athlete.domain.user.model.User;
 import com.backend.athlete.domain.auth.repository.AuthRepository;
+import com.backend.athlete.domain.user.model.type.UserRoleType;
+import com.backend.athlete.domain.user.repository.RoleRepository;
 import com.backend.athlete.global.exception.AuthException;
-import com.backend.athlete.global.jwt.CustomUserDetailService;
+import com.backend.athlete.global.jwt.service.CustomUserDetailService;
 import com.backend.athlete.global.jwt.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,26 +19,28 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
 
-    private final PasswordEncoder passwordEncoder;
     private final AuthRepository authRepository;
+    private final RoleRepository roleRepository;
 
     private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
     private final CustomUserDetailService customUserDetailService;
     private final JwtTokenUtil jwtTokenUtil;
-
-    public HttpStatus checkUserIdDuplicate(String userId) {
-        isExistUserId(userId);
-        return HttpStatus.OK;
-    }
 
     public RegisterUserResponseDto register(RegisterUserRequestDto dto) {
         isExistUserId(dto.getUserId());
@@ -43,18 +48,22 @@ public class AuthService {
 
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
         dto.setPassword(encodedPassword);
+        dto.setCode(generateUserCode());
 
-        User registerUser = authRepository.save(
-                RegisterUserRequestDto.ofEntity(dto));
+        Set<Role> roles = new HashSet<>();
+        roles.add(getUserRoleTypeRole());
+        dto.setRoleIds(roles);
+
+        User registerUser = authRepository.save(RegisterUserRequestDto.toEntity(dto));
 
         return RegisterUserResponseDto.fromEntity(registerUser);
     }
 
     public LoginTokenResponseDto login(LoginTokenRequestDto dto) {
-        authenticate(dto.getUserId(), dto.getPassword());
+        Authentication authentication = authenticate(dto.getUserId(), dto.getPassword());
         UserDetails userDetails = customUserDetailService.loadUserByUsername(dto.getUserId());
         checkEncodePassword(dto.getPassword(), userDetails.getPassword());
-        String token = jwtTokenUtil.generateToken(userDetails);
+        String token = jwtTokenUtil.generateJwtToken(authentication);
         return LoginTokenResponseDto.fromEntity(userDetails, token);
     }
 
@@ -62,7 +71,7 @@ public class AuthService {
     /**
      * 사용자 인증 여부
      */
-    protected void authenticate(String userId, String password) {
+    protected Authentication authenticate(String userId, String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userId, password));
         } catch (DisabledException e) {
@@ -70,7 +79,18 @@ public class AuthService {
         } catch (BadCredentialsException e) {
             throw new AuthException("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
+        return null;
     }
+
+    /**
+     * 회원 코드 자동 입력
+     */
+    private String generateUserCode() {
+        // 여기에서 회원 코드를 생성하는 로직을 추가할 수 있습니다.
+        // 예를 들어 UUID 또는 일련번호를 사용하여 생성할 수 있습니다.
+        return "G-" + UUID.randomUUID().toString().substring(0, 8); // 예시: U-abcdef12
+    }
+
     /**
      * 아이디 중복 체크 여부
      */
@@ -98,4 +118,11 @@ public class AuthService {
         }
     }
 
+    /**
+     * 회원 권한
+     */
+    protected Role getUserRoleTypeRole() {
+        Optional<Role> roleOptional = roleRepository.findByName(UserRoleType.USER);
+        return roleOptional.orElseThrow(() -> new IllegalStateException("Default USER role not found in database."));
+    }
 }

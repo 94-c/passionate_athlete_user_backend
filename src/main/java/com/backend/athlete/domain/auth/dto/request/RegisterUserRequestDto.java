@@ -2,38 +2,65 @@ package com.backend.athlete.domain.auth.dto.request;
 
 import com.backend.athlete.domain.user.model.Role;
 import com.backend.athlete.domain.user.model.User;
+import com.backend.athlete.domain.user.model.type.UserGenderType;
+import com.backend.athlete.domain.user.model.type.UserRoleType;
+import com.backend.athlete.domain.user.model.type.UserStatusType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
+import java.util.Set;
+
+@Getter @Setter
 public class RegisterUserRequestDto {
 
+    @NotBlank
+    private String code;
+
+    @NotBlank(message = "아이디를 입력하세요.")
+    @Size(min = 4, max = 20, message = "아이디는 4자 이상 20자 이하여야 합니다.")
     private String userId;
+
+    @NotBlank(message = "패스워드를 입력하세요.")
+    @Size(min = 8, message = "패스워드는 최소 8자 이상이어야 합니다.")
     private String password;
+
+    @NotBlank(message = "패스워드를 한번 더 입력하세요.")
+    @Size(min = 8, message = "패스워드는 최소 8자 이상이어야 합니다.")
     private String passwordCheck;
+
+    @NotBlank(message = "이름을 입력하세요.")
     private String name;
 
-    @Builder
-    public RegisterUserRequestDto(String userId, String password, String passwordCheck, String name) {
-        this.userId = userId;
-        this.password = password;
-        this.passwordCheck = passwordCheck;
-        this.name = name;
-    }
+    @NotNull(message = "성별을 선택하세요.")
+    private UserGenderType gender;
 
-    // DTO -> Entity
-    public static User ofEntity(RegisterUserRequestDto dto) {
-        return User.builder()
-                .userId(dto.getUserId())
-                .password(dto.getPassword())
-                .name(dto.getName())
-                .roles(Role.USER)
-                .build();
-    }
+    @NotNull(message = "체중을 입력하세요.")
+    private Double weight;
 
+    @NotNull(message = "키를 입력하세요.")
+    private Double height;
+
+    private Set<Role> roleIds;
+
+    protected RegisterUserRequestDto() {}
+
+    public static User toEntity(RegisterUserRequestDto dto) {
+        return new User(
+                dto.getCode(),
+                dto.getUserId(),
+                dto.getPassword(),
+                dto.getName(),
+                dto.getGender(),
+                dto.getWeight(),
+                dto.getHeight(),
+                UserStatusType.WAIT,
+                dto.getRoleIds()
+        );
+    }
 }
 

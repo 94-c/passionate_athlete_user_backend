@@ -1,5 +1,30 @@
 package com.backend.athlete.domain.user.model;
 
-public enum Role {
-    ADMIN, MANAGER, USER
+import com.backend.athlete.domain.user.model.type.UserRoleType;
+import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
+
+@Getter
+@Entity
+@Table(name = "roles")
+public class Role {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Comment("권한 인덱스")
+    private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Comment("권한 명")
+    private UserRoleType name;
+
+    protected Role() {}
+
+    public Role(UserRoleType name) {
+        this.name = name;
+    }
+
 }
