@@ -32,17 +32,7 @@ public class UpdateUserRequestDto {
     @NotNull(message = "키를 입력하세요.")
     private Double height;
 
-
     protected UpdateUserRequestDto() {}
 
-    public static User toEntity(UpdateUserRequestDto dto) {
-        return new User(
-                dto.getPassword(),
-                dto.getGender(),
-                dto.getWeight(),
-                dto.getHeight(),
-                UserStatusType.WAIT
-        );
-    }
 }
 
