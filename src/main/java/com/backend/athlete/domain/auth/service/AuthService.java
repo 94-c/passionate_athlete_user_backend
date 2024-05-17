@@ -10,19 +10,15 @@ import com.backend.athlete.domain.auth.repository.AuthRepository;
 import com.backend.athlete.domain.user.model.type.UserRoleType;
 import com.backend.athlete.domain.user.repository.RoleRepository;
 import com.backend.athlete.global.exception.AuthException;
+import com.backend.athlete.global.jwt.JwtTokenProvider;
 import com.backend.athlete.global.jwt.service.CustomUserDetailService;
-import com.backend.athlete.global.jwt.JwtTokenUtil;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +29,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class AuthService {
 
@@ -42,8 +37,15 @@ public class AuthService {
 
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-    private final CustomUserDetailService customUserDetailService;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenProvider jwtTokenUtil;
+
+    public AuthService(AuthRepository authRepository, RoleRepository roleRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenUtil) {
+        this.authRepository = authRepository;
+        this.roleRepository = roleRepository;
+        this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
 
     public RegisterUserResponseDto register(RegisterUserRequestDto dto) {
         isExistUserId(dto.getUserId());
@@ -71,9 +73,6 @@ public class AuthService {
         String token = jwtTokenUtil.generateJwtToken(authentication);
 
         CustomUserDetailsImpl userDetails = (CustomUserDetailsImpl) authentication.getPrincipal();
-        Set<String> roles = userDetails.getAuthorities().stream()
-                        .map(item -> item.getAuthority())
-                                .collect(Collectors.toSet());
 
         checkEncodePassword(dto.getPassword(), userDetails.getPassword());
 

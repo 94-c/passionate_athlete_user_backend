@@ -53,7 +53,7 @@ public class User extends BaseTimeEntity {
     @Comment("회원 상태")
     private UserStatusType status;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -74,5 +74,20 @@ public class User extends BaseTimeEntity {
         this.roles = roles;
     }
 
+    // 회원 수정
+    public User(String password, UserGenderType gender, Double weight, Double height, UserStatusType status) {
+        this.password = password;
+        this.gender = gender;
+        this.weight = weight;
+        this.height = height;
+        this.status = status;
+    }
 
+
+    public void updateUser(String password, UserGenderType gender, Double weight, Double height) {
+        this.password = password;
+        this.gender = gender;
+        this.weight = weight;
+        this.height = height;
+    }
 }
