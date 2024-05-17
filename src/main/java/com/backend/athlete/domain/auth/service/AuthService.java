@@ -73,9 +73,6 @@ public class AuthService {
         String token = jwtTokenUtil.generateJwtToken(authentication);
 
         CustomUserDetailsImpl userDetails = (CustomUserDetailsImpl) authentication.getPrincipal();
-        Set<String> roles = userDetails.getAuthorities().stream()
-                        .map(item -> item.getAuthority())
-                                .collect(Collectors.toSet());
 
         checkEncodePassword(dto.getPassword(), userDetails.getPassword());
 
