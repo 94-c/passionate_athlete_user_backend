@@ -21,14 +21,6 @@ public class UserController {
 
     private final UserService userService;
 
-    /**
-     * 1. 사용자 상세보기 O
-     * 2. 사용자 수정하기
-     * 3. 사용자 전체리스트 조회 (User 권한 이상)
-     * 4. 사용자 권한 부여 (User 권한 이상)
-     * 5. 사용자 삭제하기
-     */
-
     @GetMapping
     public ResponseEntity<GetUserResponseDto> getUserInfo(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
         GetUserResponseDto getUserInfo = userService.getUserInfo(userPrincipal);
