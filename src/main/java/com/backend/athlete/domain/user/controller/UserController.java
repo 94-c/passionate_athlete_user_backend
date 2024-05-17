@@ -2,13 +2,15 @@ package com.backend.athlete.domain.user.controller;
 
 import com.backend.athlete.domain.user.dto.response.GetUserResponseDto;
 import com.backend.athlete.domain.user.service.UserService;
+import com.backend.athlete.global.jwt.JwtTokenProvider;
+import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
+import com.sun.security.auth.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,10 +29,9 @@ public class UserController {
      * 5. 사용자 삭제하기
      */
 
-    @GetMapping("")
-    public ResponseEntity<GetUserResponseDto> getUserInfo(Authentication authentication) {
-        String userId = authentication.getName();
-        GetUserResponseDto findByUserInfo = userService.getUserInfo(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(findByUserInfo);
+    @GetMapping
+    public ResponseEntity<GetUserResponseDto> getUserInfo(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
+        GetUserResponseDto getUserInfo = userService.getUserInfo(userPrincipal.getUsername());
+        return ResponseEntity.status(HttpStatus.OK).body(getUserInfo);
     }
 }
