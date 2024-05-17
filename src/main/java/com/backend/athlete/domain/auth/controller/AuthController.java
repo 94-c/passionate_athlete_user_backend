@@ -5,6 +5,7 @@ import com.backend.athlete.domain.auth.dto.request.RegisterUserRequestDto;
 import com.backend.athlete.domain.auth.dto.response.LoginTokenResponseDto;
 import com.backend.athlete.domain.auth.dto.response.RegisterUserResponseDto;
 import com.backend.athlete.domain.auth.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterUserResponseDto> register(@RequestBody RegisterUserRequestDto dto) {
+    public ResponseEntity<RegisterUserResponseDto> register(@Valid @RequestBody RegisterUserRequestDto dto) {
         RegisterUserResponseDto register = authService.register(dto);
         return ResponseEntity.status(HttpStatus.OK).body(register);
     }
@@ -29,6 +30,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginTokenResponseDto> login(@RequestBody LoginTokenRequestDto dto) {
         LoginTokenResponseDto login = authService.login(dto);
-        return ResponseEntity.status(HttpStatus.OK).header(login.getToken()).body(login);
+        return ResponseEntity.status(HttpStatus.OK).body(login);
     }
+
 }
