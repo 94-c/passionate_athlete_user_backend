@@ -4,7 +4,7 @@ import com.backend.athlete.domain.auth.dto.request.LoginTokenRequestDto;
 import com.backend.athlete.domain.auth.dto.request.RegisterUserRequestDto;
 import com.backend.athlete.domain.auth.dto.response.LoginTokenResponseDto;
 import com.backend.athlete.domain.auth.dto.response.RegisterUserResponseDto;
-import com.backend.athlete.domain.auth.model.User;
+import com.backend.athlete.domain.user.model.User;
 import com.backend.athlete.domain.auth.repository.AuthRepository;
 import com.backend.athlete.global.exception.AuthException;
 import com.backend.athlete.global.jwt.CustomUserDetailService;

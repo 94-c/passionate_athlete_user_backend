@@ -1,7 +1,7 @@
 package com.backend.athlete.domain.auth.dto.request;
 
-import com.backend.athlete.domain.auth.model.Role;
-import com.backend.athlete.domain.auth.model.User;
+import com.backend.athlete.domain.user.model.Role;
+import com.backend.athlete.domain.user.model.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
