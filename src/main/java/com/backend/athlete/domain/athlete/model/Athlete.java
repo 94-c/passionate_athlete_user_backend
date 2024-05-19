@@ -8,6 +8,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -27,7 +28,7 @@ public class Athlete {
     @Comment("운동 날짜")
     @CreatedDate
     @Column(name = "daily_time")
-    private LocalDateTime dailyTime;
+    private LocalDate dailyTime;
 
     @Comment("운동 종목")
     private String athletics;
@@ -50,7 +51,7 @@ public class Athlete {
 
     protected Athlete() {}
 
-    public Athlete(User user, LocalDateTime dailyTime, String athletics, AthleteSuccessType type, LocalTime record, Integer round, String etc) {
+    public Athlete(User user, LocalDate dailyTime, String athletics, AthleteSuccessType type, LocalTime record, Integer round, String etc) {
         this.user = user;
         this.dailyTime = dailyTime;
         this.athletics = athletics;

@@ -31,7 +31,6 @@ public class AthleteService {
             throw new UsernameNotFoundException("User not found");
         }
 
-        dto.setDailyTime(LocalDateTime.now());
         Athlete createAthlete = athleteRepository.save(CreateAthleteRequestDto.toEntity(dto, findUser));
 
         return CreateAthleteResponseDto.fromEntity(createAthlete);

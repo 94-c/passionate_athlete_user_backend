@@ -5,6 +5,7 @@ import com.backend.athlete.domain.user.model.User;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -12,7 +13,7 @@ import java.time.LocalTime;
 public class CreateAthleteResponseDto {
 
     private Long id;
-    private LocalDateTime dailyTime;
+    private LocalDate dailyTime;
     private String athletics;
     private String type;
     private LocalTime record;
@@ -20,7 +21,7 @@ public class CreateAthleteResponseDto {
     private String etc;
     private String username;
 
-    public CreateAthleteResponseDto(Long id, LocalDateTime dailyTime, String athletics, String type, LocalTime record, Integer round, String etc, String username) {
+    public CreateAthleteResponseDto(Long id, LocalDate dailyTime, String athletics, String type, LocalTime record, Integer round, String etc, String username) {
         this.id = id;
         this.dailyTime = dailyTime;
         this.athletics = athletics;

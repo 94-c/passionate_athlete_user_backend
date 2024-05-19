@@ -8,13 +8,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter @Setter
 public class CreateAthleteRequestDto {
 
-    private LocalDateTime dailyTime;
+    private LocalDate dailyTime;
     @NotBlank(message = "운동 일지를 작성 해주세요.")
     private String athletics;
     @NotNull(message = "운동 성공 여부를 입력 해주세요.")
