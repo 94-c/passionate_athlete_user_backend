@@ -2,17 +2,18 @@ package com.backend.athlete.domain.athlete.controller;
 
 import com.backend.athlete.domain.athlete.dto.request.CreateAthleteRequestDto;
 import com.backend.athlete.domain.athlete.dto.response.CreateAthleteResponseDto;
+import com.backend.athlete.domain.athlete.dto.response.GetDailyAthleteResponseDto;
 import com.backend.athlete.domain.athlete.service.AthleteService;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/v1/athletes")
@@ -35,7 +36,8 @@ public class AthleteController {
     public ResponseEntity<CreateAthleteResponseDto> createAthlete(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
                                                                   @Valid @RequestBody CreateAthleteRequestDto dto) {
         CreateAthleteResponseDto createAthlete = athleteService.createAthlete(userPrincipal, dto);
-        return ResponseEntity.status(HttpStatus.OK).body(createAthlete);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createAthlete);
     }
+
 
 }
