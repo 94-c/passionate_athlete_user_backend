@@ -31,6 +31,9 @@ public class AthleteService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * 데일리 운동 기록 저장
+     */
     public CreateAthleteResponseDto createAthlete(CustomUserDetailsImpl userPrincipal, CreateAthleteRequestDto dto) {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
         if (findUser == null) {
@@ -42,6 +45,9 @@ public class AthleteService {
         return CreateAthleteResponseDto.fromEntity(createAthlete);
     }
 
+    /**
+     * 데일리 운동 기록 조회
+     */
     @Transactional
     public GetDailyAthleteResponseDto getDailyAthlete(CustomUserDetailsImpl userPrincipal, LocalDate dailyDate) {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
@@ -56,5 +62,6 @@ public class AthleteService {
 
         return GetDailyAthleteResponseDto.fromEntity(athlete);
     }
+
 
 }
