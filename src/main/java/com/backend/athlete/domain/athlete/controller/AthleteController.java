@@ -43,7 +43,7 @@ public class AthleteController {
 
     @GetMapping("/daily")
     public ResponseEntity<GetDailyAthleteResponseDto> getDailyAthlete(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                                      @RequestParam(name = "date", required = false) LocalDate dailyDate) {
+                                                                      @RequestParam(name = "daily", required = false) LocalDate dailyDate) {
 
         GetDailyAthleteResponseDto getDailyAthlete = athleteService.getDailyAthlete(userPrincipal, dailyDate);
         return ResponseEntity.status(HttpStatus.OK).body(getDailyAthlete);
