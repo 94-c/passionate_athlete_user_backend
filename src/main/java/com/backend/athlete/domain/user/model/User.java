@@ -83,10 +83,14 @@ public class User extends BaseTimeEntity {
         this.status = status;
     }
 
-
     public void updateUser(String password, UserGenderType gender, Double weight, Double height) {
         this.password = password;
         this.gender = gender;
+        this.weight = weight;
+        this.height = height;
+    }
+
+    public void updatePhysicalAttributes(Double weight, Double height) {
         this.weight = weight;
         this.height = height;
     }

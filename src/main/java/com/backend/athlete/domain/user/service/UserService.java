@@ -50,6 +50,9 @@ public class UserService {
                 dto.getWeight(),
                 dto.getHeight()
         );
+
+        userRepository.save(findUser);
+
         return UpdateUserResponseDto.fromEntity(findUser);
     }
 
