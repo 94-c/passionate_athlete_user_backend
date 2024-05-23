@@ -3,6 +3,7 @@ package com.backend.athlete.domain.athlete.controller;
 import com.backend.athlete.domain.athlete.dto.request.CreateAthleteRequestDto;
 import com.backend.athlete.domain.athlete.dto.response.CreateAthleteResponseDto;
 import com.backend.athlete.domain.athlete.dto.response.GetDailyAthleteResponseDto;
+import com.backend.athlete.domain.athlete.dto.response.GetMonthlyAthleteResponseDto;
 import com.backend.athlete.domain.athlete.service.AthleteService;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
 import jakarta.validation.Valid;
@@ -14,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 
 @RestController
 @RequestMapping("/api/v1/athletes")
@@ -45,5 +47,13 @@ public class AthleteController {
 
         GetDailyAthleteResponseDto getDailyAthlete = athleteService.getDailyAthlete(userPrincipal, dailyDate);
         return ResponseEntity.status(HttpStatus.OK).body(getDailyAthlete);
+    }
+
+    @GetMapping("/monthly")
+    public ResponseEntity<GetMonthlyAthleteResponseDto> getMonthlyAthlete(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
+                                                                          @RequestParam(name = "month") YearMonth month) {
+
+        GetMonthlyAthleteResponseDto getMonthlyAthlete = athleteService.getMonthlyAthlete(userPrincipal, month);
+        return ResponseEntity.status(HttpStatus.OK).body(getMonthlyAthlete);
     }
 }

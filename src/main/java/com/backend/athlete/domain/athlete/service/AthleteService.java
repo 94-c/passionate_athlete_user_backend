@@ -1,8 +1,10 @@
 package com.backend.athlete.domain.athlete.service;
 
+import com.backend.athlete.domain.athlete.dto.GroupedAthleteRecordDto;
 import com.backend.athlete.domain.athlete.dto.request.CreateAthleteRequestDto;
 import com.backend.athlete.domain.athlete.dto.response.CreateAthleteResponseDto;
 import com.backend.athlete.domain.athlete.dto.response.GetDailyAthleteResponseDto;
+import com.backend.athlete.domain.athlete.dto.response.GetMonthlyAthleteResponseDto;
 import com.backend.athlete.domain.athlete.model.Athlete;
 import com.backend.athlete.domain.athlete.repository.AthleteRepository;
 import com.backend.athlete.domain.user.model.User;
@@ -17,7 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -63,5 +67,31 @@ public class AthleteService {
         return GetDailyAthleteResponseDto.fromEntity(athlete);
     }
 
+    /**
+     * 월별 운동 기록 조회
+     */
+    @Transactional
+    public GetMonthlyAthleteResponseDto getMonthlyAthlete(CustomUserDetailsImpl userPrincipal, YearMonth yearMonth) {
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
+
+        User findUser = userRepository.findByUserId(userPrincipal.getUsername());
+
+        List<GroupedAthleteRecordDto> groupedAthleteRecords = athleteRepository.findGroupedAthletesByUserIdAndYearMonth(findUser.getId(), startDate, endDate);
+
+        List<GetDailyAthleteResponseDto> monthlyRecords = groupedAthleteRecords.stream()
+                .map(record -> new GetDailyAthleteResponseDto(
+                        record.getDailyTime(),
+                        record.getAthletics(),
+                        record.getType().toString(), // Enum을 문자열로 변환
+                        record.getTotalRecordAsLocalTime(),
+                        (int) record.getCount(),
+                        record.getEtc(),
+                        record.getUsername()
+                ))
+                .collect(Collectors.toList());
+
+        return GetMonthlyAthleteResponseDto.fromEntity(yearMonth, monthlyRecords);
+    }
 
 }
