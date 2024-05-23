@@ -7,6 +7,8 @@ import com.backend.athlete.domain.physical.repository.PhysicalRepository;
 import com.backend.athlete.domain.user.model.User;
 import com.backend.athlete.domain.user.repository.UserRepository;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.global.util.MathUtils;
+import com.backend.athlete.global.util.PhysicalUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -34,18 +36,24 @@ public class PhysicalService {
     public SavePhysicalUserResponse savePhysical(CustomUserDetailsImpl userPrincipal, SavePhysicalRequest dto) {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
 
-        dto.setMeasureDate(LocalDate.now());
+        LocalDate today = LocalDate.now();
+        dto.setMeasureDate(today);
 
-        double bmi = calculateBMI(findUser.getWeight(), dto.getHeight());
+        boolean existsSave = physicalRepository.existsByUserAndMeasureDate(findUser, today);
+        if (existsSave) {
+            throw new IllegalArgumentException("You can only register once per day.");
+        }
+
+        double bmi = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMI(findUser.getWeight(), dto.getHeight()));
         dto.setBmi(bmi);
 
-        double bodyFatPercentage = calculateBodyFatPercentage(dto.getBodyFatMass(), dto.getWeight());
+        double bodyFatPercentage = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBodyFatPercentage(dto.getBodyFatMass(), dto.getWeight()));
         dto.setBodyFatPercentage(bodyFatPercentage);
 
-        double visceralFatPercentage = calculateVisceralFatPercentage(bodyFatPercentage);
+        double visceralFatPercentage = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateVisceralFatPercentage(bodyFatPercentage));
         dto.setVisceralFatPercentage(visceralFatPercentage);
 
-        double bmr = calculateBMR(dto.getWeight(), dto.getHeight(), 30, findUser.getGender().toString());
+        double bmr = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMR(dto.getWeight(), dto.getHeight(), 30, findUser.getGender().toString()));
         dto.setBmr(bmr);
 
         Physical savePhysical = physicalRepository.save(SavePhysicalRequest.toEntity(dto, findUser));
@@ -60,7 +68,6 @@ public class PhysicalService {
 
 
 
-
     /**
      * 인바디 전체 조회 (최신 날짜 순, 페이징처리)
      */
@@ -69,36 +76,4 @@ public class PhysicalService {
      * TODO 삭제는 추후 생각중
      */
 
-    /**
-     * BMI
-     */
-    protected double calculateBMI(double weight, double heightInCm) {
-        double heightInMeters = heightInCm / 100;
-        return weight / (heightInMeters * heightInMeters);
-    }
-
-    /**
-     * 체지방률
-     */
-    protected double calculateBodyFatPercentage(double bodyFatMass, double weight) {
-        return (bodyFatMass / weight) * 100;
-    }
-
-    /**
-     * 복부지방률
-     */
-    protected double calculateVisceralFatPercentage(double bodyFatPercentage) {
-        return bodyFatPercentage * 0.1;
-    }
-
-    /**
-     * BMR
-     */
-    protected double calculateBMR(double weight, double height, int age, String gender) {
-        if (gender.equalsIgnoreCase("male")) {
-            return 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
-        } else {
-            return 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
-        }
-    }
 }
