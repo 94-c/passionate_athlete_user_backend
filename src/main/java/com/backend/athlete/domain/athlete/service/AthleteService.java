@@ -94,4 +94,12 @@ public class AthleteService {
         return GetMonthlyAthleteResponseDto.fromEntity(yearMonth, monthlyRecords);
     }
 
+    public void deleteDailyAthleteById(CustomUserDetailsImpl userPrincipal, Long id) {
+        User findUser = userRepository.findByUserId(userPrincipal.getUsername());
+
+        Athlete athlete = athleteRepository.findByIdAndUserId(id, findUser.getId())
+                .orElseThrow(() -> new RuntimeException("Athlete record not found or not authorized"));
+
+        athleteRepository.delete(athlete);
+    }
 }

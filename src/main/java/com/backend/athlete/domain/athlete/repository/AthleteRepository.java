@@ -23,4 +23,7 @@ public interface AthleteRepository extends JpaRepository<Athlete, Long> {
                                                                           @Param("startDate") LocalDate startDate,
                                                                           @Param("endDate") LocalDate endDate);
 
+    @Query("SELECT a FROM Athlete a WHERE a.id = :id AND a.user.id = :userId")
+    Optional<Athlete> findByIdAndUserId(@Param("id") Long id, @Param("userId") Long userId);
+
 }

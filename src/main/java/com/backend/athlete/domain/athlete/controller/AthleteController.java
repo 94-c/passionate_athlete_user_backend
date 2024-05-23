@@ -28,12 +28,8 @@ public class AthleteController {
     }
 
     /**
-     * 1. 데일리 운동 기록 입력
-     * 2. 데일리 운동 상세 보기
-     * 3. 데일리 운동 기록 월별 조회 (페이징)
      * 4. 데일리 운동 기록 삭제
      */
-
     @PostMapping
     public ResponseEntity<CreateAthleteResponseDto> createAthlete(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
                                                                   @Valid @RequestBody CreateAthleteRequestDto dto) {
@@ -56,4 +52,12 @@ public class AthleteController {
         GetMonthlyAthleteResponseDto getMonthlyAthlete = athleteService.getMonthlyAthlete(userPrincipal, month);
         return ResponseEntity.status(HttpStatus.OK).body(getMonthlyAthlete);
     }
+
+    @DeleteMapping("/daily/{id}")
+    public ResponseEntity<Void> deleteDailyAthlete(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
+                                                   @PathVariable Long id) {
+        athleteService.deleteDailyAthleteById(userPrincipal, id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }
