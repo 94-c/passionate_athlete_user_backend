@@ -1,5 +1,6 @@
 package com.backend.athlete.global.handler;
 
+import com.backend.athlete.global.exception.ServiceException;
 import com.backend.athlete.global.exception.response.ExceptionResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,15 @@ import java.time.Instant;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(ServiceException.class)
+    public ResponseEntity<ExceptionResponse> handleServiceException(ServiceException ex) {
+        ExceptionResponse response = new ExceptionResponse(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                Instant.now().toEpochMilli()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleUsernameNotFoundException(UsernameNotFoundException ex) {
         ExceptionResponse response = ExceptionResponse.builder()
