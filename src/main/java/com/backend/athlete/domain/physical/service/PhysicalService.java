@@ -1,7 +1,7 @@
 package com.backend.athlete.domain.physical.service;
 
 import com.backend.athlete.domain.physical.dto.request.SavePhysicalRequest;
-import com.backend.athlete.domain.physical.dto.response.SavePhysicalUserResponse;
+import com.backend.athlete.domain.physical.dto.response.SavePhysicalResponse;
 import com.backend.athlete.domain.physical.model.Physical;
 import com.backend.athlete.domain.physical.repository.PhysicalRepository;
 import com.backend.athlete.domain.user.model.User;
@@ -33,7 +33,7 @@ public class PhysicalService {
      *        일별로 한번만 등록 할 수 있도록 변경
      */
 
-    public SavePhysicalUserResponse savePhysical(CustomUserDetailsImpl userPrincipal, SavePhysicalRequest dto) {
+    public SavePhysicalResponse savePhysical(CustomUserDetailsImpl userPrincipal, SavePhysicalRequest dto) {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
 
         LocalDate today = LocalDate.now();
@@ -41,7 +41,7 @@ public class PhysicalService {
 
         boolean existsSave = physicalRepository.existsByUserAndMeasureDate(findUser, today);
         if (existsSave) {
-            throw new IllegalArgumentException("You can only register once per day.");
+            throw new IllegalArgumentException("하루에 한번만 입력 하실 수 있습니다.");
         }
 
         double bmi = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMI(findUser.getWeight(), dto.getHeight()));
@@ -63,7 +63,7 @@ public class PhysicalService {
             userRepository.save(findUser);
         }
 
-        return SavePhysicalUserResponse.fromEntity(savePhysical);
+        return SavePhysicalResponse.fromEntity(savePhysical);
     }
 
 

@@ -2,15 +2,13 @@ package com.backend.athlete.domain.physical.dto.response;
 
 import com.backend.athlete.domain.physical.model.Physical;
 import com.backend.athlete.domain.user.model.User;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Comment;
 
 import java.time.LocalDate;
 
 @Getter @Setter
-public class SavePhysicalUserResponse {
+public class SavePhysicalResponse {
 
     private Long id;
     private String username;
@@ -24,7 +22,7 @@ public class SavePhysicalUserResponse {
     private Double bmr;
     private LocalDate measureDate;
 
-    public SavePhysicalUserResponse(Long id, String username, Double weight, Double height, Double muscleMass, Double bodyFatMass, Double bmi, Double bodyFatPercentage, Double visceralFatPercentage, Double bmr, LocalDate measureDate) {
+    public SavePhysicalResponse(Long id, String username, Double weight, Double height, Double muscleMass, Double bodyFatMass, Double bmi, Double bodyFatPercentage, Double visceralFatPercentage, Double bmr, LocalDate measureDate) {
         this.id = id;
         this.username = username;
         this.weight = weight;
@@ -39,9 +37,9 @@ public class SavePhysicalUserResponse {
     }
 
     //Entity -> Dto
-    public static SavePhysicalUserResponse fromEntity(Physical physical) {
+    public static SavePhysicalResponse fromEntity(Physical physical) {
         User findUser = physical.getUser();
-        return new SavePhysicalUserResponse(
+        return new SavePhysicalResponse(
                 physical.getId(),
                 findUser.getName(),
                 physical.getWeight(),
