@@ -1,5 +1,7 @@
 package com.backend.athlete.global.handler;
 
+import com.backend.athlete.global.exception.AuthException;
+import com.backend.athlete.global.exception.CustomJwtException;
 import com.backend.athlete.global.exception.ServiceException;
 import com.backend.athlete.global.exception.response.ExceptionResponse;
 import jakarta.validation.ConstraintViolationException;
@@ -14,6 +16,16 @@ import java.time.Instant;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<ExceptionResponse> handleServiceException(AuthException ex) {
+        ExceptionResponse response = new ExceptionResponse(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                Instant.now().toEpochMilli()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<ExceptionResponse> handleServiceException(ServiceException ex) {
         ExceptionResponse response = new ExceptionResponse(
@@ -22,6 +34,16 @@ public class GlobalExceptionHandler {
                 Instant.now().toEpochMilli()
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(CustomJwtException.class)
+    public ResponseEntity<ExceptionResponse> handleCustomJwtException(CustomJwtException ex) {
+        ExceptionResponse response = new ExceptionResponse(
+                HttpStatus.UNAUTHORIZED.value(),
+                ex.getMessage(),
+                Instant.now().toEpochMilli()
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleUsernameNotFoundException(UsernameNotFoundException ex) {

@@ -6,11 +6,8 @@ import com.backend.athlete.domain.user.dto.response.UpdateUserResponseDto;
 import com.backend.athlete.domain.user.model.User;
 import com.backend.athlete.domain.user.repository.UserRepository;
 import com.backend.athlete.global.exception.AuthException;
-import com.backend.athlete.global.exception.ResourceNotFoundException;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,7 +27,7 @@ public class UserService {
     public GetUserResponseDto getUserInfo(CustomUserDetailsImpl userPrincipal) {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
         if (findUser == null) {
-            throw new UsernameNotFoundException("User not found");
+            throw new UsernameNotFoundException("회원이 존재 하지 않습니다.");
         }
         return GetUserResponseDto.fromEntity(findUser);
     }
@@ -38,7 +35,7 @@ public class UserService {
     public UpdateUserResponseDto updateUser(CustomUserDetailsImpl userPrincipal, UpdateUserRequestDto dto) {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
         if (findUser == null) {
-            throw new UsernameNotFoundException("User not found");
+            throw new UsernameNotFoundException("회원이 존재 하지 않습니다.");
         }
         checkDuplicatePassword(dto.getPassword(), dto.getPasswordCheck());
 
@@ -58,7 +55,7 @@ public class UserService {
 
     protected void checkDuplicatePassword(String password, String passwordCheck) {
         if (!password.equals(passwordCheck)) {
-            throw new AuthException("패스워드가 불일치 합니다.", HttpStatus.BAD_REQUEST);
+            throw new AuthException("패스워드가 불일치 합니다.");
         }
     }
 }

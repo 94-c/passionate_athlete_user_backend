@@ -5,18 +5,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
-@Getter
-@Setter
-@NoArgsConstructor
 public class AuthException extends RuntimeException{
 
-    private HttpStatus status;
-    private String message;
+    private static final long serialVersionUID = 1L;
 
-    public AuthException(String message, HttpStatus status) {
+    public AuthException(String message) {
         super(message);
-        this.message = message;
-        this.status = status;
     }
 
+    public AuthException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

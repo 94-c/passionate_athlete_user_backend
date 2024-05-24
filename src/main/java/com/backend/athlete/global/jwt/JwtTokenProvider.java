@@ -1,5 +1,6 @@
 package com.backend.athlete.global.jwt;
 
+import com.backend.athlete.global.exception.CustomJwtException;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -75,14 +76,16 @@ public class JwtTokenProvider {
             return true;
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());
+            throw new CustomJwtException("Invalid JWT token: " + e.getMessage(), e);
         } catch (ExpiredJwtException e) {
             logger.error("JWT token is expired: {}", e.getMessage());
+            throw new CustomJwtException("JWT token is expired: " + e.getMessage(), e);
         } catch (UnsupportedJwtException e) {
             logger.error("JWT token is unsupported: {}", e.getMessage());
+            throw new CustomJwtException("JWT token is unsupported: " + e.getMessage(), e);
         } catch (IllegalArgumentException e) {
             logger.error("JWT claims string is empty: {}", e.getMessage());
+            throw new CustomJwtException("JWT claims string is empty: " + e.getMessage(), e);
         }
-
-        return false;
     }
 }
