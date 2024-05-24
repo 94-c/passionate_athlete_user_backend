@@ -1,11 +1,13 @@
 package com.backend.athlete.domain.physical.controller;
 
 import com.backend.athlete.domain.physical.dto.request.SavePhysicalRequest;
+import com.backend.athlete.domain.physical.dto.response.GetAllPhysicalResponse;
 import com.backend.athlete.domain.physical.dto.response.GetPhysicalResponse;
 import com.backend.athlete.domain.physical.dto.response.SavePhysicalResponse;
 import com.backend.athlete.domain.physical.service.PhysicalService;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,5 +44,12 @@ public class PhysicalController {
         return ResponseEntity.status(HttpStatus.OK).body(getPhysical);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<Page<GetAllPhysicalResponse>> getAllPhysical(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
+                                                                       @RequestParam(defaultValue = "0") int page,
+                                                                       @RequestParam(defaultValue = "10") int size) {
+        Page<GetAllPhysicalResponse> getAllPhysical = physicalService.getPhysicalData(userPrincipal, page, size);
+        return ResponseEntity.status(HttpStatus.OK).body(getAllPhysical);
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.backend.athlete.domain.physical.service;
 
 import com.backend.athlete.domain.physical.dto.request.SavePhysicalRequest;
+import com.backend.athlete.domain.physical.dto.response.GetAllPhysicalResponse;
 import com.backend.athlete.domain.physical.dto.response.GetPhysicalResponse;
 import com.backend.athlete.domain.physical.dto.response.SavePhysicalResponse;
 import com.backend.athlete.domain.physical.model.Physical;
@@ -12,10 +13,15 @@ import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.global.util.MathUtils;
 import com.backend.athlete.global.util.PhysicalUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,11 +37,6 @@ public class PhysicalService {
         this.userRepository = userRepository;
     }
 
-    /**
-     * 인바디 저장
-     *  TODO : 인바디 수치 재측정해야함, 추가적으로 소수점 둘째짜리까지만 표기
-     *        일별로 한번만 등록 할 수 있도록 변경
-     */
 
     public SavePhysicalResponse savePhysical(CustomUserDetailsImpl userPrincipal, SavePhysicalRequest dto) {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
@@ -85,13 +86,28 @@ public class PhysicalService {
         return GetPhysicalResponse.fromEntity(physical);
     }
 
+    @Transactional
+    public Page<GetAllPhysicalResponse> getPhysicalData(CustomUserDetailsImpl userPrincipal, int page, int size) {
+        User user = userRepository.findByUserId(userPrincipal.getUsername());
+        if (user == null) {
+            throw new ServiceException("User not found.");
+        }
 
-    /**
-     * 인바디 전체 조회 (최신 날짜 순, 페이징처리)
-     */
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Physical> physicalPage = physicalRepository.findByUserIdOrderByMeasureDateDesc(user.getId(), pageable);
 
-    /**
-     * TODO 삭제는 추후 생각중
-     */
+        List<GetAllPhysicalResponse> responses = new ArrayList<>();
+        Physical previousPhysical = null;
+
+        for (Physical physical : physicalPage) {
+            GetAllPhysicalResponse response = GetAllPhysicalResponse.fromEntity(physical, previousPhysical);
+            previousPhysical = physical;
+            responses.add(response);
+        }
+
+        return new PageImpl<>(responses, pageable, physicalPage.getTotalElements());
+    }
+
+
 
 }
