@@ -1,18 +1,22 @@
 package com.backend.athlete.domain.physical.service;
 
 import com.backend.athlete.domain.physical.dto.request.SavePhysicalRequest;
+import com.backend.athlete.domain.physical.dto.response.GetPhysicalResponse;
 import com.backend.athlete.domain.physical.dto.response.SavePhysicalResponse;
 import com.backend.athlete.domain.physical.model.Physical;
 import com.backend.athlete.domain.physical.repository.PhysicalRepository;
 import com.backend.athlete.domain.user.model.User;
 import com.backend.athlete.domain.user.repository.UserRepository;
+import com.backend.athlete.global.exception.ServiceException;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.global.util.MathUtils;
 import com.backend.athlete.global.util.PhysicalUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -66,6 +70,20 @@ public class PhysicalService {
         return SavePhysicalResponse.fromEntity(savePhysical);
     }
 
+    @Transactional
+    public GetPhysicalResponse getPhysical(CustomUserDetailsImpl userPrincipal, LocalDate dailyDate) {
+        User findUser = userRepository.findByUserId(userPrincipal.getUsername());
+
+        List<Physical> physicals = physicalRepository.findPhysicalsByUserIdAAndAndMeasureDate(findUser.getId(), dailyDate);
+
+        if (physicals.isEmpty()) {
+            throw new ServiceException(dailyDate + " 의 인바디 정보가 존재하지 않습니다.");
+        }
+
+        Physical physical = physicals.get(0);
+
+        return GetPhysicalResponse.fromEntity(physical);
+    }
 
 
     /**
