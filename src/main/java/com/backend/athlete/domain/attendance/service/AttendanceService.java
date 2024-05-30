@@ -1,5 +1,6 @@
 package com.backend.athlete.domain.attendance.service;
 
+import com.backend.athlete.domain.attendance.dto.GetAttendanceResponse;
 import com.backend.athlete.domain.attendance.dto.request.CreateAttendanceEventRequest;
 import com.backend.athlete.domain.attendance.dto.response.CreateAttendanceEventResponse;
 import com.backend.athlete.domain.attendance.model.Attendance;
@@ -8,10 +9,13 @@ import com.backend.athlete.domain.user.model.User;
 import com.backend.athlete.domain.user.repository.UserRepository;
 import com.backend.athlete.global.exception.ServiceException;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -43,6 +47,17 @@ public class AttendanceService {
         long totalAttendanceCount = attendanceRepository.countByUserId(user.getId());
 
         return CreateAttendanceEventResponse.fromEntity(attendance, totalAttendanceCount);
+    }
+
+    @Transactional
+    public GetAttendanceResponse getAttendance(CustomUserDetailsImpl userPrincipal, LocalDate dailyDate) {
+        User findUser = userRepository.findByUserId(userPrincipal.getUsername());
+
+        Attendance attendance = attendanceRepository.findByUserIdAndAttendanceDate(findUser.getId(), dailyDate)
+                .orElseThrow(() -> new ServiceException(dailyDate + " 의 출석이 없습니다."));
+
+
+        return GetAttendanceResponse.fromEntity(attendance);
     }
 
 }
