@@ -1,21 +1,23 @@
 package com.backend.athlete.domain.attendance.service;
 
-import com.backend.athlete.domain.attendance.dto.GetAttendanceResponse;
+import com.backend.athlete.domain.attendance.dto.response.GetDailyAttendanceResponse;
 import com.backend.athlete.domain.attendance.dto.request.CreateAttendanceEventRequest;
 import com.backend.athlete.domain.attendance.dto.response.CreateAttendanceEventResponse;
+import com.backend.athlete.domain.attendance.dto.response.GetMonthlyAttendanceResponse;
 import com.backend.athlete.domain.attendance.model.Attendance;
 import com.backend.athlete.domain.attendance.repository.AttendanceRepository;
 import com.backend.athlete.domain.user.model.User;
 import com.backend.athlete.domain.user.repository.UserRepository;
 import com.backend.athlete.global.exception.ServiceException;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -50,14 +52,29 @@ public class AttendanceService {
     }
 
     @Transactional
-    public GetAttendanceResponse getAttendance(CustomUserDetailsImpl userPrincipal, LocalDate dailyDate) {
+    public GetDailyAttendanceResponse getAttendance(CustomUserDetailsImpl userPrincipal, LocalDate dailyDate) {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
 
         Attendance attendance = attendanceRepository.findByUserIdAndAttendanceDate(findUser.getId(), dailyDate)
                 .orElseThrow(() -> new ServiceException(dailyDate + " 의 출석이 없습니다."));
 
 
-        return GetAttendanceResponse.fromEntity(attendance);
+        return GetDailyAttendanceResponse.fromEntity(attendance);
     }
 
+    @Transactional
+    public GetMonthlyAttendanceResponse getMonthlyAttendance(CustomUserDetailsImpl userPrincipal, YearMonth month) {
+        User findUser = userRepository.findByUserId(userPrincipal.getUsername());
+
+        LocalDate startDate = month.atDay(1);
+        LocalDate endDate = month.atEndOfMonth();
+
+        List<Attendance> attendances = attendanceRepository.findByUserAndAttendanceDateBetween(findUser, startDate, endDate);
+
+        List<LocalDate> presentDays = attendances.stream()
+                .map(Attendance::getAttendanceDate)
+                .collect(Collectors.toList());
+
+        return new GetMonthlyAttendanceResponse(presentDays.size(), presentDays);
+    }
 }
