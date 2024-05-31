@@ -2,6 +2,7 @@ package com.backend.athlete.domain.athlete.repository;
 
 import com.backend.athlete.domain.athlete.dto.GetAthleteRecordDto;
 import com.backend.athlete.domain.athlete.model.Athlete;
+import com.backend.athlete.domain.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,5 +25,7 @@ public interface AthleteRepository extends JpaRepository<Athlete, Long> {
 
     @Query("SELECT a FROM Athlete a WHERE a.id = :id AND a.user.id = :userId")
     Optional<Athlete> findByIdAndUserId(@Param("id") Long id, @Param("userId") Long userId);
+
+    List<Athlete> findByUserAndDailyTimeBetween(User findUser, LocalDate startDate, LocalDate endDate);
 
 }

@@ -46,4 +46,5 @@ public class AttendanceController {
         GetMonthlyAttendanceResponse getMonthlyAttendance = attendanceService.getMonthlyAttendance(userPrincipal, month);
         return ResponseEntity.status(HttpStatus.OK).body(getMonthlyAttendance);
     }
+
 }
