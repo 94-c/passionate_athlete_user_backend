@@ -17,6 +17,7 @@ public class GetMonthlyAthleteResponseDto {
         this.dailyRecords = dailyRecords;
     }
 
+    // Entity -> Dto
     public static GetMonthlyAthleteResponseDto fromEntity(YearMonth month, List<GetDailyAthleteResponseDto> dailyRecords) {
         return new GetMonthlyAthleteResponseDto(month, dailyRecords);
     }

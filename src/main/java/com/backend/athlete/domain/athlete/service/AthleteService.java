@@ -1,6 +1,6 @@
 package com.backend.athlete.domain.athlete.service;
 
-import com.backend.athlete.domain.athlete.dto.GroupedAthleteRecordDto;
+import com.backend.athlete.domain.athlete.dto.GetAthleteRecordDto;
 import com.backend.athlete.domain.athlete.dto.request.CreateAthleteRequestDto;
 import com.backend.athlete.domain.athlete.dto.response.CreateAthleteResponseDto;
 import com.backend.athlete.domain.athlete.dto.response.GetDailyAthleteResponseDto;
@@ -75,13 +75,13 @@ public class AthleteService {
 
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
 
-        List<GroupedAthleteRecordDto> groupedAthleteRecords = athleteRepository.findGroupedAthletesByUserIdAndYearMonth(findUser.getId(), startDate, endDate);
+        List<GetAthleteRecordDto> groupedAthleteRecords = athleteRepository.findGroupedAthletesByUserIdAndYearMonth(findUser.getId(), startDate, endDate);
 
         List<GetDailyAthleteResponseDto> monthlyRecords = groupedAthleteRecords.stream()
                 .map(record -> new GetDailyAthleteResponseDto(
                         record.getDailyTime(),
                         record.getAthletics(),
-                        record.getType().toString(), // Enum을 문자열로 변환
+                        record.getType().toString(),
                         record.getTotalRecordAsLocalTime(),
                         (int) record.getCount(),
                         record.getEtc(),
