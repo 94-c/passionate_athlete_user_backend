@@ -33,8 +33,17 @@ public class Notice extends BaseTimeEntity {
     private String imagePath;
 
     @OneToMany(mappedBy = "notice", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
+    private List<com.backend.athlete.domain.notice.model.Comment> comments;
 
     @OneToMany(mappedBy = "notice", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes;
+
+    public Notice() {}
+
+    public Notice(String title, String content, String imagePath, User user) {
+        this.title = title;
+        this.content = content;
+        this.imagePath = imagePath;
+        this.user = user;
+    }
 }

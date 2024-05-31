@@ -1,6 +1,7 @@
 package com.backend.athlete.domain.notice.dto.request;
 
 import com.backend.athlete.domain.notice.model.Notice;
+import com.backend.athlete.domain.user.model.User;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,6 @@ public class SaveNoticeRequest {
     }
 
     public static Notice toEntity(SaveNoticeRequest dto, User user) {
-        return notice;
+        return new Notice(dto.getTitle(), dto.getContent(), dto.getImagePath(), user);
     }
 }

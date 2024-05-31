@@ -19,6 +19,6 @@ public class SaveNoticeResponse {
     }
 
     public static SaveNoticeResponse fromEntity(Notice notice) {
-        return new SaveNoticeResponse(notice.getId(), notice.getTitle(), notice.getContent(), notice.getImagePath())
+        return new SaveNoticeResponse(notice.getId(), notice.getTitle(), notice.getContent(), notice.getImagePath());
     }
 }

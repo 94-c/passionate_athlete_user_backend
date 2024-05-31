@@ -2,6 +2,8 @@ package com.backend.athlete.domain.notice.service;
 
 import com.backend.athlete.domain.notice.dto.request.SaveNoticeRequest;
 import com.backend.athlete.domain.notice.dto.response.SaveNoticeResponse;
+import com.backend.athlete.domain.notice.model.Comment;
+import com.backend.athlete.domain.notice.model.Like;
 import com.backend.athlete.domain.notice.model.Notice;
 import com.backend.athlete.domain.notice.repository.CommentRepository;
 import com.backend.athlete.domain.notice.repository.LikeRepository;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 public class NoticeService {
@@ -66,5 +69,4 @@ public class NoticeService {
     public Like addLike(Like like) {
         return likeRepository.save(like);
     }
-}
 }
