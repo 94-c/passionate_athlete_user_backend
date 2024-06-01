@@ -1,19 +1,25 @@
 package com.backend.athlete.domain.notice.service;
 
 import com.backend.athlete.domain.notice.dto.request.SaveNoticeRequest;
+import com.backend.athlete.domain.notice.dto.request.UpdateNoticeRequest;
+import com.backend.athlete.domain.notice.dto.response.GetNoticeResponse;
 import com.backend.athlete.domain.notice.dto.response.SaveNoticeResponse;
-import com.backend.athlete.domain.notice.model.Comment;
-import com.backend.athlete.domain.notice.model.Like;
+import com.backend.athlete.domain.notice.dto.response.UpdateNoticeResponse;
 import com.backend.athlete.domain.notice.model.Notice;
 import com.backend.athlete.domain.notice.repository.CommentRepository;
 import com.backend.athlete.domain.notice.repository.LikeRepository;
 import com.backend.athlete.domain.notice.repository.NoticeRepository;
 import com.backend.athlete.domain.user.model.User;
 import com.backend.athlete.domain.user.repository.UserRepository;
+import com.backend.athlete.global.exception.ServiceException;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.print.Pageable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,7 +49,7 @@ public class NoticeService {
             if (Files.notExists(rootLocation)) {
                 Files.createDirectories(rootLocation);
             }
-            String filename = file.getOriginalFilename();
+            String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
             Files.copy(file.getInputStream(), rootLocation.resolve(filename));
             noticeRequest.setImagePath(rootLocation.resolve(filename).toString());
         }
@@ -54,19 +60,49 @@ public class NoticeService {
         return SaveNoticeResponse.fromEntity(savedNotice);
     }
 
-    public Notice getNotice(Long id) {
-        return noticeRepository.findById(id).orElseThrow(() -> new RuntimeException("Notice not found"));
+    @Transactional
+    public GetNoticeResponse getNotice(Long id) {
+        Notice notice = noticeRepository.findById(id)
+                .orElseThrow(() -> new ServiceException("존재하지 않는 게시물입니다."));
+
+        return GetNoticeResponse.fromEntity(notice);
     }
 
-    public List<Notice> getAllNotices() {
-        return noticeRepository.findAll();
+    @Transactional
+    public UpdateNoticeResponse updateNotice(Long id, CustomUserDetailsImpl userPrincipal, UpdateNoticeRequest noticeRequest, MultipartFile file) throws IOException {
+        Notice notice = noticeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Notice not found"));
+
+        if (!notice.getUser().getUserId().equals(userPrincipal.getUsername())) {
+            throw new RuntimeException("You are not authorized to update this notice");
+        }
+
+        String imagePath = notice.getImagePath();
+        if (!file.isEmpty()) {
+            if (Files.notExists(rootLocation)) {
+                Files.createDirectories(rootLocation);
+            }
+            String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Files.copy(file.getInputStream(), rootLocation.resolve(filename));
+            imagePath = rootLocation.resolve(filename).toString();
+        }
+
+        notice.updateNotice(noticeRequest.getTitle(), noticeRequest.getContent(), imagePath);
+
+        Notice updatedNotice = noticeRepository.save(notice);
+
+        return UpdateNoticeResponse.fromEntity(updatedNotice);
     }
 
-    public Comment addComment(Comment comment) {
-        return commentRepository.save(comment);
+    public void deleteNotice(Long id, CustomUserDetailsImpl userPrincipal) {
+        Notice notice = noticeRepository.findById(id)
+                .orElseThrow(() -> new ServiceException("회원을 찾지 못했습니다."));
+
+        if (!notice.getUser().getUserId().equals(userPrincipal.getUsername())) {
+            throw new ServiceException("이 게시물를 삭제할 권한이 없습니다.");
+        }
+
+        noticeRepository.delete(notice);
     }
 
-    public Like addLike(Like like) {
-        return likeRepository.save(like);
-    }
 }

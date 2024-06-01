@@ -46,4 +46,11 @@ public class Notice extends BaseTimeEntity {
         this.imagePath = imagePath;
         this.user = user;
     }
+
+    public void updateNotice(String title, String content, String imagePath) {
+        this.title = title;
+        this.content = content;
+        this.imagePath = imagePath;
+    }
+
 }
