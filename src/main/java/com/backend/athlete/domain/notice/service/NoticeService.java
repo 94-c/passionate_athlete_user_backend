@@ -1,10 +1,10 @@
 package com.backend.athlete.domain.notice.service;
 
+import com.backend.athlete.domain.notice.dto.request.PageSearchNoticeRequest;
 import com.backend.athlete.domain.notice.dto.request.SaveNoticeRequest;
 import com.backend.athlete.domain.notice.dto.request.UpdateNoticeRequest;
-import com.backend.athlete.domain.notice.dto.response.GetNoticeResponse;
-import com.backend.athlete.domain.notice.dto.response.SaveNoticeResponse;
-import com.backend.athlete.domain.notice.dto.response.UpdateNoticeResponse;
+import com.backend.athlete.domain.notice.dto.response.*;
+import com.backend.athlete.domain.notice.model.Comment;
 import com.backend.athlete.domain.notice.model.Notice;
 import com.backend.athlete.domain.notice.repository.CommentRepository;
 import com.backend.athlete.domain.notice.repository.LikeRepository;
@@ -15,16 +15,17 @@ import com.backend.athlete.global.exception.ServiceException;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.print.Pageable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NoticeService {
@@ -41,6 +42,7 @@ public class NoticeService {
         this.likeRepository = likeRepository;
         this.userRepository = userRepository;
     }
+
 
     public SaveNoticeResponse saveNotice(CustomUserDetailsImpl userPrincipal, SaveNoticeRequest noticeRequest, MultipartFile file) throws IOException {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
@@ -71,10 +73,10 @@ public class NoticeService {
     @Transactional
     public UpdateNoticeResponse updateNotice(Long id, CustomUserDetailsImpl userPrincipal, UpdateNoticeRequest noticeRequest, MultipartFile file) throws IOException {
         Notice notice = noticeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Notice not found"));
+                .orElseThrow(() -> new ServiceException("게시글을 찾지 못했습니다."));
 
         if (!notice.getUser().getUserId().equals(userPrincipal.getUsername())) {
-            throw new RuntimeException("You are not authorized to update this notice");
+            throw new ServiceException("게시글의 권한이 존재하지 않습니다.");
         }
 
         String imagePath = notice.getImagePath();
@@ -103,6 +105,17 @@ public class NoticeService {
         }
 
         noticeRepository.delete(notice);
+    }
+
+    public Page<SearchNoticeResponse> searchNotices(PageSearchNoticeRequest request, int page, int perPage) {
+        Pageable pageable = PageRequest.of(page, perPage);
+        Page<Notice> notices = noticeRepository.findAllByUserAndTitle(request.getName(), request.getTitle(), pageable);
+
+        return notices.map(notice -> {
+            int likeCount = likeRepository.countByNoticeId(notice.getId());
+            List<Comment> comments = commentRepository.findByNoticeId(notice.getId());
+            return SearchNoticeResponse.fromEntity(notice, likeCount, comments);
+        });
     }
 
 }

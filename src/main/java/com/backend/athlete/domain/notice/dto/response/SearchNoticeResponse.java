@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter @Setter
-public class GetNoticeResponse {
+public class SearchNoticeResponse {
     private Long id;
     private String title;
     private String content;
@@ -18,7 +18,7 @@ public class GetNoticeResponse {
     private int likeCount;
     private List<CommentResponse> comments;
 
-    public GetNoticeResponse(Long id, String title, String content, String imagePath, String userName, int likeCount, List<CommentResponse> comments) {
+    public SearchNoticeResponse(Long id, String title, String content, String imagePath, String userName, int likeCount, List<CommentResponse> comments) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -28,18 +28,22 @@ public class GetNoticeResponse {
         this.comments = comments;
     }
 
-    public static GetNoticeResponse fromEntity(Notice notice) {
-        List<CommentResponse> commentResponses = notice.getComments().stream()
-                .map(CommentResponse::fromEntity)
+    public static SearchNoticeResponse fromEntity(Notice notice, int likeCount, List<Comment> comments) {
+        List<CommentResponse> commentResponses = comments.stream()
+                .map(comment -> new CommentResponse(
+                        comment.getId(),
+                        comment.getContent(),
+                        comment.getUser().getName(),
+                        comment.getCreatedDate()))
                 .collect(Collectors.toList());
 
-        return new GetNoticeResponse(
+        return new SearchNoticeResponse(
                 notice.getId(),
                 notice.getTitle(),
                 notice.getContent(),
                 notice.getImagePath(),
                 notice.getUser().getName(),
-                notice.getLikes().size(),
+                likeCount,
                 commentResponses
         );
     }
