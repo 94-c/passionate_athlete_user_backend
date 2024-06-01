@@ -16,9 +16,9 @@ public class SearchNoticeResponse {
     private String imagePath;
     private String userName;
     private int likeCount;
-    private List<CommentResponse> comments;
+    private List<GetCommentResponse> comments;
 
-    public SearchNoticeResponse(Long id, String title, String content, String imagePath, String userName, int likeCount, List<CommentResponse> comments) {
+    public SearchNoticeResponse(Long id, String title, String content, String imagePath, String userName, int likeCount, List<GetCommentResponse> comments) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -29,8 +29,8 @@ public class SearchNoticeResponse {
     }
 
     public static SearchNoticeResponse fromEntity(Notice notice, int likeCount, List<Comment> comments) {
-        List<CommentResponse> commentResponses = comments.stream()
-                .map(comment -> new CommentResponse(
+        List<GetCommentResponse> commentResponses = comments.stream()
+                .map(comment -> new GetCommentResponse(
                         comment.getId(),
                         comment.getContent(),
                         comment.getUser().getName(),

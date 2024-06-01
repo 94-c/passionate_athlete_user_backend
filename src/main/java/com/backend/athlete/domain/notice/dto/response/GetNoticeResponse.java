@@ -1,6 +1,5 @@
 package com.backend.athlete.domain.notice.dto.response;
 
-import com.backend.athlete.domain.notice.model.Comment;
 import com.backend.athlete.domain.notice.model.Notice;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,9 +15,9 @@ public class GetNoticeResponse {
     private String imagePath;
     private String userName;
     private int likeCount;
-    private List<CommentResponse> comments;
+    private List<GetCommentResponse> comments;
 
-    public GetNoticeResponse(Long id, String title, String content, String imagePath, String userName, int likeCount, List<CommentResponse> comments) {
+    public GetNoticeResponse(Long id, String title, String content, String imagePath, String userName, int likeCount, List<GetCommentResponse> comments) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -29,8 +28,8 @@ public class GetNoticeResponse {
     }
 
     public static GetNoticeResponse fromEntity(Notice notice) {
-        List<CommentResponse> commentResponses = notice.getComments().stream()
-                .map(CommentResponse::fromEntity)
+        List<GetCommentResponse> commentResponses = notice.getComments().stream()
+                .map(GetCommentResponse::fromEntity)
                 .collect(Collectors.toList());
 
         return new GetNoticeResponse(
