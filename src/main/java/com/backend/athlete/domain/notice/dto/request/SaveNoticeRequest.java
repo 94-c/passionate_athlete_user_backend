@@ -12,15 +12,6 @@ public class SaveNoticeRequest {
     private String title;
     private String content;
     private String imagePath;
-
-    protected SaveNoticeRequest() {}
-
-    public SaveNoticeRequest(String title, String content, String imagePath) {
-        this.title = title;
-        this.content = content;
-        this.imagePath = imagePath;
-    }
-
     public static Notice toEntity(SaveNoticeRequest dto, User user) {
         return new Notice(dto.getTitle(), dto.getContent(), dto.getImagePath(), user);
     }

@@ -15,9 +15,9 @@ public class GetNoticeResponse {
     private String imagePath;
     private String userName;
     private int likeCount;
-    private List<GetCommentResponse> comments;
+    private List<GetNoticeCommentResponse> comments;
 
-    public GetNoticeResponse(Long id, String title, String content, String imagePath, String userName, int likeCount, List<GetCommentResponse> comments) {
+    public GetNoticeResponse(Long id, String title, String content, String imagePath, String userName, int likeCount, List<GetNoticeCommentResponse> comments) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -28,8 +28,8 @@ public class GetNoticeResponse {
     }
 
     public static GetNoticeResponse fromEntity(Notice notice) {
-        List<GetCommentResponse> commentResponses = notice.getComments().stream()
-                .map(GetCommentResponse::fromEntity)
+        List<GetNoticeCommentResponse> commentResponses = notice.getComments().stream()
+                .map(GetNoticeCommentResponse::fromEntity)
                 .collect(Collectors.toList());
 
         return new GetNoticeResponse(
