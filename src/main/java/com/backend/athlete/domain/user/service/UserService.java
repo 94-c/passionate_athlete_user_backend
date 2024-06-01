@@ -7,6 +7,7 @@ import com.backend.athlete.domain.user.model.User;
 import com.backend.athlete.domain.user.repository.UserRepository;
 import com.backend.athlete.global.exception.AuthException;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,6 +33,7 @@ public class UserService {
         return GetUserResponseDto.fromEntity(findUser);
     }
 
+    @Transactional
     public UpdateUserResponseDto updateUser(CustomUserDetailsImpl userPrincipal, UpdateUserRequestDto dto) {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
         if (findUser == null) {
