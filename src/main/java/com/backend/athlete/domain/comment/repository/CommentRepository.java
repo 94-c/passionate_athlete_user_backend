@@ -1,9 +1,8 @@
-package com.backend.athlete.domain.notice.repository;
+package com.backend.athlete.domain.comment.repository;
 
-import com.backend.athlete.domain.notice.model.Comment;
+import com.backend.athlete.domain.comment.model.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Arrays;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
