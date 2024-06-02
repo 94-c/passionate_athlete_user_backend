@@ -24,4 +24,12 @@ public class Like extends BaseTimeEntity {
     @JoinColumn(name = "notice_id", nullable = false)
     @Comment("게시판 인덱스")
     private Notice notice;
+
+    protected Like() {}
+
+    public Like(User user, Notice notice) {
+        this.user = user;
+        this.notice = notice;
+    }
+
 }
