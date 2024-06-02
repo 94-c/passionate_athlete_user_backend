@@ -1,5 +1,8 @@
 package com.backend.athlete.domain.notice.service;
 
+import com.backend.athlete.domain.notice.dto.response.CreateLikeNoticeResponse;
+import com.backend.athlete.domain.notice.dto.response.DeleteLikeNoticeResponse;
+import com.backend.athlete.domain.notice.dto.response.GetLikeNoticeResponse;
 import com.backend.athlete.domain.notice.model.Like;
 import com.backend.athlete.domain.notice.model.Notice;
 import com.backend.athlete.domain.notice.repository.LikeRepository;
@@ -24,34 +27,44 @@ public class LikeNoticeService {
         this.userRepository = userRepository;
     }
 
-
-    public void likeNotice(Long noticeId, CustomUserDetailsImpl userPrincipal) {
+    @Transactional
+    public CreateLikeNoticeResponse likeNotice(Long noticeId, CustomUserDetailsImpl userPrincipal) {
         User user = userRepository.findByUserId(userPrincipal.getUsername());
         Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> new ServiceException("게시글이 존재 하지 않습니다."));
 
         if (likeRepository.existsByUserAndNotice(user, notice)) {
-            throw new RuntimeException("Already liked");
+            throw new ServiceException("이미 좋아요를 누르셨습니다.");
         }
 
         Like like = new Like(user, notice);
         likeRepository.save(like);
+
+        Long likeCount = likeRepository.countByNotice(notice);
+
+        return CreateLikeNoticeResponse.fromEntity(like, likeCount);
+
     }
 
 
-    public void unlikeNotice(Long noticeId, CustomUserDetailsImpl userPrincipal) {
+    public DeleteLikeNoticeResponse unlikeNotice(Long noticeId, CustomUserDetailsImpl userPrincipal) {
         User user = userRepository.findByUserId(userPrincipal.getUsername());
         Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> new ServiceException("게시글이 존재 하지 않습니다."));
 
         if (!likeRepository.existsByUserAndNotice(user, notice)) {
-            throw new RuntimeException("Not liked yet");
+            throw new ServiceException("Not liked yet");
         }
 
         likeRepository.deleteByUserAndNotice(user, notice);
+
+        Long likeCount = likeRepository.countByNotice(notice);
+
+        return DeleteLikeNoticeResponse.fromEntity(notice, user, likeCount);
     }
 
-    public long getLikeCount(Long noticeId) {
+    public GetLikeNoticeResponse getLikeCount(Long noticeId) {
         Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> new ServiceException("게시글이 존재 하지 않습니다."));
-        return likeRepository.countByNotice(notice);
+        long like = likeRepository.countByNotice(notice);
+        return GetLikeNoticeResponse.fromEntity(notice, like);
     }
 
 }

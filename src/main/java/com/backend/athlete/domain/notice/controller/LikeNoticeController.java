@@ -1,5 +1,8 @@
 package com.backend.athlete.domain.notice.controller;
 
+import com.backend.athlete.domain.notice.dto.response.CreateLikeNoticeResponse;
+import com.backend.athlete.domain.notice.dto.response.DeleteLikeNoticeResponse;
+import com.backend.athlete.domain.notice.dto.response.GetLikeNoticeResponse;
 import com.backend.athlete.domain.notice.service.LikeNoticeService;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
 import org.springframework.http.HttpStatus;
@@ -17,20 +20,22 @@ public class LikeNoticeController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> likeNotice(@PathVariable Long noticeId, @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
-        likeNoticeService.likeNotice(noticeId, userPrincipal);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<CreateLikeNoticeResponse> likeNotice(@PathVariable Long noticeId,
+                                                               @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
+        CreateLikeNoticeResponse response = likeNoticeService.likeNotice(noticeId, userPrincipal);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> unlikeNotice(@PathVariable Long noticeId, @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
-        likeNoticeService.unlikeNotice(noticeId, userPrincipal);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity<DeleteLikeNoticeResponse> unlikeNotice(@PathVariable Long noticeId,
+                                                                 @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
+        DeleteLikeNoticeResponse response = likeNoticeService.unlikeNotice(noticeId, userPrincipal);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/count")
-    public ResponseEntity<Long> getLikeCount(@PathVariable Long noticeId) {
-        long likeCount = likeNoticeService.getLikeCount(noticeId);
-        return ResponseEntity.ok(likeCount);
+    public ResponseEntity<GetLikeNoticeResponse> getLikeCount(@PathVariable Long noticeId) {
+        GetLikeNoticeResponse response = likeNoticeService.getLikeCount(noticeId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
