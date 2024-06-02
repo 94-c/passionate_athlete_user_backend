@@ -1,11 +1,14 @@
 package com.backend.athlete.domain.user.service;
 
 import com.backend.athlete.domain.user.dto.request.UpdateUserRequestDto;
+import com.backend.athlete.domain.user.dto.request.UpdateUserStatusRequest;
 import com.backend.athlete.domain.user.dto.response.GetUserResponseDto;
 import com.backend.athlete.domain.user.dto.response.UpdateUserResponseDto;
+import com.backend.athlete.domain.user.dto.response.UpdateUserStatusResponse;
 import com.backend.athlete.domain.user.model.User;
 import com.backend.athlete.domain.user.repository.UserRepository;
 import com.backend.athlete.global.exception.AuthException;
+import com.backend.athlete.global.exception.ServiceException;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -59,5 +62,13 @@ public class UserService {
         if (!password.equals(passwordCheck)) {
             throw new AuthException("패스워드가 불일치 합니다.");
         }
+    }
+
+    public UpdateUserStatusResponse updateUserStatus(Long userId, UpdateUserStatusRequest request, CustomUserDetailsImpl userPrincipal) {
+        User user = userRepository.findByUserId(userPrincipal.getUsername());
+
+        User updatedUser = userRepository.save(UpdateUserStatusRequest.toEntity(request, user));
+
+        return new UpdateUserStatusResponse(updatedUser.getId(), updatedUser.getStatus(), "User status updated successfully");
     }
 }

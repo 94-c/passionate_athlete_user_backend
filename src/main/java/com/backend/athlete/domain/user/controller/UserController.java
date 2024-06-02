@@ -1,8 +1,11 @@
 package com.backend.athlete.domain.user.controller;
 
 import com.backend.athlete.domain.user.dto.request.UpdateUserRequestDto;
+import com.backend.athlete.domain.user.dto.request.UpdateUserStatusRequest;
+import com.backend.athlete.domain.user.dto.request.UpdateUserStausRequest;
 import com.backend.athlete.domain.user.dto.response.GetUserResponseDto;
 import com.backend.athlete.domain.user.dto.response.UpdateUserResponseDto;
+import com.backend.athlete.domain.user.dto.response.UpdateUserStatusResponse;
 import com.backend.athlete.domain.user.service.UserService;
 import com.backend.athlete.global.jwt.JwtTokenProvider;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
@@ -32,5 +35,18 @@ public class UserController {
                                                             @RequestBody UpdateUserRequestDto dto) {
         UpdateUserResponseDto updateUser = userService.updateUser(userPrincipal, dto);
         return ResponseEntity.status(HttpStatus.OK).body(updateUser);
+    }
+
+    /**
+     * 회원 상태 변경
+     * 회원 권한 변경
+     */
+    @PutMapping("/{userId}/status")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity<UpdateUserStatusResponse> updateStatus(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
+                                                                 @PathVariable Long userId,
+                                                                 @RequestBody UpdateUserStatusRequest request) {
+        UpdateUserStatusResponse response = userService.updateUserStatus(userId, request, userPrincipal);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
