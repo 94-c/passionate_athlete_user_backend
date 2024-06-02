@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter @Setter
 public class CreateCommentRequest {
-    private Long parentId; // 대댓글의 경우 부모 댓글 ID
+    private Long parentId;
     @NotNull(message = "댓글 내용을 입력 해주세요.")
     private String content;
 

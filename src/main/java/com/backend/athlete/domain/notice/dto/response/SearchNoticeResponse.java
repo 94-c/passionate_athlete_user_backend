@@ -16,15 +16,19 @@ public class SearchNoticeResponse {
     private String imagePath;
     private String userName;
     private int likeCount;
+    private String createdDate;
+    private String modifiedDate;
     private List<GetNoticeCommentResponse> comments;
 
-    public SearchNoticeResponse(Long id, String title, String content, String imagePath, String userName, int likeCount, List<GetNoticeCommentResponse> comments) {
+    public SearchNoticeResponse(Long id, String title, String content, String imagePath, String userName, int likeCount, String createdDate, String modifiedDate, List<GetNoticeCommentResponse> comments) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.imagePath = imagePath;
         this.userName = userName;
         this.likeCount = likeCount;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
         this.comments = comments;
     }
 
@@ -44,6 +48,8 @@ public class SearchNoticeResponse {
                 notice.getImagePath(),
                 notice.getUser().getName(),
                 likeCount,
+                notice.getCreatedDate(),
+                notice.getModifiedDate(),
                 commentResponses
         );
     }
