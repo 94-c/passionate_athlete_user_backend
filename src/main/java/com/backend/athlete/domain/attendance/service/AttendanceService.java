@@ -1,8 +1,8 @@
 package com.backend.athlete.domain.attendance.service;
 
-import com.backend.athlete.domain.attendance.dto.response.GetDailyAttendanceResponse;
 import com.backend.athlete.domain.attendance.dto.request.CreateAttendanceRequest;
 import com.backend.athlete.domain.attendance.dto.response.CreateAttendanceResponse;
+import com.backend.athlete.domain.attendance.dto.response.GetDailyAttendanceResponse;
 import com.backend.athlete.domain.attendance.dto.response.GetMonthlyAttendanceResponse;
 import com.backend.athlete.domain.attendance.model.Attendance;
 import com.backend.athlete.domain.attendance.repository.AttendanceRepository;

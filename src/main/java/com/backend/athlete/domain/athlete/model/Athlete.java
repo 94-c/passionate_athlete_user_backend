@@ -9,7 +9,6 @@ import org.hibernate.annotations.Comment;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter

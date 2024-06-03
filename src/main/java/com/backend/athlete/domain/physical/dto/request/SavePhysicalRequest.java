@@ -2,11 +2,9 @@ package com.backend.athlete.domain.physical.dto.request;
 
 import com.backend.athlete.domain.physical.model.Physical;
 import com.backend.athlete.domain.user.model.User;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Comment;
 
 import java.time.LocalDate;
 

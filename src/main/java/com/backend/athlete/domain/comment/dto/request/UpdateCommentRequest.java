@@ -1,6 +1,5 @@
 package com.backend.athlete.domain.comment.dto.request;
 
-import com.backend.athlete.domain.comment.model.Comment;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
