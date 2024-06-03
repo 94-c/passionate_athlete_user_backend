@@ -1,5 +1,6 @@
 package com.backend.athlete.domain.user.model;
 
+import com.backend.athlete.domain.branch.model.Branch;
 import com.backend.athlete.domain.user.model.type.UserGenderType;
 import com.backend.athlete.domain.user.model.type.UserStatusType;
 import com.backend.athlete.global.common.BaseTimeEntity;
@@ -56,6 +57,10 @@ public class User extends BaseTimeEntity {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "branch_id")
+    private Branch branch;
 
     protected User() {
     }
