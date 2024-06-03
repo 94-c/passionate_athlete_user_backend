@@ -1,22 +1,20 @@
 package com.backend.athlete.domain.auth.dto.request;
 
+import com.backend.athlete.domain.branch.model.Branch;
 import com.backend.athlete.domain.user.model.Role;
 import com.backend.athlete.domain.user.model.User;
 import com.backend.athlete.domain.user.model.type.UserGenderType;
-import com.backend.athlete.domain.user.model.type.UserRoleType;
 import com.backend.athlete.domain.user.model.type.UserStatusType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Set;
 
 @Getter @Setter
-public class RegisterUserRequestDto {
+public class RegisterUserRequest {
 
     private String code;
 
@@ -46,9 +44,12 @@ public class RegisterUserRequestDto {
 
     private Set<Role> roleIds;
 
-    protected RegisterUserRequestDto() {}
+    @NotBlank(message = "지점 이름을 입력하세요.")
+    private String branchName;
 
-    public static User toEntity(RegisterUserRequestDto dto) {
+    protected RegisterUserRequest() {}
+
+    public static User toEntity(RegisterUserRequest dto, Branch branch) {
         return new User(
                 dto.getCode(),
                 dto.getUserId(),
@@ -58,7 +59,8 @@ public class RegisterUserRequestDto {
                 dto.getWeight(),
                 dto.getHeight(),
                 UserStatusType.WAIT,
-                dto.getRoleIds()
+                dto.getRoleIds(),
+                branch
         );
     }
 }
