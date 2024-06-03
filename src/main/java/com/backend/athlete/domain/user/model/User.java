@@ -1,6 +1,5 @@
 package com.backend.athlete.domain.user.model;
 
-import com.backend.athlete.domain.branch.model.Branch;
 import com.backend.athlete.domain.user.model.type.UserRoleType;
 import com.backend.athlete.domain.user.model.type.UserStatusType;
 import com.backend.athlete.domain.user.model.type.UserGenderType;
@@ -58,15 +57,12 @@ public class User extends BaseTimeEntity {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles = new HashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name = "branch_id")
-    private Branch branch;
-
-    protected User() {}
+    protected User() {
+    }
 
     // 회원 가입
     public User(String code, String userId, String password, String name, UserGenderType gender, Double weight, Double height, UserStatusType status, Set<Role> roles, Branch branch) {
