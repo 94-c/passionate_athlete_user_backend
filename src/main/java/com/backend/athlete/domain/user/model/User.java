@@ -1,13 +1,9 @@
 package com.backend.athlete.domain.user.model;
 
-import com.backend.athlete.domain.user.model.type.UserRoleType;
-import com.backend.athlete.domain.user.model.type.UserStatusType;
 import com.backend.athlete.domain.user.model.type.UserGenderType;
+import com.backend.athlete.domain.user.model.type.UserStatusType;
 import com.backend.athlete.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;

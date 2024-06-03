@@ -1,12 +1,8 @@
 package com.backend.athlete.domain.branch.dto.response;
 
-import com.backend.athlete.domain.branch.dto.data.ManagerData;
 import com.backend.athlete.domain.branch.model.Branch;
-import com.backend.athlete.domain.user.model.User;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter @Setter
 public class PageSearchBranchResponse {

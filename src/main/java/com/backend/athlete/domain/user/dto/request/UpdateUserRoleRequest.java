@@ -1,7 +1,6 @@
 package com.backend.athlete.domain.user.dto.request;
 
 import com.backend.athlete.domain.user.model.type.UserRoleType;
-import com.backend.athlete.domain.user.model.type.UserStatusType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 

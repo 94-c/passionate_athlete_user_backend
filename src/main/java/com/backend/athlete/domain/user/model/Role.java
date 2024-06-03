@@ -2,9 +2,7 @@ package com.backend.athlete.domain.user.model;
 
 import com.backend.athlete.domain.user.model.type.UserRoleType;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 @Getter

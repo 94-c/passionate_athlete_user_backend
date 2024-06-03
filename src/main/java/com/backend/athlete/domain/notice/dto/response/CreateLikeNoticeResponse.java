@@ -1,7 +1,6 @@
 package com.backend.athlete.domain.notice.dto.response;
 
 import com.backend.athlete.domain.notice.model.Like;
-import com.backend.athlete.domain.notice.model.Notice;
 import lombok.Getter;
 import lombok.Setter;
 

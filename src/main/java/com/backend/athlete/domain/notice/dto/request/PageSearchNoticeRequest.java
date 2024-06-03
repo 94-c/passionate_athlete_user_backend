@@ -1,6 +1,5 @@
 package com.backend.athlete.domain.notice.dto.request;
 
-import com.backend.athlete.domain.user.model.User;
 import lombok.Getter;
 import lombok.Setter;
 
