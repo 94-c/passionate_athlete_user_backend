@@ -1,15 +1,14 @@
 package com.backend.athlete.domain.user.controller;
 
-import com.backend.athlete.domain.user.dto.request.UpdateUserRequestDto;
+import com.backend.athlete.domain.user.dto.request.UpdateUserRequest;
 import com.backend.athlete.domain.user.dto.request.UpdateUserRoleRequest;
 import com.backend.athlete.domain.user.dto.request.UpdateUserStatusRequest;
-import com.backend.athlete.domain.user.dto.response.GetUserResponseDto;
-import com.backend.athlete.domain.user.dto.response.UpdateUserResponseDto;
+import com.backend.athlete.domain.user.dto.response.GetUserResponse;
+import com.backend.athlete.domain.user.dto.response.UpdateUserResponse;
 import com.backend.athlete.domain.user.dto.response.UpdateUserRoleResponse;
 import com.backend.athlete.domain.user.dto.response.UpdateUserStatusResponse;
 import com.backend.athlete.domain.user.service.UserService;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
-import com.sun.security.auth.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,15 +24,15 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<GetUserResponseDto> getUserInfo(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
-        GetUserResponseDto getUserInfo = userService.getUserInfo(userPrincipal);
+    public ResponseEntity<GetUserResponse> getUserInfo(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
+        GetUserResponse getUserInfo = userService.getUserInfo(userPrincipal);
         return ResponseEntity.status(HttpStatus.OK).body(getUserInfo);
     }
 
     @PutMapping
-    public ResponseEntity<UpdateUserResponseDto> updateUser(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                            @RequestBody UpdateUserRequestDto dto) {
-        UpdateUserResponseDto updateUser = userService.updateUser(userPrincipal, dto);
+    public ResponseEntity<UpdateUserResponse> updateUser(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
+                                                         @RequestBody UpdateUserRequest dto) {
+        UpdateUserResponse updateUser = userService.updateUser(userPrincipal, dto);
         return ResponseEntity.status(HttpStatus.OK).body(updateUser);
     }
 

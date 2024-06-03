@@ -8,13 +8,13 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Getter @Setter
-public class CreateAttendanceEventRequest {
+public class CreateAttendanceRequest {
 
     private LocalDate eventDate;
 
-    protected CreateAttendanceEventRequest() {}
+    protected CreateAttendanceRequest() {}
 
-    public static Attendance toEntity(CreateAttendanceEventRequest dto, User user) {
+    public static Attendance toEntity(CreateAttendanceRequest dto, User user) {
         return new Attendance(
                 user,
                 dto.getEventDate()

@@ -6,11 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter @Setter
-public class CreateAthleteResponseDto {
+public class CreateAthleteResponse {
 
     private Long id;
     private LocalDate dailyTime;
@@ -21,7 +20,7 @@ public class CreateAthleteResponseDto {
     private String etc;
     private String username;
 
-    public CreateAthleteResponseDto(Long id, LocalDate dailyTime, String athletics, String type, LocalTime record, Integer round, String etc, String username) {
+    public CreateAthleteResponse(Long id, LocalDate dailyTime, String athletics, String type, LocalTime record, Integer round, String etc, String username) {
         this.id = id;
         this.dailyTime = dailyTime;
         this.athletics = athletics;
@@ -33,9 +32,9 @@ public class CreateAthleteResponseDto {
     }
 
     //Entity -> Dto
-    public static CreateAthleteResponseDto fromEntity(Athlete athlete) {
+    public static CreateAthleteResponse fromEntity(Athlete athlete) {
         User findUser = athlete.getUser();
-        return new CreateAthleteResponseDto(
+        return new CreateAthleteResponse(
                 athlete.getId(),
                 athlete.getDailyTime(),
                 athlete.getAthletics(),

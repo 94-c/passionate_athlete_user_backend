@@ -106,14 +106,14 @@ public class NoticeService {
         noticeRepository.delete(notice);
     }
 
-    public Page<SearchNoticeResponse> searchNotices(PageSearchNoticeRequest request, int page, int perPage) {
+    public Page<PageSearchNoticeResponse> searchNotices(PageSearchNoticeRequest request, int page, int perPage) {
         Pageable pageable = PageRequest.of(page, perPage);
         Page<Notice> notices = noticeRepository.findAllByUserAndTitle(request.getName(), request.getTitle(), pageable);
 
         return notices.map(notice -> {
             int likeCount = likeRepository.countByNoticeId(notice.getId());
             List<Comment> comments = commentRepository.findByNoticeId(notice.getId());
-            return SearchNoticeResponse.fromEntity(notice, likeCount, comments);
+            return PageSearchNoticeResponse.fromEntity(notice, likeCount, comments);
         });
     }
 

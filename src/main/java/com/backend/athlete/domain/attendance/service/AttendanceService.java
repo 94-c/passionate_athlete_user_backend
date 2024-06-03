@@ -1,8 +1,8 @@
 package com.backend.athlete.domain.attendance.service;
 
 import com.backend.athlete.domain.attendance.dto.response.GetDailyAttendanceResponse;
-import com.backend.athlete.domain.attendance.dto.request.CreateAttendanceEventRequest;
-import com.backend.athlete.domain.attendance.dto.response.CreateAttendanceEventResponse;
+import com.backend.athlete.domain.attendance.dto.request.CreateAttendanceRequest;
+import com.backend.athlete.domain.attendance.dto.response.CreateAttendanceResponse;
 import com.backend.athlete.domain.attendance.dto.response.GetMonthlyAttendanceResponse;
 import com.backend.athlete.domain.attendance.model.Attendance;
 import com.backend.athlete.domain.attendance.repository.AttendanceRepository;
@@ -30,7 +30,7 @@ public class AttendanceService {
         this.userRepository = userRepository;
     }
 
-    public CreateAttendanceEventResponse createAttendanceEvent(CustomUserDetailsImpl userPrincipal, CreateAttendanceEventRequest dto) {
+    public CreateAttendanceResponse createAttendanceEvent(CustomUserDetailsImpl userPrincipal, CreateAttendanceRequest dto) {
         User user = userRepository.findByUserId(userPrincipal.getUsername());
         if (user == null) {
             throw new ServiceException("회원을 찾을 수 없습니다.");
@@ -44,11 +44,11 @@ public class AttendanceService {
             throw new ServiceException("이미 해당 " +  eventDate + " 일에 출석 했습니다. ");
         }
 
-        Attendance attendance = attendanceRepository.save(CreateAttendanceEventRequest.toEntity(dto, user));
+        Attendance attendance = attendanceRepository.save(CreateAttendanceRequest.toEntity(dto, user));
 
         long totalAttendanceCount = attendanceRepository.countByUserId(user.getId());
 
-        return CreateAttendanceEventResponse.fromEntity(attendance, totalAttendanceCount);
+        return CreateAttendanceResponse.fromEntity(attendance, totalAttendanceCount);
     }
 
     @Transactional

@@ -1,10 +1,7 @@
 package com.backend.athlete.domain.user.dto.response;
 
 import com.backend.athlete.domain.user.model.User;
-import com.backend.athlete.domain.user.model.type.UserGenderType;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Set;
@@ -12,7 +9,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-public class GetUserResponseDto {
+public class GetUserResponse {
 
     private String code;
     private String userId;
@@ -23,7 +20,7 @@ public class GetUserResponseDto {
     private Set<String> roles;
     private String createdDate;
 
-    public GetUserResponseDto(String code, String userId, String name, String gender, Double weight, Double height, Set<String> roles, String createdDate) {
+    public GetUserResponse(String code, String userId, String name, String gender, Double weight, Double height, Set<String> roles, String createdDate) {
         this.code = code;
         this.userId = userId;
         this.name = name;
@@ -34,12 +31,12 @@ public class GetUserResponseDto {
         this.createdDate = createdDate;
     }
 
-    public static GetUserResponseDto fromEntity(User user) {
+    public static GetUserResponse fromEntity(User user) {
         Set<String> roleNames = user.getRoles().stream()
                 .map(role -> role.getName().toString())
                 .collect(Collectors.toSet());
 
-        return new GetUserResponseDto(
+        return new GetUserResponse(
                 user.getCode(),
                 user.getUserId(),
                 user.getName(),

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-public class UpdateUserResponseDto {
+public class UpdateUserResponse {
 
     private String code;
     private String userId;
@@ -20,7 +20,7 @@ public class UpdateUserResponseDto {
     private Set<String> roles;
     private String modifiedDate;
 
-    public UpdateUserResponseDto(String code, String userId, String name, String gender, Double weight, Double height, Set<String> roles, String modifiedDate) {
+    public UpdateUserResponse(String code, String userId, String name, String gender, Double weight, Double height, Set<String> roles, String modifiedDate) {
         this.code = code;
         this.userId = userId;
         this.name = name;
@@ -31,12 +31,12 @@ public class UpdateUserResponseDto {
         this.modifiedDate = modifiedDate;
     }
 
-    public static UpdateUserResponseDto fromEntity(User user) {
+    public static UpdateUserResponse fromEntity(User user) {
         Set<String> roleNames = user.getRoles().stream()
                 .map(role -> role.getName().toString())
                 .collect(Collectors.toSet());
 
-        return new UpdateUserResponseDto(
+        return new UpdateUserResponse(
                 user.getCode(),
                 user.getUserId(),
                 user.getName(),

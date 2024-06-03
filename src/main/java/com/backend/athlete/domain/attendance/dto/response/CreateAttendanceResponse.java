@@ -8,22 +8,22 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Getter @Setter
-public class CreateAttendanceEventResponse {
+public class CreateAttendanceResponse {
 
     private String userName;
     private LocalDate attendanceDate;
     private long totalAttendanceCount;
 
-    public CreateAttendanceEventResponse(String userName, LocalDate attendanceDate, long totalAttendanceCount) {
+    public CreateAttendanceResponse(String userName, LocalDate attendanceDate, long totalAttendanceCount) {
         this.userName = userName;
         this.attendanceDate = attendanceDate;
         this.totalAttendanceCount = totalAttendanceCount;
     }
 
     //Entity -> Dto
-    public static CreateAttendanceEventResponse fromEntity(Attendance attendance, long totalAttendanceCount) {
+    public static CreateAttendanceResponse fromEntity(Attendance attendance, long totalAttendanceCount) {
         User findUser = attendance.getUser();
-        return new CreateAttendanceEventResponse(
+        return new CreateAttendanceResponse(
                 findUser.getName(),
                 attendance.getAttendanceDate(),
                 totalAttendanceCount

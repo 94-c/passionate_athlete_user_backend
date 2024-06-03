@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Getter @Setter
-public class GetDailyAthleteResponseDto {
+public class GetDailyAthleteResponse {
 
     private LocalDate dailyTime;
     private String athletics;
@@ -19,7 +19,7 @@ public class GetDailyAthleteResponseDto {
     private String etc;
     private String username;
 
-    public GetDailyAthleteResponseDto(LocalDate dailyTime, String athletics, String type, LocalTime record, Integer round, String etc, String username) {
+    public GetDailyAthleteResponse(LocalDate dailyTime, String athletics, String type, LocalTime record, Integer round, String etc, String username) {
         this.dailyTime = dailyTime;
         this.athletics = athletics;
         this.type = type;
@@ -29,9 +29,9 @@ public class GetDailyAthleteResponseDto {
         this.username = username;
     }
 
-    public static GetDailyAthleteResponseDto fromEntity(Athlete athlete) {
+    public static GetDailyAthleteResponse fromEntity(Athlete athlete) {
         User findUser = athlete.getUser();
-        return new GetDailyAthleteResponseDto(
+        return new GetDailyAthleteResponse(
                 athlete.getDailyTime(),
                 athlete.getAthletics(),
                 athlete.getType().toString(),

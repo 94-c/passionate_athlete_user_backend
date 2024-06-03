@@ -9,11 +9,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter @Setter
-public class CreateAthleteRequestDto {
+public class CreateAthleteRequest {
 
     private LocalDate dailyTime;
     @NotBlank(message = "운동 일지를 작성 해주세요.")
@@ -27,9 +26,9 @@ public class CreateAthleteRequestDto {
 
     private String etc;
 
-    protected CreateAthleteRequestDto() {}
+    protected CreateAthleteRequest() {}
 
-    public static Athlete toEntity(CreateAthleteRequestDto dto, User user) {
+    public static Athlete toEntity(CreateAthleteRequest dto, User user) {
         return new Athlete(
                 user,
                 dto.getDailyTime(),

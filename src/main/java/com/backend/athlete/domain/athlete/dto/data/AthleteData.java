@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.athlete.dto;
+package com.backend.athlete.domain.athlete.dto.data;
 
 import com.backend.athlete.domain.athlete.model.type.AthleteSuccessType;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Getter @Setter
-public class GetAthleteRecordDto {
+public class AthleteData {
     private LocalDate dailyTime;
     private String athletics;
     private AthleteSuccessType type;

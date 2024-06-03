@@ -5,7 +5,7 @@ import com.backend.athlete.domain.notice.dto.request.SaveNoticeRequest;
 import com.backend.athlete.domain.notice.dto.request.UpdateNoticeRequest;
 import com.backend.athlete.domain.notice.dto.response.GetNoticeResponse;
 import com.backend.athlete.domain.notice.dto.response.SaveNoticeResponse;
-import com.backend.athlete.domain.notice.dto.response.SearchNoticeResponse;
+import com.backend.athlete.domain.notice.dto.response.PageSearchNoticeResponse;
 import com.backend.athlete.domain.notice.dto.response.UpdateNoticeResponse;
 import com.backend.athlete.domain.notice.service.NoticeService;
 import com.backend.athlete.global.constant.PageConstant;
@@ -40,7 +40,7 @@ public class NoticeController {
             @RequestParam(defaultValue = PageConstant.DEFAULT_PER_PAGE, required = false) int perPage
     ) {
         PageSearchNoticeRequest request = new PageSearchNoticeRequest(title, name);
-        Page<SearchNoticeResponse> response = noticeService.searchNotices(request, page, perPage);
+        Page<PageSearchNoticeResponse> response = noticeService.searchNotices(request, page, perPage);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

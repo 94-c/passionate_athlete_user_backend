@@ -1,8 +1,8 @@
 package com.backend.athlete.domain.attendance.controller;
 
 import com.backend.athlete.domain.attendance.dto.response.GetDailyAttendanceResponse;
-import com.backend.athlete.domain.attendance.dto.request.CreateAttendanceEventRequest;
-import com.backend.athlete.domain.attendance.dto.response.CreateAttendanceEventResponse;
+import com.backend.athlete.domain.attendance.dto.request.CreateAttendanceRequest;
+import com.backend.athlete.domain.attendance.dto.response.CreateAttendanceResponse;
 import com.backend.athlete.domain.attendance.dto.response.GetMonthlyAttendanceResponse;
 import com.backend.athlete.domain.attendance.service.AttendanceService;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
@@ -26,9 +26,9 @@ public class AttendanceController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateAttendanceEventResponse> dailyAttendance(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                                         @RequestBody CreateAttendanceEventRequest dto) {
-        CreateAttendanceEventResponse dailyAttendance = attendanceService.createAttendanceEvent(userPrincipal, dto);
+    public ResponseEntity<CreateAttendanceResponse> dailyAttendance(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
+                                                                    @RequestBody CreateAttendanceRequest dto) {
+        CreateAttendanceResponse dailyAttendance = attendanceService.createAttendanceEvent(userPrincipal, dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(dailyAttendance);
     }
 

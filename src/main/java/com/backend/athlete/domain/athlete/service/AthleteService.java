@@ -1,10 +1,10 @@
 package com.backend.athlete.domain.athlete.service;
 
-import com.backend.athlete.domain.athlete.dto.GetAthleteRecordDto;
-import com.backend.athlete.domain.athlete.dto.request.CreateAthleteRequestDto;
-import com.backend.athlete.domain.athlete.dto.response.CreateAthleteResponseDto;
-import com.backend.athlete.domain.athlete.dto.response.GetDailyAthleteResponseDto;
-import com.backend.athlete.domain.athlete.dto.response.GetMonthlyAthleteResponseDto;
+import com.backend.athlete.domain.athlete.dto.data.AthleteData;
+import com.backend.athlete.domain.athlete.dto.request.CreateAthleteRequest;
+import com.backend.athlete.domain.athlete.dto.response.CreateAthleteResponse;
+import com.backend.athlete.domain.athlete.dto.response.GetDailyAthleteResponse;
+import com.backend.athlete.domain.athlete.dto.response.GetMonthlyAthleteResponse;
 import com.backend.athlete.domain.athlete.model.Athlete;
 import com.backend.athlete.domain.athlete.repository.AthleteRepository;
 import com.backend.athlete.domain.user.model.User;
@@ -36,22 +36,22 @@ public class AthleteService {
     /**
      * 데일리 운동 기록 저장
      */
-    public CreateAthleteResponseDto createAthlete(CustomUserDetailsImpl userPrincipal, CreateAthleteRequestDto dto) {
+    public CreateAthleteResponse createAthlete(CustomUserDetailsImpl userPrincipal, CreateAthleteRequest dto) {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
         if (findUser == null) {
             throw new UsernameNotFoundException("User not found");
         }
         dto.setDailyTime(LocalDate.now());
-        Athlete createAthlete = athleteRepository.save(CreateAthleteRequestDto.toEntity(dto, findUser));
+        Athlete createAthlete = athleteRepository.save(CreateAthleteRequest.toEntity(dto, findUser));
 
-        return CreateAthleteResponseDto.fromEntity(createAthlete);
+        return CreateAthleteResponse.fromEntity(createAthlete);
     }
 
     /**
      * 데일리 운동 기록 조회
      */
     @Transactional
-    public GetDailyAthleteResponseDto getDailyAthlete(CustomUserDetailsImpl userPrincipal, LocalDate dailyDate) {
+    public GetDailyAthleteResponse getDailyAthlete(CustomUserDetailsImpl userPrincipal, LocalDate dailyDate) {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
 
         List<Athlete> athletes = athleteRepository.findAthletesByUserIdAndDailyTime(findUser.getId(), dailyDate);
@@ -62,23 +62,23 @@ public class AthleteService {
 
         Athlete athlete = athletes.get(0);
 
-        return GetDailyAthleteResponseDto.fromEntity(athlete);
+        return GetDailyAthleteResponse.fromEntity(athlete);
     }
 
     /**
      * 월별 운동 기록 조회
      */
     @Transactional
-    public GetMonthlyAthleteResponseDto getMonthlyAthlete(CustomUserDetailsImpl userPrincipal, YearMonth yearMonth) {
+    public GetMonthlyAthleteResponse getMonthlyAthlete(CustomUserDetailsImpl userPrincipal, YearMonth yearMonth) {
         LocalDate startDate = yearMonth.atDay(1);
         LocalDate endDate = yearMonth.atEndOfMonth();
 
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
 
-        List<GetAthleteRecordDto> groupedAthleteRecords = athleteRepository.findGroupedAthletesByUserIdAndYearMonth(findUser.getId(), startDate, endDate);
+        List<AthleteData> groupedAthleteRecords = athleteRepository.findGroupedAthletesByUserIdAndYearMonth(findUser.getId(), startDate, endDate);
 
-        List<GetDailyAthleteResponseDto> monthlyRecords = groupedAthleteRecords.stream()
-                .map(record -> new GetDailyAthleteResponseDto(
+        List<GetDailyAthleteResponse> monthlyRecords = groupedAthleteRecords.stream()
+                .map(record -> new GetDailyAthleteResponse(
                         record.getDailyTime(),
                         record.getAthletics(),
                         record.getType().toString(),
@@ -89,7 +89,7 @@ public class AthleteService {
                 ))
                 .collect(Collectors.toList());
 
-        return GetMonthlyAthleteResponseDto.fromEntity(yearMonth, monthlyRecords);
+        return GetMonthlyAthleteResponse.fromEntity(yearMonth, monthlyRecords);
     }
 
     public void deleteDailyAthleteById(CustomUserDetailsImpl userPrincipal, Long id) {

@@ -1,19 +1,14 @@
 package com.backend.athlete.domain.user.dto.request;
 
-import com.backend.athlete.domain.user.model.Role;
-import com.backend.athlete.domain.user.model.User;
 import com.backend.athlete.domain.user.model.type.UserGenderType;
-import com.backend.athlete.domain.user.model.type.UserStatusType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
-
 @Getter @Setter
-public class UpdateUserRequestDto {
+public class UpdateUserRequest {
 
     @NotBlank(message = "패스워드를 입력하세요.")
     @Size(min = 8, message = "패스워드는 최소 8자 이상이어야 합니다.")
@@ -32,7 +27,7 @@ public class UpdateUserRequestDto {
     @NotNull(message = "키를 입력하세요.")
     private Double height;
 
-    protected UpdateUserRequestDto() {}
+    protected UpdateUserRequest() {}
 
 }
 

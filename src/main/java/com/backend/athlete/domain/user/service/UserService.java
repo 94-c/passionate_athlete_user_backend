@@ -1,10 +1,10 @@
 package com.backend.athlete.domain.user.service;
 
-import com.backend.athlete.domain.user.dto.request.UpdateUserRequestDto;
+import com.backend.athlete.domain.user.dto.request.UpdateUserRequest;
 import com.backend.athlete.domain.user.dto.request.UpdateUserRoleRequest;
 import com.backend.athlete.domain.user.dto.request.UpdateUserStatusRequest;
-import com.backend.athlete.domain.user.dto.response.GetUserResponseDto;
-import com.backend.athlete.domain.user.dto.response.UpdateUserResponseDto;
+import com.backend.athlete.domain.user.dto.response.GetUserResponse;
+import com.backend.athlete.domain.user.dto.response.UpdateUserResponse;
 import com.backend.athlete.domain.user.dto.response.UpdateUserRoleResponse;
 import com.backend.athlete.domain.user.dto.response.UpdateUserStatusResponse;
 import com.backend.athlete.domain.user.model.Role;
@@ -34,16 +34,16 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
-    public GetUserResponseDto getUserInfo(CustomUserDetailsImpl userPrincipal) {
+    public GetUserResponse getUserInfo(CustomUserDetailsImpl userPrincipal) {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
         if (findUser == null) {
             throw new UsernameNotFoundException("회원이 존재 하지 않습니다.");
         }
-        return GetUserResponseDto.fromEntity(findUser);
+        return GetUserResponse.fromEntity(findUser);
     }
 
     @Transactional
-    public UpdateUserResponseDto updateUser(CustomUserDetailsImpl userPrincipal, UpdateUserRequestDto dto) {
+    public UpdateUserResponse updateUser(CustomUserDetailsImpl userPrincipal, UpdateUserRequest dto) {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
         if (findUser == null) {
             throw new UsernameNotFoundException("회원이 존재 하지 않습니다.");
@@ -61,7 +61,7 @@ public class UserService {
 
         userRepository.save(findUser);
 
-        return UpdateUserResponseDto.fromEntity(findUser);
+        return UpdateUserResponse.fromEntity(findUser);
     }
 
     protected void checkDuplicatePassword(String password, String passwordCheck) {
