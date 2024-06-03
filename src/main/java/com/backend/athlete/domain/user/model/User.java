@@ -69,7 +69,7 @@ public class User extends BaseTimeEntity {
     protected User() {}
 
     // 회원 가입
-    public User(String code, String userId, String password, String name, UserGenderType gender, Double weight, Double height, UserStatusType status, Set<Role> roles) {
+    public User(String code, String userId, String password, String name, UserGenderType gender, Double weight, Double height, UserStatusType status, Set<Role> roles, Branch branch) {
         this.code = code;
         this.userId = userId;
         this.password = password;
@@ -79,15 +79,7 @@ public class User extends BaseTimeEntity {
         this.height = height;
         this.status = status;
         this.roles = roles;
-    }
-
-    // 회원 수정
-    public User(String password, UserGenderType gender, Double weight, Double height, UserStatusType status) {
-        this.password = password;
-        this.gender = gender;
-        this.weight = weight;
-        this.height = height;
-        this.status = status;
+        this.branch = branch;
     }
 
     public void updateUser(String password, UserGenderType gender, Double weight, Double height) {

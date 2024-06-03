@@ -1,9 +1,9 @@
 package com.backend.athlete.domain.auth.controller;
 
-import com.backend.athlete.domain.auth.dto.request.LoginTokenRequestDto;
-import com.backend.athlete.domain.auth.dto.request.RegisterUserRequestDto;
-import com.backend.athlete.domain.auth.dto.response.LoginTokenResponseDto;
-import com.backend.athlete.domain.auth.dto.response.RegisterUserResponseDto;
+import com.backend.athlete.domain.auth.dto.request.LoginTokenRequest;
+import com.backend.athlete.domain.auth.dto.request.RegisterUserRequest;
+import com.backend.athlete.domain.auth.dto.response.LoginTokenResponse;
+import com.backend.athlete.domain.auth.dto.response.RegisterUserResponse;
 import com.backend.athlete.domain.auth.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,14 +22,14 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterUserResponseDto> register(@Valid @RequestBody RegisterUserRequestDto dto) {
-        RegisterUserResponseDto register = authService.register(dto);
+    public ResponseEntity<RegisterUserResponse> register(@Valid @RequestBody RegisterUserRequest dto) {
+        RegisterUserResponse register = authService.register(dto);
         return ResponseEntity.status(HttpStatus.OK).body(register);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginTokenResponseDto> login(@RequestBody LoginTokenRequestDto dto) {
-        LoginTokenResponseDto login = authService.login(dto);
+    public ResponseEntity<LoginTokenResponse> login(@RequestBody LoginTokenRequest dto) {
+        LoginTokenResponse login = authService.login(dto);
         return ResponseEntity.status(HttpStatus.OK).body(login);
     }
 

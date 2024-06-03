@@ -1,15 +1,18 @@
 package com.backend.athlete.domain.auth.service;
 
-import com.backend.athlete.domain.auth.dto.request.LoginTokenRequestDto;
-import com.backend.athlete.domain.auth.dto.request.RegisterUserRequestDto;
-import com.backend.athlete.domain.auth.dto.response.LoginTokenResponseDto;
-import com.backend.athlete.domain.auth.dto.response.RegisterUserResponseDto;
+import com.backend.athlete.domain.auth.dto.request.LoginTokenRequest;
+import com.backend.athlete.domain.auth.dto.request.RegisterUserRequest;
+import com.backend.athlete.domain.auth.dto.response.LoginTokenResponse;
+import com.backend.athlete.domain.auth.dto.response.RegisterUserResponse;
+import com.backend.athlete.domain.branch.model.Branch;
+import com.backend.athlete.domain.branch.repository.BranchRepository;
 import com.backend.athlete.domain.user.model.Role;
 import com.backend.athlete.domain.user.model.User;
 import com.backend.athlete.domain.auth.repository.AuthRepository;
 import com.backend.athlete.domain.user.model.type.UserRoleType;
 import com.backend.athlete.domain.user.repository.RoleRepository;
 import com.backend.athlete.global.exception.AuthException;
+import com.backend.athlete.global.exception.ServiceException;
 import com.backend.athlete.global.jwt.JwtTokenProvider;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.global.util.UserCodeUtils;
@@ -31,20 +34,21 @@ public class AuthService {
 
     private final AuthRepository authRepository;
     private final RoleRepository roleRepository;
-
+    private final BranchRepository branchRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenUtil;
 
-    public AuthService(AuthRepository authRepository, RoleRepository roleRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenUtil) {
+    public AuthService(AuthRepository authRepository, RoleRepository roleRepository, BranchRepository branchRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenUtil) {
         this.authRepository = authRepository;
         this.roleRepository = roleRepository;
+        this.branchRepository = branchRepository;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    public RegisterUserResponseDto register(RegisterUserRequestDto dto) {
+    public RegisterUserResponse register(RegisterUserRequest dto) {
         isExistUserId(dto.getUserId());
         checkDuplicatePassword(dto.getPassword(), dto.getPasswordCheck());
 
@@ -52,16 +56,20 @@ public class AuthService {
         dto.setPassword(encodedPassword);
         dto.setCode(generateUserCode());
 
+        Branch branch = branchRepository.findByName(dto.getBranchName())
+                .orElseThrow(() -> new ServiceException("해당 지점을 찾을 수 없습니다."));
+
         Set<Role> roles = new HashSet<>();
         roles.add(getUserRoleTypeRole());
         dto.setRoleIds(roles);
 
-        User registerUser = authRepository.save(RegisterUserRequestDto.toEntity(dto));
+        User registerUser = authRepository.save(RegisterUserRequest.toEntity(dto, branch));
 
-        return RegisterUserResponseDto.fromEntity(registerUser);
+        return RegisterUserResponse.fromEntity(registerUser);
     }
 
-    public LoginTokenResponseDto login(LoginTokenRequestDto dto) {
+
+    public LoginTokenResponse login(LoginTokenRequest dto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.getUserId(), dto.getPassword()));
 
@@ -73,7 +81,7 @@ public class AuthService {
 
         checkEncodePassword(dto.getPassword(), userDetails.getPassword());
 
-        return LoginTokenResponseDto.fromEntity(userDetails, token);
+        return LoginTokenResponse.fromEntity(userDetails, token);
     }
 
 
