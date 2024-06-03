@@ -8,7 +8,7 @@ import com.backend.athlete.domain.notice.dto.response.SaveNoticeResponse;
 import com.backend.athlete.domain.notice.dto.response.SearchNoticeResponse;
 import com.backend.athlete.domain.notice.dto.response.UpdateNoticeResponse;
 import com.backend.athlete.domain.notice.service.NoticeService;
-import com.backend.athlete.global.constant.PagingConstant;
+import com.backend.athlete.global.constant.PageConstant;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.domain.Page;
@@ -36,8 +36,8 @@ public class NoticeController {
     public ResponseEntity<?> searchNotice(
             @RequestParam(defaultValue = "", required = false) String title,
             @RequestParam(defaultValue = "", required = false) String name,
-            @RequestParam(defaultValue = PagingConstant.DEFAULT_PAGE, required = false) int page,
-            @RequestParam(defaultValue = PagingConstant.DEFAULT_PER_PAGE, required = false) int perPage
+            @RequestParam(defaultValue = PageConstant.DEFAULT_PAGE, required = false) int page,
+            @RequestParam(defaultValue = PageConstant.DEFAULT_PER_PAGE, required = false) int perPage
     ) {
         PageSearchNoticeRequest request = new PageSearchNoticeRequest(title, name);
         Page<SearchNoticeResponse> response = noticeService.searchNotices(request, page, perPage);
