@@ -1,9 +1,11 @@
 package com.backend.athlete.domain.user.controller;
 
 import com.backend.athlete.domain.user.dto.request.UpdateUserRequestDto;
+import com.backend.athlete.domain.user.dto.request.UpdateUserRoleRequest;
 import com.backend.athlete.domain.user.dto.request.UpdateUserStatusRequest;
 import com.backend.athlete.domain.user.dto.response.GetUserResponseDto;
 import com.backend.athlete.domain.user.dto.response.UpdateUserResponseDto;
+import com.backend.athlete.domain.user.dto.response.UpdateUserRoleResponse;
 import com.backend.athlete.domain.user.dto.response.UpdateUserStatusResponse;
 import com.backend.athlete.domain.user.service.UserService;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
@@ -41,10 +43,17 @@ public class UserController {
      */
     @PutMapping("/{userId}/status")
     @PreAuthorize("hasAnyAuthority('MANAGER') or hasAnyAuthority('ADMIN')")
-    public ResponseEntity<UpdateUserStatusResponse> updateStatus(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                                 @PathVariable Long userId,
+    public ResponseEntity<UpdateUserStatusResponse> updateStatus(@PathVariable Long userId,
                                                                  @RequestBody UpdateUserStatusRequest request) {
-        UpdateUserStatusResponse response = userService.updateUserStatus(userId, request, userPrincipal);
+        UpdateUserStatusResponse response = userService.updateUserStatus(userId, request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PutMapping("/{userId}/role")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<UpdateUserRoleResponse> updateRole(@PathVariable Long userId,
+                                                             @RequestBody UpdateUserRoleRequest request) {
+        UpdateUserRoleResponse response = userService.updateUserRole(userId, request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

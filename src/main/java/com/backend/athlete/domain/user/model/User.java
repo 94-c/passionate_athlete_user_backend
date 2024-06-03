@@ -1,5 +1,6 @@
 package com.backend.athlete.domain.user.model;
 
+import com.backend.athlete.domain.user.model.type.UserRoleType;
 import com.backend.athlete.domain.user.model.type.UserStatusType;
 import com.backend.athlete.domain.user.model.type.UserGenderType;
 import com.backend.athlete.global.common.BaseTimeEntity;
@@ -99,6 +100,11 @@ public class User extends BaseTimeEntity {
 
     public void updateUserStatus(UserStatusType status) {
         this.status = status;
+    }
+
+    public void updateUserRole(Role role) {
+        this.roles.clear();
+        this.roles.add(role);
     }
 
 }

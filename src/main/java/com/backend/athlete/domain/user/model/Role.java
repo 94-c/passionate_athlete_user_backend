@@ -23,8 +23,4 @@ public class Role {
 
     protected Role() {}
 
-    public Role(UserRoleType name) {
-        this.name = name;
-    }
-
 }

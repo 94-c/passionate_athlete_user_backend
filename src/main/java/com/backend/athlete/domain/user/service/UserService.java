@@ -1,11 +1,15 @@
 package com.backend.athlete.domain.user.service;
 
 import com.backend.athlete.domain.user.dto.request.UpdateUserRequestDto;
+import com.backend.athlete.domain.user.dto.request.UpdateUserRoleRequest;
 import com.backend.athlete.domain.user.dto.request.UpdateUserStatusRequest;
 import com.backend.athlete.domain.user.dto.response.GetUserResponseDto;
 import com.backend.athlete.domain.user.dto.response.UpdateUserResponseDto;
+import com.backend.athlete.domain.user.dto.response.UpdateUserRoleResponse;
 import com.backend.athlete.domain.user.dto.response.UpdateUserStatusResponse;
+import com.backend.athlete.domain.user.model.Role;
 import com.backend.athlete.domain.user.model.User;
+import com.backend.athlete.domain.user.repository.RoleRepository;
 import com.backend.athlete.domain.user.repository.UserRepository;
 import com.backend.athlete.global.exception.AuthException;
 import com.backend.athlete.global.exception.ServiceException;
@@ -22,10 +26,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     public GetUserResponseDto getUserInfo(CustomUserDetailsImpl userPrincipal) {
@@ -64,18 +70,26 @@ public class UserService {
         }
     }
 
-    public UpdateUserStatusResponse updateUserStatus(Long userId, UpdateUserStatusRequest request, CustomUserDetailsImpl userPrincipal) {
-        User user = userRepository.findByUserId(userPrincipal.getUsername());
-
+    public UpdateUserStatusResponse updateUserStatus(Long userId, UpdateUserStatusRequest request) {
         User findUser = userRepository.findById(userId)
                 .orElseThrow(() -> new ServiceException("해당 회원을 찾을 수 없습니다."));
-
         findUser.updateUserStatus(
             request.getStatus()
         );
-
         userRepository.save(findUser);
-
         return UpdateUserStatusResponse.fromEntity(findUser);
+    }
+
+    public UpdateUserRoleResponse updateUserRole(Long userId, UpdateUserRoleRequest request) {
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new ServiceException("해당 회원을 찾을 수 없습니다."));
+
+        Role newRole = roleRepository.findByName(request.getRole())
+                .orElseThrow(() -> new ServiceException("해당 권한을 찾을 수 없습니다."));
+
+        findUser.updateUserRole(newRole);
+        User updatedUser = userRepository.save(findUser);
+
+        return UpdateUserRoleResponse.fromEntity(updatedUser);
     }
 }
