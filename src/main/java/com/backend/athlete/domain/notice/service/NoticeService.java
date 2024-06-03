@@ -57,9 +57,7 @@ public class NoticeService {
             Files.copy(file.getInputStream(), rootLocation.resolve(filename));
             noticeRequest.setImagePath(rootLocation.resolve(filename).toString());
         }
-
-        Notice notice = SaveNoticeRequest.toEntity(noticeRequest, findUser);
-        Notice savedNotice = noticeRepository.save(notice);
+        Notice savedNotice = noticeRepository.save(SaveNoticeRequest.toEntity(noticeRequest, findUser));
 
         return SaveNoticeResponse.fromEntity(savedNotice);
     }

@@ -5,30 +5,32 @@ import com.backend.athlete.domain.user.model.User;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
 public class SaveNoticeResponse {
     private Long id;
     private String title;
     private String content;
     private String imagePath;
     private String userName;
+    private String createdDate;
 
-    public SaveNoticeResponse(Long id, String title, String content, String imagePath, String userName) {
+    public SaveNoticeResponse(Long id, String title, String content, String imagePath, String userName, String createdDate) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.imagePath = imagePath;
         this.userName = userName;
+        this.createdDate = createdDate;
     }
 
     public static SaveNoticeResponse fromEntity(Notice notice) {
-        User findUser = notice.getUser();
         return new SaveNoticeResponse(
                 notice.getId(),
                 notice.getTitle(),
                 notice.getContent(),
                 notice.getImagePath(),
-                findUser.getName()
+                notice.getUser().getName(),
+                notice.getCreatedDate()
         );
     }
 }

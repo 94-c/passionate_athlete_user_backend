@@ -46,10 +46,10 @@ public class NoticeController {
 
     @PostMapping
     public ResponseEntity<SaveNoticeResponse> createNotice(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                           @RequestParam("notice") String noticeJson,
+                                                           @RequestParam("notice") String notice,
                                                            @RequestParam("file") MultipartFile file) {
         try {
-            SaveNoticeRequest noticeRequest = objectMapper.readValue(noticeJson, SaveNoticeRequest.class);
+            SaveNoticeRequest noticeRequest = objectMapper.readValue(notice, SaveNoticeRequest.class);
             SaveNoticeResponse response = noticeService.saveNotice(userPrincipal, noticeRequest, file);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (IOException e) {
@@ -66,10 +66,10 @@ public class NoticeController {
     @PutMapping("/{id}")
     public ResponseEntity<UpdateNoticeResponse> updateNotice(@PathVariable Long id,
                                                              @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                             @RequestParam("notice") String noticeJson,
+                                                             @RequestParam("notice") String notice,
                                                              @RequestParam("file") MultipartFile file) {
         try {
-            UpdateNoticeRequest noticeRequest = objectMapper.readValue(noticeJson, UpdateNoticeRequest.class);
+            UpdateNoticeRequest noticeRequest = objectMapper.readValue(notice, UpdateNoticeRequest.class);
             UpdateNoticeResponse response = noticeService.updateNotice(id, userPrincipal, noticeRequest, file);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (IOException e) {
