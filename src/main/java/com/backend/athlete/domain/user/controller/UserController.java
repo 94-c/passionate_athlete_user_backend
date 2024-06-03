@@ -37,10 +37,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(updateUser);
     }
 
-    /**
-     * 회원 상태 변경
-     * 회원 권한 변경
-     */
     @PutMapping("/{userId}/status")
     @PreAuthorize("hasAnyAuthority('MANAGER') or hasAnyAuthority('ADMIN')")
     public ResponseEntity<UpdateUserStatusResponse> updateStatus(@PathVariable Long userId,
