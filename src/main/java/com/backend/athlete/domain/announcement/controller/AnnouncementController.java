@@ -1,12 +1,10 @@
 package com.backend.athlete.domain.announcement.controller;
 
 import com.backend.athlete.domain.announcement.dto.request.PageSearchAnnouncementRequest;
-import com.backend.athlete.domain.announcement.dto.response.PageSearchAnnouncementResponse;
-import com.backend.athlete.domain.announcement.dto.response.UpdateAnnouncementResponse;
+import com.backend.athlete.domain.announcement.dto.request.UpdateAnnouncementStatusRequest;
+import com.backend.athlete.domain.announcement.dto.response.*;
 import com.backend.athlete.domain.announcement.dto.request.CreateAnnouncementRequest;
 import com.backend.athlete.domain.announcement.dto.request.UpdateAnnouncementRequest;
-import com.backend.athlete.domain.announcement.dto.response.CreateAnnouncementResponse;
-import com.backend.athlete.domain.announcement.dto.response.GetAnnouncementResponse;
 import com.backend.athlete.domain.announcement.service.AnnouncementService;
 import com.backend.athlete.global.constant.PageConstant;
 import com.backend.athlete.global.jwt.service.CustomUserDetailsImpl;
@@ -76,6 +74,12 @@ public class AnnouncementController {
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<UpdateAnnouncementStatusResponse> updateAnnouncementStatus(@PathVariable Long id, @RequestBody UpdateAnnouncementStatusRequest request) {
+        UpdateAnnouncementStatusResponse response = announcementService.updateAnnouncementStatus(id, request.isStatus());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 

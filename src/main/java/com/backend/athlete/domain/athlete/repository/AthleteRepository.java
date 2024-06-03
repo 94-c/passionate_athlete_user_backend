@@ -15,13 +15,14 @@ public interface AthleteRepository extends JpaRepository<Athlete, Long> {
     @Query("SELECT a FROM Athlete a WHERE a.user.id = :userId AND a.dailyTime = :dailyTime")
     List<Athlete> findAthletesByUserIdAndDailyTime(@Param("userId") Long userId, @Param("dailyTime") LocalDate dailyTime);
 
-    @Query("SELECT new com.backend.athlete.domain.athlete.dto.AthleteData(a.dailyTime, a.athletics, a.type, SUM(a.record) as totalRecord, COUNT(a.id) as recordCount, a.etc, a.user.name as username) " +
+    @Query("SELECT new com.backend.athlete.domain.athlete.dto.data.AthleteData(a.dailyTime, a.athletics, a.type, SUM(a.record), COUNT(a.id), a.etc, a.user.name) " +
             "FROM Athlete a " +
             "WHERE a.user.id = :userId AND a.dailyTime BETWEEN :startDate AND :endDate " +
             "GROUP BY a.dailyTime, a.athletics, a.type, a.etc, a.user.name")
     List<AthleteData> findGroupedAthletesByUserIdAndYearMonth(@Param("userId") Long userId,
                                                               @Param("startDate") LocalDate startDate,
                                                               @Param("endDate") LocalDate endDate);
+
 
     @Query("SELECT a FROM Athlete a WHERE a.id = :id AND a.user.id = :userId")
     Optional<Athlete> findByIdAndUserId(@Param("id") Long id, @Param("userId") Long userId);

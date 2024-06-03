@@ -1,12 +1,9 @@
 package com.backend.athlete.domain.announcement.service;
 
 import com.backend.athlete.domain.announcement.dto.request.PageSearchAnnouncementRequest;
-import com.backend.athlete.domain.announcement.dto.response.PageSearchAnnouncementResponse;
-import com.backend.athlete.domain.announcement.dto.response.UpdateAnnouncementResponse;
+import com.backend.athlete.domain.announcement.dto.response.*;
 import com.backend.athlete.domain.announcement.dto.request.CreateAnnouncementRequest;
 import com.backend.athlete.domain.announcement.dto.request.UpdateAnnouncementRequest;
-import com.backend.athlete.domain.announcement.dto.response.CreateAnnouncementResponse;
-import com.backend.athlete.domain.announcement.dto.response.GetAnnouncementResponse;
 import com.backend.athlete.domain.announcement.model.Announcement;
 import com.backend.athlete.domain.announcement.repository.AnnouncementRepository;
 import com.backend.athlete.domain.user.model.User;
@@ -17,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -100,6 +98,15 @@ public class AnnouncementService {
 
         return UpdateAnnouncementResponse.fromEntity(updateAnnouncement);
     }
+    @Transactional
+    public UpdateAnnouncementStatusResponse updateAnnouncementStatus(Long id, boolean status) {
+        Announcement announcement = announcementRepository.findById(id)
+                .orElseThrow(() -> new ServiceException("존재하지 않는 공지사항입니다."));
 
+        announcement.isStatus(status);
+        announcementRepository.save(announcement);
+
+        return UpdateAnnouncementStatusResponse.fromEntity(announcement);
+    }
 
 }

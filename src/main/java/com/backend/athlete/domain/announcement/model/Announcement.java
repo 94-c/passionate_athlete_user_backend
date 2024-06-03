@@ -50,4 +50,8 @@ public class Announcement extends BaseTimeEntity {
         this.imagePath = imagePath;
     }
 
+    public void isStatus(boolean status) {
+        this.status = status;
+    }
+
 }
