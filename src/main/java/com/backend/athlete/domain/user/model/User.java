@@ -19,7 +19,8 @@ import java.util.Set;
 @Table(name = "users")
 public class User extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("회원 인덱스")
     private Long id;
 
@@ -59,7 +60,8 @@ public class User extends BaseTimeEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
 
-    protected User() {}
+    protected User() {
+    }
 
     // 회원 가입
     public User(String code, String userId, String password, String name, UserGenderType gender, Double weight, Double height, UserStatusType status, Set<Role> roles) {
@@ -83,10 +85,6 @@ public class User extends BaseTimeEntity {
         this.status = status;
     }
 
-    public User(UserStatusType status) {
-        this.status = status;
-    }
-
     public void updateUser(String password, UserGenderType gender, Double weight, Double height) {
         this.password = password;
         this.gender = gender;
@@ -97,6 +95,10 @@ public class User extends BaseTimeEntity {
     public void updatePhysicalAttributes(Double weight, Double height) {
         this.weight = weight;
         this.height = height;
+    }
+
+    public void updateUserStatus(UserStatusType status) {
+        this.status = status;
     }
 
 }

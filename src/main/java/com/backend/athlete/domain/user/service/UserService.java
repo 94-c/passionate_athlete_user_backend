@@ -67,8 +67,15 @@ public class UserService {
     public UpdateUserStatusResponse updateUserStatus(Long userId, UpdateUserStatusRequest request, CustomUserDetailsImpl userPrincipal) {
         User user = userRepository.findByUserId(userPrincipal.getUsername());
 
-        User updatedUser = userRepository.save(UpdateUserStatusRequest.toEntity(request, user));
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new ServiceException("해당 회원을 찾을 수 없습니다."));
 
-        return new UpdateUserStatusResponse(updatedUser.getId(), updatedUser.getStatus(), "User status updated successfully");
+        findUser.updateUserStatus(
+            request.getStatus()
+        );
+
+        userRepository.save(findUser);
+
+        return UpdateUserStatusResponse.fromEntity(findUser);
     }
 }
