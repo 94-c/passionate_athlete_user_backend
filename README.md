@@ -10,9 +10,6 @@
 - Framework : Spring Boot 3.2.*
 - Database : MySQL
 
-## Installation and Getting Started
-
--------------------------
 
 ## Setting
 
