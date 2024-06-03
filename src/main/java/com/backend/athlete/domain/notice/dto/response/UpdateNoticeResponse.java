@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Getter @Setter
+@Getter
 public class UpdateNoticeResponse {
     private Long id;
     private String title;
