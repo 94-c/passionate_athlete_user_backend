@@ -7,13 +7,13 @@ import com.backend.athlete.domain.notice.Notice;
 import com.backend.athlete.domain.notice.NoticeRepository;
 import com.backend.athlete.domain.user.User;
 import com.backend.athlete.domain.user.UserRepository;
-import com.backend.athlete.presentation.request.PageSearchNoticeRequest;
-import com.backend.athlete.presentation.request.SaveNoticeRequest;
-import com.backend.athlete.presentation.request.UpdateNoticeRequest;
-import com.backend.athlete.presentation.response.GetNoticeResponse;
-import com.backend.athlete.presentation.response.PageSearchNoticeResponse;
-import com.backend.athlete.presentation.response.SaveNoticeResponse;
-import com.backend.athlete.presentation.response.UpdateNoticeResponse;
+import com.backend.athlete.presentation.notice.request.PageSearchNoticeRequest;
+import com.backend.athlete.presentation.notice.request.CreateNoticeRequest;
+import com.backend.athlete.presentation.notice.request.UpdateNoticeRequest;
+import com.backend.athlete.presentation.notice.response.GetNoticeResponse;
+import com.backend.athlete.presentation.notice.response.PageSearchNoticeResponse;
+import com.backend.athlete.presentation.notice.response.CreateNoticeResponse;
+import com.backend.athlete.presentation.notice.response.UpdateNoticeResponse;
 import com.backend.athlete.support.exception.ServiceException;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
 import org.springframework.data.domain.Page;
@@ -46,7 +46,7 @@ public class NoticeService {
     }
 
 
-    public SaveNoticeResponse saveNotice(CustomUserDetailsImpl userPrincipal, SaveNoticeRequest noticeRequest, MultipartFile file) throws IOException {
+    public CreateNoticeResponse saveNotice(CustomUserDetailsImpl userPrincipal, CreateNoticeRequest noticeRequest, MultipartFile file) throws IOException {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
 
         if (!file.isEmpty()) {
@@ -57,9 +57,9 @@ public class NoticeService {
             Files.copy(file.getInputStream(), rootLocation.resolve(filename));
             noticeRequest.setImagePath(rootLocation.resolve(filename).toString());
         }
-        Notice savedNotice = noticeRepository.save(SaveNoticeRequest.toEntity(noticeRequest, findUser));
+        Notice savedNotice = noticeRepository.save(CreateNoticeRequest.toEntity(noticeRequest, findUser));
 
-        return SaveNoticeResponse.fromEntity(savedNotice);
+        return CreateNoticeResponse.fromEntity(savedNotice);
     }
 
     @Transactional

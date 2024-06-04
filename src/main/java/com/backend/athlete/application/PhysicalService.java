@@ -4,10 +4,10 @@ import com.backend.athlete.domain.physical.Physical;
 import com.backend.athlete.domain.physical.PhysicalRepository;
 import com.backend.athlete.domain.user.User;
 import com.backend.athlete.domain.user.UserRepository;
-import com.backend.athlete.presentation.request.SavePhysicalRequest;
-import com.backend.athlete.presentation.response.GetAllPhysicalResponse;
-import com.backend.athlete.presentation.response.GetPhysicalResponse;
-import com.backend.athlete.presentation.response.SavePhysicalResponse;
+import com.backend.athlete.presentation.physical.request.CreatePhysicalRequest;
+import com.backend.athlete.presentation.physical.response.PagePhysicalResponse;
+import com.backend.athlete.presentation.physical.response.GetPhysicalResponse;
+import com.backend.athlete.presentation.physical.response.CreatePhysicalResponse;
 import com.backend.athlete.support.exception.ServiceException;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.MathUtils;
@@ -38,7 +38,7 @@ public class PhysicalService {
     }
 
 
-    public SavePhysicalResponse savePhysical(CustomUserDetailsImpl userPrincipal, SavePhysicalRequest request) {
+    public CreatePhysicalResponse savePhysical(CustomUserDetailsImpl userPrincipal, CreatePhysicalRequest request) {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
 
         LocalDate today = LocalDate.now();
@@ -61,14 +61,14 @@ public class PhysicalService {
         double bmr = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMR(request.getWeight(), request.getHeight(), 30, findUser.getGender().toString()));
         request.setBmr(bmr);
 
-        Physical savePhysical = physicalRepository.save(SavePhysicalRequest.toEntity(request, findUser));
+        Physical savePhysical = physicalRepository.save(CreatePhysicalRequest.toEntity(request, findUser));
 
         if (!Objects.equals(findUser.getHeight(), request.getHeight()) || !Objects.equals(findUser.getWeight(), request.getWeight())) {
             findUser.updatePhysicalAttributes(request.getWeight(), request.getHeight());
             userRepository.save(findUser);
         }
 
-        return SavePhysicalResponse.fromEntity(savePhysical);
+        return CreatePhysicalResponse.fromEntity(savePhysical);
     }
 
     @Transactional
@@ -87,7 +87,7 @@ public class PhysicalService {
     }
 
     @Transactional
-    public Page<GetAllPhysicalResponse> getPhysicalData(CustomUserDetailsImpl userPrincipal, int page, int size) {
+    public Page<PagePhysicalResponse> getPhysicalData(CustomUserDetailsImpl userPrincipal, int page, int size) {
         User user = userRepository.findByUserId(userPrincipal.getUsername());
         if (user == null) {
             throw new ServiceException("User not found.");
@@ -96,11 +96,11 @@ public class PhysicalService {
         Pageable pageable = PageRequest.of(page, size);
         Page<Physical> physicalPage = physicalRepository.findByUserIdOrderByMeasureDateDesc(user.getId(), pageable);
 
-        List<GetAllPhysicalResponse> responses = new ArrayList<>();
+        List<PagePhysicalResponse> responses = new ArrayList<>();
         Physical previousPhysical = null;
 
         for (Physical physical : physicalPage) {
-            GetAllPhysicalResponse response = GetAllPhysicalResponse.fromEntity(physical, previousPhysical);
+            PagePhysicalResponse response = PagePhysicalResponse.fromEntity(physical, previousPhysical);
             previousPhysical = physical;
             responses.add(response);
         }

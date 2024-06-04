@@ -7,7 +7,7 @@ import com.backend.athlete.domain.attendance.Attendance;
 import com.backend.athlete.domain.attendance.AttendanceRepository;
 import com.backend.athlete.domain.user.User;
 import com.backend.athlete.domain.user.UserRepository;
-import com.backend.athlete.presentation.response.GetWeeklyAttendanceResponse;
+import com.backend.athlete.presentation.report.response.GetWeeklyAttendanceResponse;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

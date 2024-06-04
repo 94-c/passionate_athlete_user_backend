@@ -1,6 +1,6 @@
 package com.backend.athlete.support.jwt;
 
-import com.backend.athlete.support.exception.CustomJwtException;
+import com.backend.athlete.support.exception.JwtException;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -76,16 +76,16 @@ public class JwtTokenProvider {
             return true;
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());
-            throw new CustomJwtException("Invalid JWT token: " + e.getMessage(), e);
+            throw new JwtException("Invalid JWT token: " + e.getMessage(), e);
         } catch (ExpiredJwtException e) {
             logger.error("JWT token is expired: {}", e.getMessage());
-            throw new CustomJwtException("JWT token is expired: " + e.getMessage(), e);
+            throw new JwtException("JWT token is expired: " + e.getMessage(), e);
         } catch (UnsupportedJwtException e) {
             logger.error("JWT token is unsupported: {}", e.getMessage());
-            throw new CustomJwtException("JWT token is unsupported: " + e.getMessage(), e);
+            throw new JwtException("JWT token is unsupported: " + e.getMessage(), e);
         } catch (IllegalArgumentException e) {
             logger.error("JWT claims string is empty: {}", e.getMessage());
-            throw new CustomJwtException("JWT claims string is empty: " + e.getMessage(), e);
+            throw new JwtException("JWT claims string is empty: " + e.getMessage(), e);
         }
     }
 }

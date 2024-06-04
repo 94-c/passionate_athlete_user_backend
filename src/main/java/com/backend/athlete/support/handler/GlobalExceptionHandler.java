@@ -1,8 +1,8 @@
 package com.backend.athlete.support.handler;
 
-import com.backend.athlete.presentation.response.ExceptionResponse;
+import com.backend.athlete.support.exception.response.ExceptionResponse;
 import com.backend.athlete.support.exception.AuthException;
-import com.backend.athlete.support.exception.CustomJwtException;
+import com.backend.athlete.support.exception.JwtException;
 import com.backend.athlete.support.exception.ServiceException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,6 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
-
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<ExceptionResponse> handleServiceException(ServiceException ex) {
         ExceptionResponse response = new ExceptionResponse(
@@ -35,9 +34,8 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
-
-    @ExceptionHandler(CustomJwtException.class)
-    public ResponseEntity<ExceptionResponse> handleCustomJwtException(CustomJwtException ex) {
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ExceptionResponse> handleCustomJwtException(JwtException ex) {
         ExceptionResponse response = new ExceptionResponse(
                 HttpStatus.UNAUTHORIZED.value(),
                 ex.getMessage(),
