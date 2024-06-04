@@ -38,33 +38,33 @@ public class PhysicalService {
     }
 
 
-    public SavePhysicalResponse savePhysical(CustomUserDetailsImpl userPrincipal, SavePhysicalRequest dto) {
+    public SavePhysicalResponse savePhysical(CustomUserDetailsImpl userPrincipal, SavePhysicalRequest request) {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
 
         LocalDate today = LocalDate.now();
-        dto.setMeasureDate(today);
+        request.setMeasureDate(today);
 
         boolean existsSave = physicalRepository.existsByUserAndMeasureDate(findUser, today);
         if (existsSave) {
             throw new IllegalArgumentException("하루에 한번만 입력 하실 수 있습니다.");
         }
 
-        double bmi = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMI(findUser.getWeight(), dto.getHeight()));
-        dto.setBmi(bmi);
+        double bmi = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMI(findUser.getWeight(), request.getHeight()));
+        request.setBmi(bmi);
 
-        double bodyFatPercentage = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBodyFatPercentage(dto.getBodyFatMass(), dto.getWeight()));
-        dto.setBodyFatPercentage(bodyFatPercentage);
+        double bodyFatPercentage = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBodyFatPercentage(request.getBodyFatMass(), request.getWeight()));
+        request.setBodyFatPercentage(bodyFatPercentage);
 
         double visceralFatPercentage = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateVisceralFatPercentage(bodyFatPercentage));
-        dto.setVisceralFatPercentage(visceralFatPercentage);
+        request.setVisceralFatPercentage(visceralFatPercentage);
 
-        double bmr = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMR(dto.getWeight(), dto.getHeight(), 30, findUser.getGender().toString()));
-        dto.setBmr(bmr);
+        double bmr = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMR(request.getWeight(), request.getHeight(), 30, findUser.getGender().toString()));
+        request.setBmr(bmr);
 
-        Physical savePhysical = physicalRepository.save(SavePhysicalRequest.toEntity(dto, findUser));
+        Physical savePhysical = physicalRepository.save(SavePhysicalRequest.toEntity(request, findUser));
 
-        if (!Objects.equals(findUser.getHeight(), dto.getHeight()) || !Objects.equals(findUser.getWeight(), dto.getWeight())) {
-            findUser.updatePhysicalAttributes(dto.getWeight(), dto.getHeight());
+        if (!Objects.equals(findUser.getHeight(), request.getHeight()) || !Objects.equals(findUser.getWeight(), request.getWeight())) {
+            findUser.updatePhysicalAttributes(request.getWeight(), request.getHeight());
             userRepository.save(findUser);
         }
 

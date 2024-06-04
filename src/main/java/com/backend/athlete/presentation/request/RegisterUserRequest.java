@@ -49,17 +49,17 @@ public class RegisterUserRequest {
 
     protected RegisterUserRequest() {}
 
-    public static User toEntity(RegisterUserRequest dto, Branch branch) {
+    public static User toEntity(RegisterUserRequest request, Branch branch) {
         return new User(
-                dto.getCode(),
-                dto.getUserId(),
-                dto.getPassword(),
-                dto.getName(),
-                dto.getGender(),
-                dto.getWeight(),
-                dto.getHeight(),
+                request.getCode(),
+                request.getUserId(),
+                request.getPassword(),
+                request.getName(),
+                request.getGender(),
+                request.getWeight(),
+                request.getHeight(),
                 UserStatusType.WAIT,
-                dto.getRoleIds(),
+                request.getRoleIds(),
                 branch
         );
     }

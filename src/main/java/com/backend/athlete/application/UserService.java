@@ -43,20 +43,20 @@ public class UserService {
     }
 
     @Transactional
-    public UpdateUserResponse updateUser(CustomUserDetailsImpl userPrincipal, UpdateUserRequest dto) {
+    public UpdateUserResponse updateUser(CustomUserDetailsImpl userPrincipal, UpdateUserRequest request) {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
         if (findUser == null) {
             throw new UsernameNotFoundException("회원이 존재 하지 않습니다.");
         }
-        checkDuplicatePassword(dto.getPassword(), dto.getPasswordCheck());
+        checkDuplicatePassword(request.getPassword(), request.getPasswordCheck());
 
-        String encodedPassword = passwordEncoder.encode(dto.getPassword());
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
 
         findUser.updateUser(
                 encodedPassword,
-                dto.getGender(),
-                dto.getWeight(),
-                dto.getHeight()
+                request.getGender(),
+                request.getWeight(),
+                request.getHeight()
         );
 
         userRepository.save(findUser);

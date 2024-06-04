@@ -28,15 +28,15 @@ public class CreateAthleteRequest {
 
     protected CreateAthleteRequest() {}
 
-    public static Athlete toEntity(CreateAthleteRequest dto, User user) {
+    public static Athlete toEntity(CreateAthleteRequest request, User user) {
         return new Athlete(
                 user,
-                dto.getDailyTime(),
-                dto.getAthletics(),
-                dto.getType(),
-                dto.getRecord(),
-                dto.getRound(),
-                dto.getEtc()
+                request.getDailyTime(),
+                request.getAthletics(),
+                request.getType(),
+                request.getRecord(),
+                request.getRound(),
+                request.getEtc()
         );
     }
 

@@ -14,10 +14,10 @@ public class CreateAttendanceRequest {
 
     protected CreateAttendanceRequest() {}
 
-    public static Attendance toEntity(CreateAttendanceRequest dto, User user) {
+    public static Attendance toEntity(CreateAttendanceRequest request, User user) {
         return new Attendance(
                 user,
-                dto.getEventDate()
+                request.getEventDate()
         );
     }
 

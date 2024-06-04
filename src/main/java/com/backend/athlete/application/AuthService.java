@@ -48,30 +48,30 @@ public class AuthService {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    public RegisterUserResponse register(RegisterUserRequest dto) {
-        isExistUserId(dto.getUserId());
-        checkDuplicatePassword(dto.getPassword(), dto.getPasswordCheck());
+    public RegisterUserResponse register(RegisterUserRequest request) {
+        isExistUserId(request.getUserId());
+        checkDuplicatePassword(request.getPassword(), request.getPasswordCheck());
 
-        String encodedPassword = passwordEncoder.encode(dto.getPassword());
-        dto.setPassword(encodedPassword);
-        dto.setCode(generateUserCode());
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        request.setPassword(encodedPassword);
+        request.setCode(generateUserCode());
 
-        Branch branch = branchRepository.findByName(dto.getBranchName())
+        Branch branch = branchRepository.findByName(request.getBranchName())
                 .orElseThrow(() -> new ServiceException("해당 지점을 찾을 수 없습니다."));
 
         Set<Role> roles = new HashSet<>();
         roles.add(getUserRoleTypeRole());
-        dto.setRoleIds(roles);
+        request.setRoleIds(roles);
 
-        User registerUser = authRepository.save(RegisterUserRequest.toEntity(dto, branch));
+        User registerUser = authRepository.save(RegisterUserRequest.toEntity(request, branch));
 
         return RegisterUserResponse.fromEntity(registerUser);
     }
 
 
-    public LoginTokenResponse login(LoginTokenRequest dto) {
+    public LoginTokenResponse login(LoginTokenRequest request) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(dto.getUserId(), dto.getPassword()));
+                new UsernamePasswordAuthenticationToken(request.getUserId(), request.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -79,7 +79,7 @@ public class AuthService {
 
         CustomUserDetailsImpl userDetails = (CustomUserDetailsImpl) authentication.getPrincipal();
 
-        checkEncodePassword(dto.getPassword(), userDetails.getPassword());
+        checkEncodePassword(request.getPassword(), userDetails.getPassword());
 
         return LoginTokenResponse.fromEntity(userDetails, token);
     }

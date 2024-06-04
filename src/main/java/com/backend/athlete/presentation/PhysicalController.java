@@ -32,24 +32,24 @@ public class PhysicalController {
      */
     @PostMapping
     public ResponseEntity<SavePhysicalResponse> savePhysical(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                             @Valid @RequestBody SavePhysicalRequest dto) {
-        SavePhysicalResponse savePhysical = physicalService.savePhysical(userPrincipal, dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savePhysical);
+                                                             @Valid @RequestBody SavePhysicalRequest request) {
+        SavePhysicalResponse response = physicalService.savePhysical(userPrincipal, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/daily")
     public ResponseEntity<GetPhysicalResponse> getPhysical(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
                                                            @RequestParam(name = "daily", required = false) LocalDate dailyDate) {
-        GetPhysicalResponse getPhysical = physicalService.getPhysical(userPrincipal, dailyDate);
-        return ResponseEntity.status(HttpStatus.OK).body(getPhysical);
+        GetPhysicalResponse response = physicalService.getPhysical(userPrincipal, dailyDate);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/all")
     public ResponseEntity<Page<GetAllPhysicalResponse>> getAllPhysical(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
                                                                        @RequestParam(defaultValue = "0") int page,
                                                                        @RequestParam(defaultValue = "10") int size) {
-        Page<GetAllPhysicalResponse> getAllPhysical = physicalService.getPhysicalData(userPrincipal, page, size);
-        return ResponseEntity.status(HttpStatus.OK).body(getAllPhysical);
+        Page<GetAllPhysicalResponse> response = physicalService.getPhysicalData(userPrincipal, page, size);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }

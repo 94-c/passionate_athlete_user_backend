@@ -27,9 +27,9 @@ public class AttendanceController {
 
     @PostMapping
     public ResponseEntity<CreateAttendanceResponse> dailyAttendance(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                                    @RequestBody CreateAttendanceRequest dto) {
-        CreateAttendanceResponse dailyAttendance = attendanceService.createAttendanceEvent(userPrincipal, dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(dailyAttendance);
+                                                                    @RequestBody CreateAttendanceRequest request) {
+        CreateAttendanceResponse response = attendanceService.createAttendanceEvent(userPrincipal, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/daily")

@@ -36,13 +36,13 @@ public class AthleteService {
     /**
      * 데일리 운동 기록 저장
      */
-    public CreateAthleteResponse createAthlete(CustomUserDetailsImpl userPrincipal, CreateAthleteRequest dto) {
+    public CreateAthleteResponse createAthlete(CustomUserDetailsImpl userPrincipal, CreateAthleteRequest request) {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
         if (findUser == null) {
             throw new UsernameNotFoundException("User not found");
         }
-        dto.setDailyTime(LocalDate.now());
-        Athlete createAthlete = athleteRepository.save(CreateAthleteRequest.toEntity(dto, findUser));
+        request.setDailyTime(LocalDate.now());
+        Athlete createAthlete = athleteRepository.save(CreateAthleteRequest.toEntity(request, findUser));
 
         return CreateAthleteResponse.fromEntity(createAthlete);
     }

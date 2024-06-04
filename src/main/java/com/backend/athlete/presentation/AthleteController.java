@@ -29,25 +29,25 @@ public class AthleteController {
     @PostMapping
     @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity<CreateAthleteResponse> createAthlete(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                               @Valid @RequestBody CreateAthleteRequest dto) {
-        CreateAthleteResponse createAthlete = athleteService.createAthlete(userPrincipal, dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createAthlete);
+                                                               @Valid @RequestBody CreateAthleteRequest request) {
+        CreateAthleteResponse response = athleteService.createAthlete(userPrincipal, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/daily")
     public ResponseEntity<GetDailyAthleteResponse> getDailyAthlete(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
                                                                    @RequestParam(name = "daily", required = false) LocalDate dailyDate) {
 
-        GetDailyAthleteResponse getDailyAthlete = athleteService.getDailyAthlete(userPrincipal, dailyDate);
-        return ResponseEntity.status(HttpStatus.OK).body(getDailyAthlete);
+        GetDailyAthleteResponse response = athleteService.getDailyAthlete(userPrincipal, dailyDate);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/monthly")
     public ResponseEntity<GetMonthlyAthleteResponse> getMonthlyAthlete(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
                                                                        @RequestParam(name = "month") YearMonth month) {
 
-        GetMonthlyAthleteResponse getMonthlyAthlete = athleteService.getMonthlyAthlete(userPrincipal, month);
-        return ResponseEntity.status(HttpStatus.OK).body(getMonthlyAthlete);
+        GetMonthlyAthleteResponse response = athleteService.getMonthlyAthlete(userPrincipal, month);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("/daily/{id}")

@@ -12,7 +12,7 @@ public class SaveNoticeRequest {
     private String title;
     private String content;
     private String imagePath;
-    public static Notice toEntity(SaveNoticeRequest dto, User user) {
-        return new Notice(dto.getTitle(), dto.getContent(), dto.getImagePath(), user);
+    public static Notice toEntity(SaveNoticeRequest request, User user) {
+        return new Notice(request.getTitle(), request.getContent(), request.getImagePath(), user);
     }
 }

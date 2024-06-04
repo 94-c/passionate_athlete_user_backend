@@ -26,18 +26,18 @@ public class SavePhysicalRequest {
     private Double bmr;
     protected SavePhysicalRequest() {}
 
-    public static Physical toEntity(SavePhysicalRequest dto, User user) {
+    public static Physical toEntity(SavePhysicalRequest request, User user) {
         return new Physical(
                 user,
-                dto.getWeight(),
-                dto.getHeight(),
-                dto.getMuscleMass(),
-                dto.getBodyFatMass(),
-                dto.getMeasureDate(),
-                dto.getBmi(),
-                dto.getBodyFatPercentage(),
-                dto.getVisceralFatPercentage(),
-                dto.getBmr()
+                request.getWeight(),
+                request.getHeight(),
+                request.getMuscleMass(),
+                request.getBodyFatMass(),
+                request.getMeasureDate(),
+                request.getBmi(),
+                request.getBodyFatPercentage(),
+                request.getVisceralFatPercentage(),
+                request.getBmr()
         );
     }
 }

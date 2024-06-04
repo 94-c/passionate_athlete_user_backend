@@ -30,21 +30,21 @@ public class AttendanceService {
         this.userRepository = userRepository;
     }
 
-    public CreateAttendanceResponse createAttendanceEvent(CustomUserDetailsImpl userPrincipal, CreateAttendanceRequest dto) {
+    public CreateAttendanceResponse createAttendanceEvent(CustomUserDetailsImpl userPrincipal, CreateAttendanceRequest request) {
         User user = userRepository.findByUserId(userPrincipal.getUsername());
         if (user == null) {
             throw new ServiceException("회원을 찾을 수 없습니다.");
         }
 
-        if (dto.getEventDate() == null) dto.setEventDate(LocalDate.now());
+        if (request.getEventDate() == null) request.setEventDate(LocalDate.now());
 
-        LocalDate eventDate = dto.getEventDate();
+        LocalDate eventDate = request.getEventDate();
 
         if (attendanceRepository.findByUserIdAndAttendanceDate(user.getId(), eventDate).isPresent()) {
             throw new ServiceException("이미 해당 " +  eventDate + " 일에 출석 했습니다. ");
         }
 
-        Attendance attendance = attendanceRepository.save(CreateAttendanceRequest.toEntity(dto, user));
+        Attendance attendance = attendanceRepository.save(CreateAttendanceRequest.toEntity(request, user));
 
         long totalAttendanceCount = attendanceRepository.countByUserId(user.getId());
 

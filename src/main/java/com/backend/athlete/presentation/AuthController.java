@@ -22,15 +22,15 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterUserResponse> register(@Valid @RequestBody RegisterUserRequest dto) {
-        RegisterUserResponse register = authService.register(dto);
-        return ResponseEntity.status(HttpStatus.OK).body(register);
+    public ResponseEntity<RegisterUserResponse> register(@Valid @RequestBody RegisterUserRequest request) {
+        RegisterUserResponse response = authService.register(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginTokenResponse> login(@RequestBody LoginTokenRequest dto) {
-        LoginTokenResponse login = authService.login(dto);
-        return ResponseEntity.status(HttpStatus.OK).body(login);
+    public ResponseEntity<LoginTokenResponse> login(@RequestBody LoginTokenRequest request) {
+        LoginTokenResponse response = authService.login(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }
