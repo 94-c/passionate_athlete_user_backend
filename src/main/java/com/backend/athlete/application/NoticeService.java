@@ -107,7 +107,7 @@ public class NoticeService {
         noticeRepository.delete(notice);
     }
 
-    public Page<PageSearchNoticeResponse> searchNotices(PageSearchNoticeRequest request, int page, int perPage) {
+    public Page<PageSearchNoticeResponse> searchNotices(PageSearchNoticeRequest request, int page, int perPage, Integer kind) {
         Pageable pageable = PageRequest.of(page, perPage);
         Page<Notice> notices = noticeRepository.findAllByUserAndTitle(request.getName(), request.getTitle(), pageable);
 
