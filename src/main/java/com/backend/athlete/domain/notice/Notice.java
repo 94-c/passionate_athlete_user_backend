@@ -29,8 +29,14 @@ public class Notice extends BaseTimeEntity {
     @Comment("게시판 내용")
     private String content;
 
+    @Comment("게시판 종류")
+    private Integer kind;
+
     @Comment("이미지 파일 경로")
     private String imagePath;
+
+    @Comment("게시글 활성화")
+    private boolean status;
 
     @OneToMany(mappedBy = "notice", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<com.backend.athlete.domain.comment.Comment> comments;
@@ -40,10 +46,12 @@ public class Notice extends BaseTimeEntity {
 
     public Notice() {}
 
-    public Notice(String title, String content, String imagePath, User user) {
+    public Notice(String title, String content, Integer kind, String imagePath, boolean status, User user) {
         this.title = title;
         this.content = content;
+        this.kind = kind;
         this.imagePath = imagePath;
+        this.status = status;
         this.user = user;
     }
 
@@ -51,6 +59,10 @@ public class Notice extends BaseTimeEntity {
         this.title = title;
         this.content = content;
         this.imagePath = imagePath;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
 }

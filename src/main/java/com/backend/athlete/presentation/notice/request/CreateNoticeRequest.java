@@ -12,7 +12,9 @@ public class CreateNoticeRequest {
     private String title;
     private String content;
     private String imagePath;
+    private Integer kind;
+    private boolean status;
     public static Notice toEntity(CreateNoticeRequest request, User user) {
-        return new Notice(request.getTitle(), request.getContent(), request.getImagePath(), user);
+        return new Notice(request.getTitle(), request.getContent(), request.getKind(), request.getImagePath(), request.isStatus(), user);
     }
 }
