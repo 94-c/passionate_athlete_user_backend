@@ -16,6 +16,8 @@ import com.backend.athlete.presentation.notice.response.CreateNoticeResponse;
 import com.backend.athlete.presentation.notice.response.UpdateNoticeResponse;
 import com.backend.athlete.support.exception.ServiceException;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.support.util.FileUtils;
+import com.backend.athlete.support.util.FindUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -58,33 +60,26 @@ public class NoticeService {
 
 
     public CreateNoticeResponse saveNotice(CustomUserDetailsImpl userPrincipal, CreateNoticeRequest noticeRequest, MultipartFile file) throws IOException {
-        User findUser = userRepository.findByUserId(userPrincipal.getUsername());
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
         if (!file.isEmpty()) {
-            if (Files.notExists(rootLocation)) {
-                Files.createDirectories(rootLocation);
-            }
-            String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-            Files.copy(file.getInputStream(), rootLocation.resolve(filename));
-            noticeRequest.setImagePath(rootLocation.resolve(filename).toString());
+            String imagePath = FileUtils.saveFile(file, rootLocation);
         }
-        Notice savedNotice = noticeRepository.save(CreateNoticeRequest.toEntity(noticeRequest, findUser));
+
+        Notice savedNotice = noticeRepository.save(CreateNoticeRequest.toEntity(noticeRequest, user));
 
         return CreateNoticeResponse.fromEntity(savedNotice);
     }
 
     @Transactional
     public GetNoticeResponse getNotice(Long id) {
-        Notice notice = noticeRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("존재하지 않는 게시물입니다."));
-
+        Notice notice = FindUtils.findByNoticeId(id);
         return GetNoticeResponse.fromEntity(notice);
     }
 
     @Transactional
     public UpdateNoticeResponse updateNotice(Long id, CustomUserDetailsImpl userPrincipal, UpdateNoticeRequest noticeRequest, MultipartFile file) throws IOException {
-        Notice notice = noticeRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("게시글을 찾지 못했습니다."));
+        Notice notice = FindUtils.findByNoticeId(id);
 
         if (!notice.getUser().getUserId().equals(userPrincipal.getUsername())) {
             throw new ServiceException("게시글의 권한이 존재하지 않습니다.");
@@ -92,12 +87,7 @@ public class NoticeService {
 
         String imagePath = notice.getImagePath();
         if (!file.isEmpty()) {
-            if (Files.notExists(rootLocation)) {
-                Files.createDirectories(rootLocation);
-            }
-            String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-            Files.copy(file.getInputStream(), rootLocation.resolve(filename));
-            imagePath = rootLocation.resolve(filename).toString();
+            imagePath = FileUtils.saveFile(file, rootLocation);
         }
 
         notice.updateNotice(noticeRequest.getTitle(), noticeRequest.getContent(), imagePath);
@@ -108,8 +98,7 @@ public class NoticeService {
     }
 
     public void deleteNotice(Long id, CustomUserDetailsImpl userPrincipal) {
-        Notice notice = noticeRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("회원을 찾지 못했습니다."));
+        Notice notice = FindUtils.findByNoticeId(id);
 
         if (!notice.getUser().getUserId().equals(userPrincipal.getUsername())) {
             throw new ServiceException("이 게시물를 삭제할 권한이 없습니다.");
@@ -119,8 +108,7 @@ public class NoticeService {
     }
 
     public GetNoticeResponse setStatus(Long id, CustomUserDetailsImpl userPrincipal) {
-        Notice notice = noticeRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("게시글을 찾지 못했습니다."));
+        Notice notice = FindUtils.findByNoticeId(id);
 
         if (!notice.getUser().getUserId().equals(userPrincipal.getUsername())) {
             throw new ServiceException("이 게시물를 삭제할 권한이 없습니다.");

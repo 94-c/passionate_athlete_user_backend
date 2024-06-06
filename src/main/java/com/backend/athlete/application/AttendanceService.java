@@ -3,14 +3,13 @@ package com.backend.athlete.application;
 import com.backend.athlete.domain.attendance.Attendance;
 import com.backend.athlete.domain.attendance.AttendanceRepository;
 import com.backend.athlete.domain.user.User;
-import com.backend.athlete.domain.user.UserRepository;
 import com.backend.athlete.presentation.attendance.request.CreateAttendanceRequest;
 import com.backend.athlete.presentation.attendance.response.CreateAttendanceResponse;
 import com.backend.athlete.presentation.attendance.response.GetDailyAttendanceResponse;
 import com.backend.athlete.presentation.attendance.response.GetMonthlyAttendanceResponse;
 import com.backend.athlete.support.exception.ServiceException;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
-import com.backend.athlete.support.util.FindUtil;
+import com.backend.athlete.support.util.FindUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +28,7 @@ public class AttendanceService {
     }
 
     public CreateAttendanceResponse createAttendanceEvent(CustomUserDetailsImpl userPrincipal, CreateAttendanceRequest request) {
-        User user = FindUtil.findByUserId(userPrincipal.getUsername());
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
         if (request.getEventDate() == null) request.setEventDate(LocalDate.now());
 
@@ -48,7 +47,7 @@ public class AttendanceService {
 
     @Transactional
     public GetDailyAttendanceResponse getAttendance(CustomUserDetailsImpl userPrincipal, LocalDate dailyDate) {
-        User user = FindUtil.findByUserId(userPrincipal.getUsername());
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
         Attendance attendance = attendanceRepository.findByUserIdAndAttendanceDate(user.getId(), dailyDate)
                 .orElseThrow(() -> new ServiceException(dailyDate + " 의 출석이 없습니다."));
@@ -59,7 +58,7 @@ public class AttendanceService {
 
     @Transactional
     public GetMonthlyAttendanceResponse getMonthlyAttendance(CustomUserDetailsImpl userPrincipal, YearMonth month) {
-        User user = FindUtil.findByUserId(userPrincipal.getUsername());
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
         LocalDate startDate = month.atDay(1);
         LocalDate endDate = month.atEndOfMonth();

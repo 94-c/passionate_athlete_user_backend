@@ -9,7 +9,7 @@ import com.backend.athlete.presentation.athlete.response.CreateAthleteResponse;
 import com.backend.athlete.presentation.athlete.response.GetDailyAthleteResponse;
 import com.backend.athlete.presentation.athlete.response.GetMonthlyAthleteResponse;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
-import com.backend.athlete.support.util.FindUtil;
+import com.backend.athlete.support.util.FindUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class AthleteService {
     }
 
     public CreateAthleteResponse createAthlete(CustomUserDetailsImpl userPrincipal, CreateAthleteRequest request) {
-        User user = FindUtil.findByUserId(userPrincipal.getUsername());
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
         request.setDailyTime(LocalDate.now());
 
@@ -41,7 +41,7 @@ public class AthleteService {
 
     @Transactional
     public GetDailyAthleteResponse getDailyAthlete(CustomUserDetailsImpl userPrincipal, LocalDate dailyDate) {
-        User user = FindUtil.findByUserId(userPrincipal.getUsername());
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
         List<Athlete> athletes = athleteRepository.findAthletesByUserIdAndDailyTime(user.getId(), dailyDate);
 
@@ -59,7 +59,7 @@ public class AthleteService {
         LocalDate startDate = yearMonth.atDay(1);
         LocalDate endDate = yearMonth.atEndOfMonth();
 
-        User user = FindUtil.findByUserId(userPrincipal.getUsername());
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
         List<AthleteData> groupedAthleteRecords = athleteRepository.findGroupedAthletesByUserIdAndYearMonth(user.getId(), startDate, endDate);
 
@@ -79,7 +79,7 @@ public class AthleteService {
     }
 
     public void deleteDailyAthleteById(CustomUserDetailsImpl userPrincipal, Long id) {
-        User user = FindUtil.findByUserId(userPrincipal.getUsername());
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
         Athlete athlete = athleteRepository.findByIdAndUserId(id, user.getId())
                 .orElseThrow(() -> new RuntimeException("Athlete record not found or not authorized"));

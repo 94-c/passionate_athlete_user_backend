@@ -10,15 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FindUtil {
+public class FindUtils {
 
     private static UserRepository userRepository;
     private static NoticeRepository noticeRepository;
 
     @Autowired
-    public FindUtil(UserRepository userRepository, NoticeRepository noticeRepository) {
-        FindUtil.userRepository = userRepository;
-        FindUtil.noticeRepository = noticeRepository;
+    public FindUtils(UserRepository userRepository, NoticeRepository noticeRepository) {
+        FindUtils.userRepository = userRepository;
+        FindUtils.noticeRepository = noticeRepository;
     }
 
     public static User findByUserId(String username) {

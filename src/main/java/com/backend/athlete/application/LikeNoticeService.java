@@ -3,15 +3,13 @@ package com.backend.athlete.application;
 import com.backend.athlete.domain.notice.Like;
 import com.backend.athlete.domain.notice.LikeRepository;
 import com.backend.athlete.domain.notice.Notice;
-import com.backend.athlete.domain.notice.NoticeRepository;
 import com.backend.athlete.domain.user.User;
-import com.backend.athlete.domain.user.UserRepository;
 import com.backend.athlete.presentation.notice.response.CreateLikeNoticeResponse;
 import com.backend.athlete.presentation.notice.response.DeleteLikeNoticeResponse;
 import com.backend.athlete.presentation.notice.response.GetLikeNoticeResponse;
 import com.backend.athlete.support.exception.ServiceException;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
-import com.backend.athlete.support.util.FindUtil;
+import com.backend.athlete.support.util.FindUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +23,8 @@ public class LikeNoticeService {
 
     @Transactional
     public CreateLikeNoticeResponse likeNotice(Long noticeId, CustomUserDetailsImpl userPrincipal) {
-        User user = FindUtil.findByUserId(userPrincipal.getUsername());
-        Notice notice = FindUtil.findByNoticeId(noticeId);
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
+        Notice notice = FindUtils.findByNoticeId(noticeId);
 
         if (likeRepository.existsByUserAndNotice(user, notice)) {
             throw new ServiceException("이미 좋아요를 누르셨습니다.");
@@ -43,8 +41,8 @@ public class LikeNoticeService {
 
 
     public DeleteLikeNoticeResponse unlikeNotice(Long noticeId, CustomUserDetailsImpl userPrincipal) {
-        User user = FindUtil.findByUserId(userPrincipal.getUsername());
-        Notice notice = FindUtil.findByNoticeId(noticeId);
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
+        Notice notice = FindUtils.findByNoticeId(noticeId);
 
         if (!likeRepository.existsByUserAndNotice(user, notice)) {
             throw new ServiceException("Not liked yet");
@@ -58,7 +56,7 @@ public class LikeNoticeService {
     }
 
     public GetLikeNoticeResponse getLikeCount(Long noticeId) {
-        Notice notice = FindUtil.findByNoticeId(noticeId);
+        Notice notice = FindUtils.findByNoticeId(noticeId);
         long like = likeRepository.countByNotice(notice);
         return GetLikeNoticeResponse.fromEntity(notice, like);
     }

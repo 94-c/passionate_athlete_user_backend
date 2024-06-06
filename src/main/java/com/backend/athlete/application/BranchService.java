@@ -10,14 +10,13 @@ import com.backend.athlete.presentation.branch.request.PageSearchBranchRequest;
 import com.backend.athlete.presentation.branch.request.UpdateBranchRequest;
 import com.backend.athlete.presentation.branch.response.*;
 import com.backend.athlete.support.exception.ServiceException;
-import com.backend.athlete.support.util.FindUtil;
+import com.backend.athlete.support.util.FindUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BranchService {
@@ -44,7 +43,7 @@ public class BranchService {
             throw new ServiceException("지점명이 이미 존재합니다.");
         }
 
-        User manager = FindUtil.findById(request.getManagerId());
+        User manager = FindUtils.findById(request.getManagerId());
 
         Branch createBranch = branchRepository.save(CreateBranchRequest.toEntity(request, manager));
 
@@ -62,7 +61,7 @@ public class BranchService {
         Branch branch = branchRepository.findById(id)
                 .orElseThrow(() -> new ServiceException("해당 지점을 찾을 수 없습니다."));
 
-        User manager = FindUtil.findById(request.getManagerId());
+        User manager = FindUtils.findById(request.getManagerId());
 
         branch.update(
                 request.getName(),
