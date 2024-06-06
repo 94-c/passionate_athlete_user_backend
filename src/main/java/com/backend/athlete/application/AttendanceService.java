@@ -24,11 +24,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class AttendanceService {
     private final AttendanceRepository attendanceRepository;
-    private final UserRepository userRepository;
-
-    public AttendanceService(AttendanceRepository attendanceRepository, UserRepository userRepository) {
+    public AttendanceService(AttendanceRepository attendanceRepository) {
         this.attendanceRepository = attendanceRepository;
-        this.userRepository = userRepository;
     }
 
     public CreateAttendanceResponse createAttendanceEvent(CustomUserDetailsImpl userPrincipal, CreateAttendanceRequest request) {
