@@ -38,10 +38,11 @@ public class NoticeController {
             @RequestParam(defaultValue = "", required = false) String name,
             @RequestParam(defaultValue = PageConstant.DEFAULT_PAGE, required = false) int page,
             @RequestParam(defaultValue = PageConstant.DEFAULT_PER_PAGE, required = false) int perPage,
-            @RequestParam(defaultValue = "0", required = false) Integer kind
+            @RequestParam(defaultValue = "0", required = false) Integer kind,
+            @RequestParam(defaultValue = "true") boolean status
     ) {
         PageSearchNoticeRequest request = new PageSearchNoticeRequest(title, name);
-        Page<PageSearchNoticeResponse> response = noticeService.searchNotices(request, page, perPage, kind);
+        Page<PageSearchNoticeResponse> response = noticeService.searchNotices(request, page, perPage, kind, status);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -83,5 +84,12 @@ public class NoticeController {
                                              @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
         noticeService.deleteNotice(id, userPrincipal);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}/is-active")
+    public ResponseEntity<GetNoticeResponse> setStatus(@PathVariable Long id,
+                                                       @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
+        GetNoticeResponse response = noticeService.setStatus(id, userPrincipal);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

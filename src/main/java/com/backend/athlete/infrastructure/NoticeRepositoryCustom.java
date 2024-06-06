@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface NoticeRepositoryCustom {
-    Page<Notice> findAllByUserAndTitleAndKind(String name, String title, Pageable pageable, Integer kind);
+    Page<Notice> findAllByUserAndTitleAndKindAndStatus(String name, String title, Pageable pageable, Integer kind, boolean Status);
 }

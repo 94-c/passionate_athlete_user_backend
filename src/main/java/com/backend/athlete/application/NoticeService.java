@@ -45,6 +45,17 @@ public class NoticeService {
         this.userRepository = userRepository;
     }
 
+    public Page<PageSearchNoticeResponse> searchNotices(PageSearchNoticeRequest request, int page, int perPage, Integer kind, boolean status) {
+        Pageable pageable = PageRequest.of(page, perPage);
+        Page<Notice> notices = noticeRepository.findAllByUserAndTitleAndKindAndStatus(request.getName(), request.getTitle(), pageable, kind, status);
+
+        return notices.map(notice -> {
+            int likeCount = likeRepository.countByNoticeId(notice.getId());
+            List<Comment> comments = commentRepository.findByNoticeId(notice.getId());
+            return PageSearchNoticeResponse.fromEntity(notice, likeCount, comments);
+        });
+    }
+
 
     public CreateNoticeResponse saveNotice(CustomUserDetailsImpl userPrincipal, CreateNoticeRequest noticeRequest, MultipartFile file) throws IOException {
         User findUser = userRepository.findByUserId(userPrincipal.getUsername());
@@ -107,15 +118,21 @@ public class NoticeService {
         noticeRepository.delete(notice);
     }
 
-    public Page<PageSearchNoticeResponse> searchNotices(PageSearchNoticeRequest request, int page, int perPage, Integer kind) {
-        Pageable pageable = PageRequest.of(page, perPage);
-        Page<Notice> notices = noticeRepository.findAllByUserAndTitle(request.getName(), request.getTitle(), pageable);
+    public GetNoticeResponse setStatus(Long id, CustomUserDetailsImpl userPrincipal) {
+        Notice notice = noticeRepository.findById(id)
+                .orElseThrow(() -> new ServiceException("게시글을 찾지 못했습니다."));
 
-        return notices.map(notice -> {
-            int likeCount = likeRepository.countByNoticeId(notice.getId());
-            List<Comment> comments = commentRepository.findByNoticeId(notice.getId());
-            return PageSearchNoticeResponse.fromEntity(notice, likeCount, comments);
-        });
+        if (!notice.getUser().getUserId().equals(userPrincipal.getUsername())) {
+            throw new ServiceException("이 게시물를 삭제할 권한이 없습니다.");
+        }
+
+        notice.setStatus(true);
+
+        Notice setStatusNotice = noticeRepository.save(notice);
+
+        return GetNoticeResponse.fromEntity(setStatusNotice);
     }
+
+
 
 }

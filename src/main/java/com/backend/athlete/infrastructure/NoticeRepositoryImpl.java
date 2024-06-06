@@ -34,7 +34,7 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
     }
 
     @Override
-    public Page<Notice> findAllByUserAndTitleAndKind(String name, String title, Pageable pageable, Integer kind) {
+    public Page<Notice> findAllByUserAndTitleAndKindAndStatus(String name, String title, Pageable pageable, Integer kind, boolean status) {
         BooleanBuilder booleanBuilder = toBooleanBuilder(name, title, kind);
 
         List<Notice> content = factory.selectFrom(QNotice.notice)

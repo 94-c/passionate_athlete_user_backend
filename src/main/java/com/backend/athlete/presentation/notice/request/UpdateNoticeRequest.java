@@ -11,9 +11,11 @@ public class UpdateNoticeRequest {
     @NotNull(message = "제목을 입력 해주세요.")
     private String title;
     private String content;
+    private Integer kind;
     private String imagePath;
+    private boolean status;
 
     public static Notice toEntity(UpdateNoticeRequest request, User user) {
-        return new Notice(request.getTitle(), request.getContent(), request.getImagePath(), user);
+        return new Notice(request.getTitle(), request.getContent(), request.getKind(), request.getImagePath(), request.isStatus(), user);
     }
 }
