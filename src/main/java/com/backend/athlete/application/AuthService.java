@@ -85,34 +85,23 @@ public class AuthService {
     }
 
 
-    /**
-     * 회원 코드 자동 입력
-     */
     private String generateUserCode() {
         return UserCodeUtils.generateRandomString();
     }
 
-    /**
-     * 아이디 중복 체크 여부
-     */
+
     protected void isExistUserId(String userId) {
         if (authRepository.findByUserId(userId).isPresent()) {
             throw new AuthException("이미 사용 중인 아이디 입니다.");
         }
     }
 
-    /**
-     * 비밀번호와 비밀번호 확인이 같은지 체크
-     */
     protected void checkDuplicatePassword(String password, String passwordCheck) {
         if (!password.equals(passwordCheck)) {
             throw new AuthException("패스워드가 불일치 합니다.");
         }
     }
 
-    /**
-     * 사용자가 입력한 비번과 DB에 저장된 비번이 같은지 체크 : 인코딩 확인
-     */
     protected void checkEncodePassword(String rawPassword, String encodedPassword) {
         if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
             throw new AuthException("패스워드가 불일치 합니다.");
