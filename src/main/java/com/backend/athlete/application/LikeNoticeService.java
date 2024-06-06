@@ -11,6 +11,7 @@ import com.backend.athlete.presentation.notice.response.DeleteLikeNoticeResponse
 import com.backend.athlete.presentation.notice.response.GetLikeNoticeResponse;
 import com.backend.athlete.support.exception.ServiceException;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.support.util.FindUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,19 +19,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class LikeNoticeService {
     private final LikeRepository likeRepository;
-    private final NoticeRepository noticeRepository;
-    private final UserRepository userRepository;
-
-    public LikeNoticeService(LikeRepository likeRepository, NoticeRepository noticeRepository, UserRepository userRepository) {
+    public LikeNoticeService(LikeRepository likeRepository) {
         this.likeRepository = likeRepository;
-        this.noticeRepository = noticeRepository;
-        this.userRepository = userRepository;
     }
 
     @Transactional
     public CreateLikeNoticeResponse likeNotice(Long noticeId, CustomUserDetailsImpl userPrincipal) {
-        User user = userRepository.findByUserId(userPrincipal.getUsername());
-        Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> new ServiceException("게시글이 존재 하지 않습니다."));
+        User user = FindUtil.findByUserId(userPrincipal.getUsername());
+        Notice notice = FindUtil.findByNoticeId(noticeId);
 
         if (likeRepository.existsByUserAndNotice(user, notice)) {
             throw new ServiceException("이미 좋아요를 누르셨습니다.");
@@ -47,8 +43,8 @@ public class LikeNoticeService {
 
 
     public DeleteLikeNoticeResponse unlikeNotice(Long noticeId, CustomUserDetailsImpl userPrincipal) {
-        User user = userRepository.findByUserId(userPrincipal.getUsername());
-        Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> new ServiceException("게시글이 존재 하지 않습니다."));
+        User user = FindUtil.findByUserId(userPrincipal.getUsername());
+        Notice notice = FindUtil.findByNoticeId(noticeId);
 
         if (!likeRepository.existsByUserAndNotice(user, notice)) {
             throw new ServiceException("Not liked yet");
@@ -62,7 +58,7 @@ public class LikeNoticeService {
     }
 
     public GetLikeNoticeResponse getLikeCount(Long noticeId) {
-        Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> new ServiceException("게시글이 존재 하지 않습니다."));
+        Notice notice = FindUtil.findByNoticeId(noticeId);
         long like = likeRepository.countByNotice(notice);
         return GetLikeNoticeResponse.fromEntity(notice, like);
     }

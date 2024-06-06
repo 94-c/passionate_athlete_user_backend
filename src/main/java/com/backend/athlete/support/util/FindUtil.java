@@ -1,5 +1,7 @@
 package com.backend.athlete.support.util;
 
+import com.backend.athlete.domain.notice.Notice;
+import com.backend.athlete.domain.notice.NoticeRepository;
 import com.backend.athlete.domain.user.User;
 import com.backend.athlete.domain.user.UserRepository;
 import com.backend.athlete.support.exception.ServiceException;
@@ -11,10 +13,12 @@ import org.springframework.stereotype.Component;
 public class FindUtil {
 
     private static UserRepository userRepository;
+    private static NoticeRepository noticeRepository;
 
     @Autowired
-    public FindUtil(UserRepository userRepository) {
+    public FindUtil(UserRepository userRepository, NoticeRepository noticeRepository) {
         FindUtil.userRepository = userRepository;
+        FindUtil.noticeRepository = noticeRepository;
     }
 
     public static User findByUserId(String username) {
@@ -24,10 +28,13 @@ public class FindUtil {
         }
         return user;
     }
-
     public static User findById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ServiceException("해당 유저를 찾을 수 없습니다."));
+    }
+    public static Notice findByNoticeId(Long id) {
+        return noticeRepository.findById(id)
+                .orElseThrow(() -> new ServiceException("게시글이 존재 하지 않습니다."));
     }
 
 
