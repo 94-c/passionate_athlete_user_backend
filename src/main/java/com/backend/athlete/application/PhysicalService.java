@@ -10,6 +10,8 @@ import com.backend.athlete.presentation.physical.response.GetPhysicalResponse;
 import com.backend.athlete.presentation.physical.response.CreatePhysicalResponse;
 import com.backend.athlete.support.exception.ServiceException;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.support.util.FileUtils;
+import com.backend.athlete.support.util.FindUtils;
 import com.backend.athlete.support.util.MathUtils;
 import com.backend.athlete.support.util.PhysicalUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -37,19 +39,18 @@ public class PhysicalService {
         this.userRepository = userRepository;
     }
 
-
     public CreatePhysicalResponse savePhysical(CustomUserDetailsImpl userPrincipal, CreatePhysicalRequest request) {
-        User findUser = userRepository.findByUserId(userPrincipal.getUsername());
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
         LocalDate today = LocalDate.now();
         request.setMeasureDate(today);
 
-        boolean existsSave = physicalRepository.existsByUserAndMeasureDate(findUser, today);
+        boolean existsSave = physicalRepository.existsByUserAndMeasureDate(user, today);
         if (existsSave) {
             throw new IllegalArgumentException("하루에 한번만 입력 하실 수 있습니다.");
         }
 
-        double bmi = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMI(findUser.getWeight(), request.getHeight()));
+        double bmi = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMI(user.getWeight(), request.getHeight()));
         request.setBmi(bmi);
 
         double bodyFatPercentage = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBodyFatPercentage(request.getBodyFatMass(), request.getWeight()));
@@ -58,14 +59,14 @@ public class PhysicalService {
         double visceralFatPercentage = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateVisceralFatPercentage(bodyFatPercentage));
         request.setVisceralFatPercentage(visceralFatPercentage);
 
-        double bmr = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMR(request.getWeight(), request.getHeight(), 30, findUser.getGender().toString()));
+        double bmr = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMR(request.getWeight(), request.getHeight(), 30, user.getGender().toString()));
         request.setBmr(bmr);
 
-        Physical savePhysical = physicalRepository.save(CreatePhysicalRequest.toEntity(request, findUser));
+        Physical savePhysical = physicalRepository.save(CreatePhysicalRequest.toEntity(request, user));
 
-        if (!Objects.equals(findUser.getHeight(), request.getHeight()) || !Objects.equals(findUser.getWeight(), request.getWeight())) {
-            findUser.updatePhysicalAttributes(request.getWeight(), request.getHeight());
-            userRepository.save(findUser);
+        if (!Objects.equals(user.getHeight(), request.getHeight()) || !Objects.equals(user.getWeight(), request.getWeight())) {
+            user.updatePhysicalAttributes(request.getWeight(), request.getHeight());
+            userRepository.save(user);
         }
 
         return CreatePhysicalResponse.fromEntity(savePhysical);
@@ -73,9 +74,9 @@ public class PhysicalService {
 
     @Transactional
     public GetPhysicalResponse getPhysical(CustomUserDetailsImpl userPrincipal, LocalDate dailyDate) {
-        User findUser = userRepository.findByUserId(userPrincipal.getUsername());
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
-        List<Physical> physicals = physicalRepository.findPhysicalsByUserIdAAndAndMeasureDate(findUser.getId(), dailyDate);
+        List<Physical> physicals = physicalRepository.findPhysicalsByUserIdAndMeasureDate(user.getId(), dailyDate);
 
         if (physicals.isEmpty()) {
             throw new ServiceException(dailyDate + " 의 인바디 정보가 존재하지 않습니다.");
@@ -88,10 +89,7 @@ public class PhysicalService {
 
     @Transactional
     public Page<PagePhysicalResponse> getPhysicalData(CustomUserDetailsImpl userPrincipal, int page, int size) {
-        User user = userRepository.findByUserId(userPrincipal.getUsername());
-        if (user == null) {
-            throw new ServiceException("User not found.");
-        }
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Physical> physicalPage = physicalRepository.findByUserIdOrderByMeasureDateDesc(user.getId(), pageable);
