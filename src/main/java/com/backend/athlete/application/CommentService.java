@@ -13,6 +13,7 @@ import com.backend.athlete.presentation.comment.response.GetCommentResponse;
 import com.backend.athlete.presentation.comment.response.UpdateCommentResponse;
 import com.backend.athlete.support.exception.ServiceException;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.support.util.FindUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,12 +31,12 @@ public class CommentService {
     }
 
     public CreateCommentResponse createComment(CustomUserDetailsImpl userPrincipal, Long noticeId, CreateCommentRequest request) {
-        User findUser = userRepository.findByUserId(userPrincipal.getUsername());
+        User user = FindUtil.findByUserId(userPrincipal.getUsername());
 
         Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> new ServiceException("게시글을 찾을 수 없습니다."));
         Comment parent = request.getParentId() != null ? commentRepository.findById(request.getParentId()).orElseThrow(() -> new ServiceException("해당 댓글 " + request.getParentId() + " 찾을 수 없습니다.")) : null;
 
-        Comment createComment = commentRepository.save(CreateCommentRequest.toEntity(request, notice, findUser, parent));
+        Comment createComment = commentRepository.save(CreateCommentRequest.toEntity(request, notice, user, parent));
 
         return CreateCommentResponse.fromEntity(createComment);
     }
