@@ -24,12 +24,10 @@ public class ReportService {
 
     private final AttendanceRepository attendanceRepository;
     private final AthleteRepository athleteRepository;
-    private final UserRepository userRepository;
 
-    public ReportService(AttendanceRepository attendanceRepository, AthleteRepository athleteRepository, UserRepository userRepository) {
+    public ReportService(AttendanceRepository attendanceRepository, AthleteRepository athleteRepository) {
         this.attendanceRepository = attendanceRepository;
         this.athleteRepository = athleteRepository;
-        this.userRepository = userRepository;
     }
 
     @Transactional
