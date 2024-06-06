@@ -10,6 +10,7 @@ import com.backend.athlete.presentation.attendance.response.GetDailyAttendanceRe
 import com.backend.athlete.presentation.attendance.response.GetMonthlyAttendanceResponse;
 import com.backend.athlete.support.exception.ServiceException;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.support.util.FindUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,10 +32,7 @@ public class AttendanceService {
     }
 
     public CreateAttendanceResponse createAttendanceEvent(CustomUserDetailsImpl userPrincipal, CreateAttendanceRequest request) {
-        User user = userRepository.findByUserId(userPrincipal.getUsername());
-        if (user == null) {
-            throw new ServiceException("회원을 찾을 수 없습니다.");
-        }
+        User user = FindUtil.findByUserId(userPrincipal.getUsername());
 
         if (request.getEventDate() == null) request.setEventDate(LocalDate.now());
 
@@ -53,9 +51,9 @@ public class AttendanceService {
 
     @Transactional
     public GetDailyAttendanceResponse getAttendance(CustomUserDetailsImpl userPrincipal, LocalDate dailyDate) {
-        User findUser = userRepository.findByUserId(userPrincipal.getUsername());
+        User user = FindUtil.findByUserId(userPrincipal.getUsername());
 
-        Attendance attendance = attendanceRepository.findByUserIdAndAttendanceDate(findUser.getId(), dailyDate)
+        Attendance attendance = attendanceRepository.findByUserIdAndAttendanceDate(user.getId(), dailyDate)
                 .orElseThrow(() -> new ServiceException(dailyDate + " 의 출석이 없습니다."));
 
 
@@ -64,12 +62,12 @@ public class AttendanceService {
 
     @Transactional
     public GetMonthlyAttendanceResponse getMonthlyAttendance(CustomUserDetailsImpl userPrincipal, YearMonth month) {
-        User findUser = userRepository.findByUserId(userPrincipal.getUsername());
+        User user = FindUtil.findByUserId(userPrincipal.getUsername());
 
         LocalDate startDate = month.atDay(1);
         LocalDate endDate = month.atEndOfMonth();
 
-        List<Attendance> attendances = attendanceRepository.findByUserAndAttendanceDateBetween(findUser, startDate, endDate);
+        List<Attendance> attendances = attendanceRepository.findByUserAndAttendanceDateBetween(user, startDate, endDate);
 
         List<LocalDate> presentDays = attendances.stream()
                 .map(Attendance::getAttendanceDate)
@@ -77,4 +75,5 @@ public class AttendanceService {
 
         return new GetMonthlyAttendanceResponse(presentDays.size(), presentDays);
     }
+
 }
