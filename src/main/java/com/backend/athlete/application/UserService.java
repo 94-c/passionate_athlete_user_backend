@@ -14,6 +14,7 @@ import com.backend.athlete.presentation.user.response.UpdateUserStatusResponse;
 import com.backend.athlete.support.exception.AuthException;
 import com.backend.athlete.support.exception.ServiceException;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.support.util.FindUtils;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,61 +36,52 @@ public class UserService {
     }
 
     public GetUserResponse getUserInfo(CustomUserDetailsImpl userPrincipal) {
-        User findUser = userRepository.findByUserId(userPrincipal.getUsername());
-        if (findUser == null) {
-            throw new UsernameNotFoundException("회원이 존재 하지 않습니다.");
-        }
-        return GetUserResponse.fromEntity(findUser);
+        return GetUserResponse.fromEntity(FindUtils.findByUserId(userPrincipal.getUsername()));
     }
 
     @Transactional
     public UpdateUserResponse updateUser(CustomUserDetailsImpl userPrincipal, UpdateUserRequest request) {
-        User findUser = userRepository.findByUserId(userPrincipal.getUsername());
-        if (findUser == null) {
-            throw new UsernameNotFoundException("회원이 존재 하지 않습니다.");
-        }
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
         checkDuplicatePassword(request.getPassword(), request.getPasswordCheck());
 
         String encodedPassword = passwordEncoder.encode(request.getPassword());
 
-        findUser.updateUser(
+        user.updateUser(
                 encodedPassword,
                 request.getGender(),
                 request.getWeight(),
                 request.getHeight()
         );
 
-        userRepository.save(findUser);
+        userRepository.save(user);
 
-        return UpdateUserResponse.fromEntity(findUser);
+        return UpdateUserResponse.fromEntity(user);
+    }
+
+    public UpdateUserStatusResponse updateUserStatus(Long userId, UpdateUserStatusRequest request) {
+        User user = FindUtils.findById(userId);
+        user.updateUserStatus(
+            request.getStatus()
+        );
+        userRepository.save(user);
+        return UpdateUserStatusResponse.fromEntity(user);
+    }
+
+    public UpdateUserRoleResponse updateUserRole(Long userId, UpdateUserRoleRequest request) {
+        User user = FindUtils.findById(userId);
+
+        Role newRole = roleRepository.findByName(request.getRole())
+                .orElseThrow(() -> new ServiceException("해당 권한을 찾을 수 없습니다."));
+
+        user.updateUserRole(newRole);
+        User updatedUser = userRepository.save(user);
+
+        return UpdateUserRoleResponse.fromEntity(updatedUser);
     }
 
     protected void checkDuplicatePassword(String password, String passwordCheck) {
         if (!password.equals(passwordCheck)) {
             throw new AuthException("패스워드가 불일치 합니다.");
         }
-    }
-
-    public UpdateUserStatusResponse updateUserStatus(Long userId, UpdateUserStatusRequest request) {
-        User findUser = userRepository.findById(userId)
-                .orElseThrow(() -> new ServiceException("해당 회원을 찾을 수 없습니다."));
-        findUser.updateUserStatus(
-            request.getStatus()
-        );
-        userRepository.save(findUser);
-        return UpdateUserStatusResponse.fromEntity(findUser);
-    }
-
-    public UpdateUserRoleResponse updateUserRole(Long userId, UpdateUserRoleRequest request) {
-        User findUser = userRepository.findById(userId)
-                .orElseThrow(() -> new ServiceException("해당 회원을 찾을 수 없습니다."));
-
-        Role newRole = roleRepository.findByName(request.getRole())
-                .orElseThrow(() -> new ServiceException("해당 권한을 찾을 수 없습니다."));
-
-        findUser.updateUserRole(newRole);
-        User updatedUser = userRepository.save(findUser);
-
-        return UpdateUserRoleResponse.fromEntity(updatedUser);
     }
 }
