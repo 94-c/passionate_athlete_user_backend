@@ -27,7 +27,7 @@ public class AthleteController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER') or hasAnyAuthority('MANAGER')")
     public ResponseEntity<CreateAthleteResponse> createAthlete(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
                                                                @Valid @RequestBody CreateAthleteRequest request) {
         CreateAthleteResponse response = athleteService.createAthlete(userPrincipal, request);

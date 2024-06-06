@@ -59,4 +59,5 @@ public class Athlete {
         this.round = round;
         this.etc = etc;
     }
+
 }
