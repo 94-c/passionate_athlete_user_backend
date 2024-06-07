@@ -1,0 +1,44 @@
+package com.backend.athlete.domain.execise;
+
+import com.backend.athlete.support.common.BaseTimeEntity;
+import jakarta.persistence.*;
+import lombok.Getter;
+import org.hibernate.annotations.Comment;
+
+import java.sql.Time;
+import java.util.List;
+
+@Getter
+@Entity
+@Table(name = "workout")
+public class Workout extends BaseTimeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Comment("운동명")
+    private String title;
+
+    @Comment("운동 설명")
+    private String description;
+
+    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Comment("세부 운동 항목")
+    private List<WorkoutInfo> workoutInfos;
+
+    @Comment("운동 라운드")
+    private String round;
+
+    @Comment("운동 시간")
+    private Time time;
+    protected Workout() {}
+
+    public Workout(String title, String description, String round, Time time) {
+        this.title = title;
+        this.description = description;
+        this.round = round;
+        this.time = time;
+    }
+
+}
