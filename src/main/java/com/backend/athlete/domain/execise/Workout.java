@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.hibernate.annotations.Comment;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -39,6 +40,11 @@ public class Workout extends BaseTimeEntity {
         this.description = description;
         this.round = round;
         this.time = time;
+        this.workoutInfos = new ArrayList<>();
+    }
+
+    public void addWorkoutInfo(WorkoutInfo workoutInfo) {
+        workoutInfos.add(workoutInfo);
     }
 
 }
