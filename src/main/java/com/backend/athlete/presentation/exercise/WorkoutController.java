@@ -3,13 +3,11 @@ package com.backend.athlete.presentation.exercise;
 import com.backend.athlete.application.WorkoutService;
 import com.backend.athlete.presentation.exercise.request.CreateWorkoutRequest;
 import com.backend.athlete.presentation.exercise.response.CreateWorkoutResponse;
+import com.backend.athlete.presentation.exercise.response.GetWorkoutResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/workouts")
@@ -27,6 +25,10 @@ public class WorkoutController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-
+    @GetMapping("/{id}")
+    public ResponseEntity<GetWorkoutResponse> getWorkout(@PathVariable Long id) {
+        GetWorkoutResponse response = workoutService.getWorkoutById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
 }

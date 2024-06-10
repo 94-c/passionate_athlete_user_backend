@@ -4,6 +4,7 @@ import com.backend.athlete.domain.execise.*;
 import com.backend.athlete.presentation.exercise.request.CreateWorkoutInfoRequest;
 import com.backend.athlete.presentation.exercise.request.CreateWorkoutRequest;
 import com.backend.athlete.presentation.exercise.response.CreateWorkoutResponse;
+import com.backend.athlete.presentation.exercise.response.GetWorkoutResponse;
 import com.backend.athlete.support.exception.ServiceException;
 import org.springframework.stereotype.Service;
 
@@ -46,8 +47,9 @@ public class WorkoutService {
         return workoutRepository.findAll();
     }
 
-    public Workout getWorkoutById(Long id) {
-        return workoutRepository.findById(id).orElse(null);
+    public GetWorkoutResponse getWorkoutById(Long id) {
+        Workout workout = workoutRepository.findWorkoutWithDetailsById(id);
+        return GetWorkoutResponse.fromEntity(workout);
     }
 
     public void deleteWorkout(Long id) {

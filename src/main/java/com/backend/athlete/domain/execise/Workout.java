@@ -7,7 +7,9 @@ import org.hibernate.annotations.Comment;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Entity
@@ -26,7 +28,7 @@ public class Workout extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
     @Comment("세부 운동 항목")
-    private List<WorkoutInfo> workoutInfos;
+    private Set<WorkoutInfo> workoutInfos;
 
     @Comment("운동 라운드")
     private String round;
@@ -40,7 +42,7 @@ public class Workout extends BaseTimeEntity {
         this.description = description;
         this.round = round;
         this.time = time;
-        this.workoutInfos = new ArrayList<>();
+        this.workoutInfos = new HashSet<>();
     }
 
     public void addWorkoutInfo(WorkoutInfo workoutInfo) {
