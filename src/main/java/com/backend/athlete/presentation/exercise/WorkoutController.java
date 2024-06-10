@@ -4,6 +4,8 @@ import com.backend.athlete.application.WorkoutService;
 import com.backend.athlete.presentation.exercise.request.CreateWorkoutRequest;
 import com.backend.athlete.presentation.exercise.response.CreateWorkoutResponse;
 import com.backend.athlete.presentation.exercise.response.GetWorkoutResponse;
+import com.backend.athlete.support.common.response.PagedResponse;
+import com.backend.athlete.support.constant.PageConstant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +18,16 @@ public class WorkoutController {
 
     public WorkoutController(WorkoutService workoutService) {
         this.workoutService = workoutService;
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAnyAuthority('MANAGER') or hasAnyAuthority('ADMIN')")
+    public ResponseEntity<PagedResponse<GetWorkoutResponse>> getAllWorkoutsPaged(
+            @RequestParam(defaultValue = PageConstant.DEFAULT_PAGE, required = false) int page,
+            @RequestParam(defaultValue = PageConstant.DEFAULT_PER_PAGE, required = false) int perPage,
+            @RequestParam(defaultValue = "") String title) {
+        PagedResponse<GetWorkoutResponse> response = workoutService.getAllWorkoutsPaged(title, page, perPage);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping

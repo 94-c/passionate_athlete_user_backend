@@ -5,7 +5,11 @@ import com.backend.athlete.presentation.exercise.request.CreateWorkoutInfoReques
 import com.backend.athlete.presentation.exercise.request.CreateWorkoutRequest;
 import com.backend.athlete.presentation.exercise.response.CreateWorkoutResponse;
 import com.backend.athlete.presentation.exercise.response.GetWorkoutResponse;
+import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.exception.ServiceException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +23,12 @@ public class WorkoutService {
     public WorkoutService(WorkoutRepository workoutRepository, ExerciseRepository exerciseRepository) {
         this.workoutRepository = workoutRepository;
         this.exerciseRepository = exerciseRepository;
+    }
+
+    public PagedResponse<GetWorkoutResponse> getAllWorkoutsPaged(String title, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Workout> workouts = workoutRepository.findAllWithDetails(title, pageable);
+        return PagedResponse.fromPage(workouts.map(GetWorkoutResponse::fromEntity));
     }
 
     public CreateWorkoutResponse createWorkout(CreateWorkoutRequest request) {
@@ -40,11 +50,6 @@ public class WorkoutService {
 
         Workout savedWorkout = workoutRepository.save(workout);
         return CreateWorkoutResponse.fromEntity(savedWorkout);
-    }
-
-
-    public List<Workout> getAllWorkouts() {
-        return workoutRepository.findAll();
     }
 
     public GetWorkoutResponse getWorkoutById(Long id) {
