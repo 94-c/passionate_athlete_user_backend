@@ -29,7 +29,7 @@ public class WorkoutService {
             List<WorkoutInfo> workoutInfos = request.getWorkoutInfos().stream()
                     .map(infoRequest -> {
                         Exercise exercise = exerciseRepository.findById(infoRequest.getExerciseId())
-                                .orElseThrow(() -> new RuntimeException("Exercise not found"));
+                                .orElseThrow(() -> new ServiceException("운동 종목을 찾지 못했습니다."));
                         return CreateWorkoutInfoRequest.toEntity(infoRequest, workout, exercise);
                     })
                     .collect(Collectors.toList());
