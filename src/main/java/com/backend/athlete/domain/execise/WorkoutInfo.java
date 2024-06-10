@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.hibernate.annotations.Comment;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +31,11 @@ public class WorkoutInfo {
 
     @OneToMany(mappedBy = "workoutInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkoutLevel> levels;
-    protected WorkoutInfo() {};
+    private Time time;
+
+    public WorkoutInfo() {
+        this.levels = new ArrayList<>();
+    }
 
     public WorkoutInfo(Workout workout, Exercise exercise, List<CreateWorkoutLevelRequest> levelRequests) {
         this.workout = workout;
@@ -40,6 +45,21 @@ public class WorkoutInfo {
                     .map(levelRequest -> CreateWorkoutLevelRequest.toEntity(levelRequest, this))
                     .collect(Collectors.toList());
         }
+    }
+    public WorkoutInfo(Workout workout, Exercise exercise) {
+        this.workout = workout;
+        this.exercise = exercise;
+        this.levels = new ArrayList<>();
+    }
+
+    public void addLevel(WorkoutLevel level) {
+        level.setWorkoutInfo(this);
+        levels.add(level);
+    }
+
+    public void setLevels(List<WorkoutLevel> levels) {
+        this.levels.clear();
+        levels.forEach(this::addLevel);
     }
 
 

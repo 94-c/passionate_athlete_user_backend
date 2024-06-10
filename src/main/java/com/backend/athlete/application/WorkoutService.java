@@ -1,9 +1,9 @@
 package com.backend.athlete.application;
 
 import com.backend.athlete.domain.execise.*;
+import com.backend.athlete.domain.execise.type.LevelType;
 import com.backend.athlete.presentation.exercise.request.CreateWorkoutInfoRequest;
 import com.backend.athlete.presentation.exercise.request.CreateWorkoutRequest;
-import com.backend.athlete.presentation.exercise.response.CreateWorkoutResponse;
 import com.backend.athlete.presentation.exercise.response.GetWorkoutResponse;
 import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.exception.ServiceException;
@@ -31,7 +31,7 @@ public class WorkoutService {
         return PagedResponse.fromPage(workouts.map(GetWorkoutResponse::fromEntity));
     }
 
-    public CreateWorkoutResponse createWorkout(CreateWorkoutRequest request) {
+    public GetWorkoutResponse createWorkout(CreateWorkoutRequest request) {
         duplicateWorkoutTitle(request.getTitle());
 
         Workout workout = CreateWorkoutRequest.toEntity(request);
@@ -49,7 +49,7 @@ public class WorkoutService {
         }
 
         Workout savedWorkout = workoutRepository.save(workout);
-        return CreateWorkoutResponse.fromEntity(savedWorkout);
+        return GetWorkoutResponse.fromEntity(savedWorkout);
     }
 
     public GetWorkoutResponse getWorkoutById(Long id) {
@@ -57,8 +57,27 @@ public class WorkoutService {
         return GetWorkoutResponse.fromEntity(workout);
     }
 
-    public void deleteWorkout(Long id) {
-        workoutRepository.deleteById(id);
+    public GetWorkoutResponse updateWorkout(Long id, CreateWorkoutRequest request) {
+        Workout workout = workoutRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Workout not found"));
+
+        workout.update(
+                request.getTitle(),
+                request.getDescription(),
+                request.getRound(),
+                request.getTime()
+        );
+
+        if (request.getWorkoutInfos() != null) {
+            List<WorkoutInfo> workoutInfos = request.getWorkoutInfos().stream()
+                    .map(infoRequest -> convertToWorkoutInfo(infoRequest, workout))
+                    .collect(Collectors.toList());
+
+            workout.updateWorkoutInfos(workoutInfos);
+        }
+
+        Workout savedWorkout = workoutRepository.save(workout);
+        return GetWorkoutResponse.fromEntity(savedWorkout);
     }
 
     protected void duplicateWorkoutTitle(String title) {
@@ -66,5 +85,23 @@ public class WorkoutService {
         if (workout.isPresent()) {
             throw new ServiceException("이미 등록 된 오늘의 운동명입니다.");
         }
+    }
+
+    protected WorkoutInfo convertToWorkoutInfo(CreateWorkoutInfoRequest infoRequest, Workout workout) {
+        Exercise exercise = exerciseRepository.findById(infoRequest.getExerciseId())
+                .orElseThrow(() -> new RuntimeException("Exercise not found"));
+        List<WorkoutLevel> levels = infoRequest.getLevels().stream()
+                .map(levelRequest -> new WorkoutLevel(
+                        LevelType.valueOf(levelRequest.getLevel()),
+                        null,
+                        levelRequest.getMaleWeight(),
+                        levelRequest.getFemaleWeight(),
+                        levelRequest.getMaleCount(),
+                        levelRequest.getFemaleCount()))
+                .collect(Collectors.toList());
+        WorkoutInfo workoutInfo = new WorkoutInfo(workout, exercise);
+        levels.forEach(level -> level.setWorkoutInfo(workoutInfo));
+        workoutInfo.setLevels(levels);
+        return workoutInfo;
     }
 }

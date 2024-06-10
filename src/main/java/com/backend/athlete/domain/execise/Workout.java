@@ -49,4 +49,17 @@ public class Workout extends BaseTimeEntity {
         workoutInfos.add(workoutInfo);
     }
 
+    public void update(String title, String description, String round, Time time) {
+        this.title = title;
+        this.description = description;
+        this.round = round;
+        this.time = time;
+        this.workoutInfos = new HashSet<>();
+    }
+
+    public void updateWorkoutInfos(List<WorkoutInfo> newWorkoutInfos) {
+        this.workoutInfos.clear();
+        this.workoutInfos.addAll(newWorkoutInfos);
+    }
+
 }

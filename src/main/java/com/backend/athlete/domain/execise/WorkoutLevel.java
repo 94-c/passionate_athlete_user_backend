@@ -44,4 +44,9 @@ public class WorkoutLevel {
         this.maleCount = maleCount;
         this.femaleCount = femaleCount;
     }
+
+    public void setWorkoutInfo(WorkoutInfo workoutInfo) {
+        this.workoutInfo = workoutInfo;
+    }
+
 }

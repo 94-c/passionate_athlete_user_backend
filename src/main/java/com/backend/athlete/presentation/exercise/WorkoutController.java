@@ -2,7 +2,6 @@ package com.backend.athlete.presentation.exercise;
 
 import com.backend.athlete.application.WorkoutService;
 import com.backend.athlete.presentation.exercise.request.CreateWorkoutRequest;
-import com.backend.athlete.presentation.exercise.response.CreateWorkoutResponse;
 import com.backend.athlete.presentation.exercise.response.GetWorkoutResponse;
 import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.constant.PageConstant;
@@ -32,8 +31,8 @@ public class WorkoutController {
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('MANAGER') or hasAnyAuthority('ADMIN')")
-    public ResponseEntity<CreateWorkoutResponse> createWorkout(@RequestBody CreateWorkoutRequest request) {
-        CreateWorkoutResponse response = workoutService.createWorkout(request);
+    public ResponseEntity<GetWorkoutResponse> createWorkout(@RequestBody CreateWorkoutRequest request) {
+        GetWorkoutResponse response = workoutService.createWorkout(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -41,6 +40,14 @@ public class WorkoutController {
     public ResponseEntity<GetWorkoutResponse> getWorkout(@PathVariable Long id) {
         GetWorkoutResponse response = workoutService.getWorkoutById(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MANAGER') or hasAnyAuthority('ADMIN')")
+    public ResponseEntity<GetWorkoutResponse> updateWorkout(@PathVariable Long id,
+                                                               @RequestBody CreateWorkoutRequest request) {
+        GetWorkoutResponse response = workoutService.updateWorkout(id, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 }
