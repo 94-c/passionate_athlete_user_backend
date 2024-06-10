@@ -50,4 +50,11 @@ public class WorkoutController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MANAGER') or hasAnyAuthority('ADMIN')")
+    public ResponseEntity<Void> deleteWorkout(@PathVariable Long id) {
+        workoutService.deleteWorkout(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

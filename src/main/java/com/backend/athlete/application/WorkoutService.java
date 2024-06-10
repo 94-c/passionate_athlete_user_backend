@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -103,5 +104,13 @@ public class WorkoutService {
         levels.forEach(level -> level.setWorkoutInfo(workoutInfo));
         workoutInfo.setLevels(levels);
         return workoutInfo;
+    }
+
+    @Transactional
+    public void deleteWorkout(Long id) {
+        Workout workout = workoutRepository.findById(id)
+                .orElseThrow(() -> new ServiceException("오늘의 운동을 찾지 못했습니다."));
+
+        workoutRepository.delete(workout);
     }
 }
