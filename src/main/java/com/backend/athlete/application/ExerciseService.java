@@ -4,7 +4,6 @@ import com.backend.athlete.domain.execise.Exercise;
 import com.backend.athlete.domain.execise.ExerciseRepository;
 import com.backend.athlete.presentation.exercise.request.CreateExerciseRequest;
 import com.backend.athlete.presentation.exercise.request.UpdateExerciseRequest;
-import com.backend.athlete.presentation.exercise.response.CreateExerciseResponse;
 import com.backend.athlete.presentation.exercise.response.GetExerciseResponse;
 import com.backend.athlete.support.exception.ServiceException;
 import org.springframework.stereotype.Service;
@@ -17,12 +16,12 @@ public class ExerciseService {
     public ExerciseService(ExerciseRepository exerciseRepository) {
         this.exerciseRepository = exerciseRepository;
     }
-    public CreateExerciseResponse createExercise(CreateExerciseRequest request) {
+    public GetExerciseResponse createExercise(CreateExerciseRequest request) {
         duplicateExercise(request.getName());
 
         Exercise newExercise = exerciseRepository.save(CreateExerciseRequest.toEntity(request));
 
-        return CreateExerciseResponse.fromEntity(newExercise);
+        return GetExerciseResponse.fromEntity(newExercise);
     }
 
     public GetExerciseResponse getExercise(Long id) {
