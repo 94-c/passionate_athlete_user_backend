@@ -31,12 +31,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         String requestURI = request.getRequestURI();
 
-        if (requestURI.equals("/auth/login") || requestURI.equals("/api/v1/auth/login")) {
+        if (requestURI.equals("/auth/login") || requestURI.equals("/auth/register") || requestURI.equals("/api/v1/auth/login")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -62,7 +61,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             logger.error("Cannot set user authentication: {}", e.getMessage());
         }
 
-        // Continue the filter chain
         filterChain.doFilter(request, response);
     }
 }

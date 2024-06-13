@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -42,16 +43,16 @@ public class SecurityConfig {
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenProvider, userDetailsService);
 
         return http
-                .httpBasic(httpBasic -> httpBasic.disable())
-                .csrf(csrf -> csrf.disable())
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .formLogin(form -> form
-                        .loginPage("/auth/login-page")
+                        .loginPage("/auth/login")
                         .permitAll()
                         .defaultSuccessUrl("/home", true)
                 )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/login-page", "/api/v1/auth/login", "/api/v1/auth/register", "/static/**", "/public/**").permitAll()
+                        .requestMatchers("/auth/**", "/api/v1/auth/login", "/api/v1/auth/register", "/static/**", "/public/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -80,5 +81,4 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

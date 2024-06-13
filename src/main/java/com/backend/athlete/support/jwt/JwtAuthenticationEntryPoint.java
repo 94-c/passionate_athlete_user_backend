@@ -18,9 +18,15 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
             throws IOException, ServletException {
-        logger.error("Unauthorized error: {}", authException.getMessage());
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized error: Full authentication is required to access this resource");
-    }
+        String requestURI = request.getRequestURI();
 
+        if (requestURI.equals("/auth/login") || requestURI.equals("/auth/register")) {
+            // 로그인 페이지 및 등록 페이지에 대해 401 오류를 반환하지 않고 리디렉션
+            response.sendRedirect(request.getContextPath() + "/auth/login");
+        } else {
+            logger.error("Unauthorized error: {}", authException.getMessage());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized error: Full authentication is required to access this resource");
+        }
+    }
 }
 
