@@ -1,0 +1,166 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.header, .footer {
+    width: 100%;
+    background-color: #fff;
+    color: #FF3300;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    left: 0;
+    z-index: 1000;
+}
+
+.header {
+    top: 0;
+}
+
+.footer {
+    bottom: 0;
+    display: flex;
+    justify-content: space-around;
+    background-color: #333;
+    color: #fff;
+}
+
+.circle {
+    width: 60px;
+    height: 60px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.circle:hover {
+    background-color: #ddd;
+    transform: scale(1.1);
+}
+
+.circle:active {
+    background-color: #bbb;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100% - 120px); /* Adjusting height according to header and footer */
+    margin-top: 60px;
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+.hexagon-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.hexagon {
+    width: 150px;
+    height: 86.6px;
+    background-color: #FF6600;
+    position: relative;
+    margin: 43.3px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.hexagon:before,
+.hexagon:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    border-left: 75px solid transparent;
+    border-right: 75px solid transparent;
+}
+
+.hexagon:before {
+    bottom: 100%;
+    border-bottom: 43.3px solid #FF6600;
+}
+
+.hexagon:after {
+    top: 100%;
+    border-top: 43.3px solid #FF6600;
+}
+
+.hexagon:hover {
+    background-color: #FF3300;
+    transform: scale(1.1);
+}
+
+.hexagon:before:hover,
+.hexagon:after:hover {
+    border-bottom-color: #FF3300;
+    border-top-color: #FF3300;
+}
+
+.hexagon:active {
+    background-color: #FF3300;
+}
+
+.hexagon:before:active,
+.hexagon:after:active {
+    border-bottom-color: #FF3300;
+    border-top-color: #FF3300;
+}
+
+#loginBoxTitle {
+    color: #FF6600;
+    font-weight: bold;
+    font-size: 32px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, #FF9966, #FF9933);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 768px) {
+    .hexagon-container {
+        grid-template-columns: 1fr;
+    }
+
+    .hexagon {
+        width: 120px;
+        height: 69.3px;
+    }
+
+    .hexagon:before, .hexagon:after {
+        border-left: 60px solid transparent;
+        border-right: 60px solid transparent;
+    }
+
+    .hexagon:before {
+        border-bottom: 34.6px solid #FF6600;
+    }
+
+    .hexagon:after {
+        border-top: 34.6px solid #FF6600;
+    }
+
+    .circle {
+        width: 50px;
+        height: 50px;
+    }
+}
