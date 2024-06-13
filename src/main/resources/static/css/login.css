@@ -54,12 +54,12 @@ html, body {
 }
 
 #loginBoxTitle {
-    color: #000000;
+    color: #FF6600;
     font-weight: bold;
     font-size: 32px;
     text-transform: uppercase;
     margin-bottom: 20px;
-    background: linear-gradient(to right, #270a09, #8ca6ce);
+    background: linear-gradient(to right, #FF9966, #FF9933);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -73,14 +73,14 @@ html, body {
     border-radius: 4px;
     border: none;
     color: #fff;
-    background-color: #007bff;
+    background-color: #FF6633;
     cursor: pointer;
     width: 100%;
     font-size: 16px;
 }
 
 #inputBox button:hover {
-    background-color: #0056b3;
+    background-color: #FF6600;
 }
 
 /* 반응형 디자인 */
