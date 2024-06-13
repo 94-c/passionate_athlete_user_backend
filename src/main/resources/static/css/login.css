@@ -1,0 +1,107 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html, body {
+    height: 100%;
+    background: #ffffff;
+}
+
+#container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 10px;
+}
+
+#loginBox {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.input-form-box {
+    border: 0px solid #ff0000;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.input-form-box > span {
+    display: block;
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+
+.input-form-box input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.button-login-box {
+    margin: 10px 0;
+}
+
+#loginBoxTitle {
+    color: #000000;
+    font-weight: bold;
+    font-size: 32px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, #270a09, #8ca6ce);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+#inputBox {
+    margin: 10px;
+}
+
+#inputBox button {
+    padding: 10px;
+    border-radius: 4px;
+    border: none;
+    color: #fff;
+    background-color: #007bff;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+}
+
+#inputBox button:hover {
+    background-color: #0056b3;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 600px) {
+    #loginBox {
+        width: 100%;
+        margin: 20px;
+        box-shadow: none;
+        padding: 10px;
+    }
+
+    #loginBoxTitle {
+        font-size: 24px;
+    }
+
+    .input-form-box > span {
+        font-size: 14px;
+    }
+
+    #inputBox button {
+        font-size: 14px;
+        padding: 8px;
+    }
+}

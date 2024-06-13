@@ -1,22 +1,94 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html lang="en">
 <head>
-    <title>Login</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+
 </head>
-<body>
-<h1>Login</h1>
-<form th:action="@{/api/v1/auth/login}" method="post">
-    <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username"/>
+<body class="text-center">
+
+<div id="container">
+    <div id="loginBox">
+        <div id="loginBoxTitle">GODA GYM</div>
+        <div id="inputBox">
+            <div class="input-form-box">
+                <span>아이디 </span>
+                <input type="text" id="userId" name="userId" class="form-control" required>
+            </div>
+            <div class="input-form-box">
+                <span>비밀번호 </span>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            <div class="button-login-box">
+                <button type="button" id="loginButton" class="btn btn-primary btn-xs" style="width:100%">로그인</button>
+            </div>
+            <div class="button-login-box">
+                <button type="button" id="registerButton" class="btn btn-primary btn-xs" style="width:100%">회원 가입</button>
+            </div>
+        </div>
     </div>
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password"/>
-    </div>
-    <div>
-        <button type="submit">Login</button>
-    </div>
-</form>
+</div>
+
+<script th:inline="javascript">
+    document.getElementById('loginButton').addEventListener('click', function() {
+        var formData = {
+            userId: document.getElementById('userId').value,
+            password: document.getElementById('password').value
+        };
+
+        // 아이디와 비밀번호가 입력되었는지 확인
+        if (!formData.userId || !formData.password) {
+            alert('아이디와 비밀번호를 입력해 주세요.');
+            return;
+        }
+
+        fetch("/api/v1/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .then(data => {
+                if (!data.users || !data.users.userId) {
+                    alert('사용자 아이디가 없습니다.');
+                    return;
+                }
+                localStorage.setItem('jwtToken', data.token);
+
+                const roles = data.users.roles;
+                const allowedRoles = ['USER', 'MANAGER', 'ADMIN'];
+                const hasAccess = roles.some(role => allowedRoles.includes(role));
+
+                if (hasAccess) {
+                    window.location.href = "/main";
+                } else {
+                    alert('접근 권한이 없습니다.');
+                }
+            })
+            .catch(error => {
+                console.error("There was a problem with the login request:", error);
+                alert('아이디 및 비밀번호가 일치 하지 않습니다.');
+            });
+    });
+
+</script>
+
+<script type="javascript" th:href="@{/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>
