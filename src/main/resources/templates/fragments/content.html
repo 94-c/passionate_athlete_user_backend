@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div th:fragment="content">
+    <section id="info-section" class="content">
+        <p id="attendance-info">최형우님은 연속 <span class="highlight">10일</span> 출석 중입니다.</p>
+    </section>
+
+    <section id="background-decor" class="content">
+        <div id="card">
+            <div id="main-content">
+                <div class="hexagon" id="workout">
+                    <i class="fas fa-dumbbell"></i>
+                    <span>운동</span>
+                </div>
+                <div class="hexagon" id="attendance">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>출석</span>
+                </div>
+                <div class="hexagon" id="inbody">
+                    <i class="fas fa-weight"></i>
+                    <span>인바디</span>
+                </div>
+                <div class="hexagon" id="trainer">
+                    <i class="fas fa-user"></i>
+                    <span>오운</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>
