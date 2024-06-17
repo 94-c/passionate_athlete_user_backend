@@ -16,6 +16,8 @@ import com.backend.athlete.support.exception.ServiceException;
 import com.backend.athlete.support.jwt.JwtTokenProvider;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.UserCodeUtils;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -114,5 +116,14 @@ public class AuthService {
     protected Role getUserRoleTypeRole() {
         Optional<Role> roleOptional = roleRepository.findByName(UserRoleType.USER);
         return roleOptional.orElseThrow(() -> new AuthException("해당 권한이 존재 하지 않습니다."));
+    }
+
+    public void addJwtCookie(HttpServletResponse response, LoginTokenResponse jwtToken) {
+        Cookie cookie = new Cookie("jwt", jwtToken.getToken());
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true); // HTTPS를 사용하는 경우 true로 설정
+        cookie.setPath("/");
+        cookie.setMaxAge(24 * 60 * 60); // 1일 동안 유효
+        response.addCookie(cookie);
     }
 }
