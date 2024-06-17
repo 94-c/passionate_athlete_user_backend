@@ -9,7 +9,7 @@ html, body {
     background: #ffffff;
 }
 
-#container {
+.container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -18,7 +18,7 @@ html, body {
     padding: 10px;
 }
 
-#loginBox {
+.loginBox {
     width: 100%;
     max-width: 400px;
     text-align: center;

@@ -1,17 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="kr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로그인</title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/css/login.css}">
-    <link rel="stylesheet" th:href="@{/css/all.min.css}">
+    <title th:text="${pageTitle}"></title>
+
+    <link rel="stylesheet" href="/css/login.css">
 </head>
 <body class="text-center">
 
-<div id="container">
+<div class="container" layout:fragment="content">
     <div id="loginBox">
         <div id="loginBoxTitle">GODA GYM</div>
         <div id="inputBox">
@@ -41,62 +39,9 @@
     <div class="login-links">
         <a href="" class="link">비밀번호 찾기</a>
         <a href="#" class="link">아이디 찾기</a>
-        <a th:href="@{/register.html}" class="link">회원가입</a>
+        <a th:href="@{/auth/register}" class="link">회원가입</a>
     </div>
 </div>
-
-<script th:src="@{/js/jquery-3.5.1.slim.min.js}"></script>
-<script th:src="@{/js/popper.min.js}"></script>
-<script th:src="@{/js/bootstrap.min.js}"></script>
-<script th:inline="javascript">
-    document.getElementById("loginButton").addEventListener("click", function() {
-        var formData = {
-            userId: document.getElementById('userId').value,
-            password: document.getElementById('password').value
-        };
-
-        if (!formData.userId || !formData.password) {
-            alert('아이디와 비밀번호를 입력해 주세요.');
-            return;
-        }
-
-        fetch("/api/v1/auth/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formData)
-        })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Network response was not ok');
-                }
-            })
-            .then(data => {
-                if (!data.users || !data.users.userId) {
-                    alert('사용자 아이디가 없습니다.');
-                    return;
-                }
-                localStorage.setItem('jwtToken', data.token);
-
-                const roles = data.users.roles;
-                const allowedRoles = ['USER', 'MANAGER', 'ADMIN'];
-                const hasAccess = roles.some(role => allowedRoles.includes(role));
-
-                if (hasAccess) {
-                    window.location.href = "/main";
-                } else {
-                    alert('접근 권한이 없습니다.');
-                }
-            })
-            .catch(error => {
-                console.error("There was a problem with the login request:", error);
-                alert('아이디 및 비밀번호가 일치 하지 않습니다.');
-            });
-    });
-</script>
 
 </body>
 </html>
