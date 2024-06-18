@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}">
+<head>
+    <title th:text="${pageTitle}"></title>
+
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+<body class="text-center">
+
+<div class="container" layout:fragment="content">
+    <div id="header">
+        <h1>GODA GYM</h1>
+    </div>
+    <div id="info-section">
+        <p id="attendance-info">최형우님은 연속 <span class="highlight">10일</span> 출석 중입니다.</p>
+    </div>
+    <div id="background-decor">
+        <div id="card">
+            <div id="main-content">
+                <div class="hexagon" id="workout">
+                    <i class="fas fa-dumbbell"></i>
+                    <span>운동</span>
+                </div>
+                <div class="hexagon" id="attendance">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>출석</span>
+                </div>
+                <div class="hexagon" id="inbody">
+                    <i class="fas fa-weight"></i>
+                    <span>인바디</span>
+                </div>
+                <div class="hexagon" id="trainer">
+                    <i class="fas fa-user"></i>
+                    <span>오운</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+        <div class="menu-bar">
+            <a href="/list.html" class="menu-item"><i class="fas fa-users"></i></a>
+            <a href="#" class="menu-item"><i class="fas fa-bullhorn"></i></a>
+            <a href="#" class="menu-item"><i class="fas fa-user-circle"></i></a>
+            <a th:href="@{/auth/login}" class="menu-item"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </div>
+</div>
+
+<!-- 팝업 창 -->
+<div class="overlay"></div>
+<div id="popup">
+    <div id="popupContent">
+        <span id="popupClose">&times;</span>
+        <h2>오운 정보</h2>
+        <p>오운에 대한 상세 정보가 여기에 표시됩니다.</p>
+    </div>
+</div>
+</body>
+</html>
