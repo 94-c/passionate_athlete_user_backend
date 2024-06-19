@@ -52,6 +52,12 @@ public class User extends BaseTimeEntity {
     @Comment("회원 상태")
     private UserStatusType status;
 
+    @Column(nullable = false)
+    private String birthDate;
+
+    @Column(nullable = false)
+    private String phoneNumber;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -66,7 +72,7 @@ public class User extends BaseTimeEntity {
     }
 
     // 회원 가입
-    public User(String code, String userId, String password, String name, UserGenderType gender, Double weight, Double height, UserStatusType status, Set<Role> roles, Branch branch) {
+    public User(String code, String userId, String password, String name, UserGenderType gender, Double weight, Double height, UserStatusType status, Set<Role> roles, Branch branch, String birthDate, String phoneNumber) {
         this.code = code;
         this.userId = userId;
         this.password = password;
@@ -77,6 +83,8 @@ public class User extends BaseTimeEntity {
         this.status = status;
         this.roles = roles;
         this.branch = branch;
+        this.birthDate = birthDate;
+        this.phoneNumber = phoneNumber;
     }
 
     public void updateUser(String password, UserGenderType gender, Double weight, Double height) {

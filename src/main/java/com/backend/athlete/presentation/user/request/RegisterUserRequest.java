@@ -7,6 +7,7 @@ import com.backend.athlete.domain.user.type.UserGenderType;
 import com.backend.athlete.domain.user.type.UserStatusType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,7 +48,13 @@ public class RegisterUserRequest {
     @NotNull(message = "지점 이름을 입력하세요.")
     private String branchName;
 
-    protected RegisterUserRequest() {}
+    @NotBlank(message = "생년월일을 입력하세요.")
+    @Pattern(regexp = "^\\d{6}$", message = "생년월일은 6자리 숫자여야 합니다.")
+    private String birthDate;
+
+    @NotBlank(message = "휴대폰 번호를 입력하세요.")
+    @Pattern(regexp = "^\\d{11}$", message = "휴대폰 번호는 11자리 숫자여야 합니다.")
+    private String phoneNumber;
 
     public static User toEntity(RegisterUserRequest request, Branch branch) {
         return new User(
@@ -60,7 +67,9 @@ public class RegisterUserRequest {
                 request.getHeight(),
                 UserStatusType.WAIT,
                 request.getRoleIds(),
-                branch
+                branch,
+                request.getBirthDate(),
+                request.getPhoneNumber()
         );
     }
 }
