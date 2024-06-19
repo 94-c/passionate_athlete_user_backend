@@ -84,6 +84,9 @@ public class AuthService {
         return LoginTokenResponse.fromEntity(userDetails, token);
     }
 
+    public boolean checkUserIdExists(String userId) {
+        return authRepository.existsByUserId(userId);
+    }
 
     private String generateUserCode() {
         return UserCodeUtils.generateRandomString();
@@ -115,4 +118,5 @@ public class AuthService {
         Optional<Role> roleOptional = roleRepository.findByName(UserRoleType.USER);
         return roleOptional.orElseThrow(() -> new AuthException("해당 권한이 존재 하지 않습니다."));
     }
+
 }

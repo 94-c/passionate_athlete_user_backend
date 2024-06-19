@@ -44,7 +44,7 @@ public class RegisterUserRequest {
 
     private Set<Role> roleIds;
 
-    @NotBlank(message = "지점 이름을 입력하세요.")
+    @NotNull(message = "지점 이름을 입력하세요.")
     private String branchName;
 
     protected RegisterUserRequest() {}
