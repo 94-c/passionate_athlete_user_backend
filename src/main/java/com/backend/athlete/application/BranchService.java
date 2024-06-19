@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BranchService {
@@ -87,6 +88,9 @@ public class BranchService {
         return GetBranchUsersResponse.fromEntity(branch, users);
     }
 
-
-
+    public List<BranchResponse> getAllBranches() {
+        return branchRepository.findAll().stream()
+                .map(BranchResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
 }

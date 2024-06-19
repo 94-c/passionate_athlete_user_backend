@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/admin/branches")
 public class BranchController {
@@ -64,4 +66,9 @@ public class BranchController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @GetMapping("/find-all")
+    public ResponseEntity<List<BranchResponse>> getBranches() {
+        List<BranchResponse> branches = branchService.getAllBranches();
+        return ResponseEntity.status(HttpStatus.OK).body(branches);
+    }
 }
