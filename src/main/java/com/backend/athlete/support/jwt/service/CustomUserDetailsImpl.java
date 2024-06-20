@@ -1,6 +1,7 @@
 package com.backend.athlete.support.jwt.service;
 
 import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.type.UserStatusType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,16 +23,18 @@ public class CustomUserDetailsImpl implements UserDetails {
     private String name;
     @JsonIgnore
     private String password;
+    private UserStatusType status;
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetailsImpl(Long id, String code, String userId, String name, String password,
-                           Collection<? extends GrantedAuthority> authorities) {
+    public CustomUserDetailsImpl(Long id, String code, String userId, String name, String password, UserStatusType status,
+                                 Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.code = code;
         this.userId = userId;
         this.name = name;
         this.password = password;
+        this.status = status;
         this.authorities = authorities;
     }
 
@@ -46,6 +49,7 @@ public class CustomUserDetailsImpl implements UserDetails {
                 user.getUserId(),
                 user.getName(),
                 user.getPassword(),
+                user.getStatus(),  // 추가된 status 필드 설정
                 authorities);
     }
 
@@ -60,6 +64,10 @@ public class CustomUserDetailsImpl implements UserDetails {
 
     public String getName() {
         return this.name;
+    }
+
+    public UserStatusType getStatus() {
+        return this.status;
     }
 
     @Override

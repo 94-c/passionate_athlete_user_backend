@@ -46,12 +46,16 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
+                .claim("userId", userPrincipal.getUsername())
+                .claim("name", userPrincipal.getName())
+                .claim("status", userPrincipal.getStatus())
                 .claim("roles", roles)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + tokenExpirationTime))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
+
 
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
