@@ -52,10 +52,12 @@ public class User extends BaseTimeEntity {
     @Comment("회원 상태")
     private UserStatusType status;
 
-    @Column(nullable = false)
+    @Column(name = "birth_date", nullable = false)
+    @Comment("생년월일")
     private String birthDate;
 
-    @Column(nullable = false)
+    @Column(name = "phone_number", nullable = false)
+    @Comment("휴대폰 번호")
     private String phoneNumber;
 
     @ManyToMany(fetch = FetchType.EAGER)

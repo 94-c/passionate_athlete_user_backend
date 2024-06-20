@@ -17,9 +17,11 @@ public class RegisterUserResponse {
     private Double weight;
     private Double height;
     private String branchName;
+    private String birthDate;
+    private String phoneNumber;
     private Set<String> roles;
 
-    public RegisterUserResponse(String code, String userId, String name, String gender, Double weight, Double height, String branchName, Set<String> roles) {
+    public RegisterUserResponse(String code, String userId, String name, String gender, Double weight, Double height, String branchName, String birthDate, String phoneNumber,  Set<String> roles) {
         this.code = code;
         this.userId = userId;
         this.name = name;
@@ -27,6 +29,8 @@ public class RegisterUserResponse {
         this.weight = weight;
         this.height = height;
         this.branchName = branchName;
+        this.birthDate = birthDate;
+        this.phoneNumber = phoneNumber;
         this.roles = roles;
     }
 
@@ -43,6 +47,8 @@ public class RegisterUserResponse {
                 user.getWeight(),
                 user.getHeight(),
                 user.getBranch().getName(),
+                user.getBirthDate(),
+                user.getPhoneNumber(),
                 roleNames
         );
     }
