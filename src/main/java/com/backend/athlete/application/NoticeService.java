@@ -47,6 +47,7 @@ public class NoticeService {
         this.userRepository = userRepository;
     }
 
+
     public Page<PageSearchNoticeResponse> searchNotices(PageSearchNoticeRequest request, int page, int perPage, Integer kind, boolean status) {
         Pageable pageable = PageRequest.of(page, perPage);
         Page<Notice> notices = noticeRepository.findAllByUserAndTitleAndKindAndStatus(request.getName(), request.getTitle(), pageable, kind, status);
