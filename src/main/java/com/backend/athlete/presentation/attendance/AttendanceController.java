@@ -3,6 +3,7 @@ package com.backend.athlete.presentation.attendance;
 import com.backend.athlete.application.AttendanceService;
 import com.backend.athlete.presentation.attendance.request.CreateAttendanceRequest;
 import com.backend.athlete.presentation.attendance.response.CreateAttendanceResponse;
+import com.backend.athlete.presentation.attendance.response.GetContinuousAttendanceResponse;
 import com.backend.athlete.presentation.attendance.response.GetDailyAttendanceResponse;
 import com.backend.athlete.presentation.attendance.response.GetMonthlyAttendanceResponse;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
@@ -35,16 +36,22 @@ public class AttendanceController {
     @GetMapping("/daily")
     public ResponseEntity<GetDailyAttendanceResponse> getDailyAttendance(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
                                                                     @RequestParam(name = "daily", required = false) LocalDate dailyDate) {
-        GetDailyAttendanceResponse getAttendance = attendanceService.getAttendance(userPrincipal, dailyDate);
-        return ResponseEntity.status(HttpStatus.OK).body(getAttendance);
+        GetDailyAttendanceResponse response = attendanceService.getAttendance(userPrincipal, dailyDate);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/monthly")
     public ResponseEntity<GetMonthlyAttendanceResponse> getMonthlyAttendance(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
                                                                              @RequestParam(name = "month")YearMonth month) {
 
-        GetMonthlyAttendanceResponse getMonthlyAttendance = attendanceService.getMonthlyAttendance(userPrincipal, month);
-        return ResponseEntity.status(HttpStatus.OK).body(getMonthlyAttendance);
+        GetMonthlyAttendanceResponse response = attendanceService.getMonthlyAttendance(userPrincipal, month);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/continue")
+    public ResponseEntity<GetContinuousAttendanceResponse> getContinuousAttendance(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
+        GetContinuousAttendanceResponse response = attendanceService.continuousAttendance(userPrincipal);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }
