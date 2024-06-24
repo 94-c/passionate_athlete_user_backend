@@ -14,6 +14,8 @@ import com.backend.athlete.presentation.comment.response.UpdateCommentResponse;
 import com.backend.athlete.support.exception.ServiceException;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FindUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,11 @@ public class CommentService {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.noticeRepository = noticeRepository;
+    }
+
+    public Page<GetCommentResponse> findAllComments(Long noticeId, Pageable pageable) {
+        return commentRepository.findByNoticeIdWithReplies(noticeId, pageable)
+                .map(GetCommentResponse::fromEntity);
     }
 
     public CreateCommentResponse createComment(CustomUserDetailsImpl userPrincipal, Long noticeId, CreateCommentRequest request) {

@@ -8,19 +8,20 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GetCommentResponse {
     private Long id;
+    private Long noticeId;
     private String content;
     private String userName;
     private String createdDate;
     private String modifiedDate;
     private List<GetCommentResponse> replies = new ArrayList<>();
 
-    public GetCommentResponse(Long id, String content, String userName, String createdDate, String modifiedDate, List<GetCommentResponse> replies) {
+    public GetCommentResponse(Long id, Long noticeId, String content, String userName, String createdDate, String modifiedDate, List<GetCommentResponse> replies) {
         this.id = id;
+        this.noticeId = noticeId;
         this.content = content;
         this.userName = userName;
         this.createdDate = createdDate;
@@ -29,12 +30,12 @@ public class GetCommentResponse {
     }
 
     public static GetCommentResponse fromEntity(Comment comment) {
-
         List<GetCommentResponse> replyResponses = comment.getReplies().stream()
                 .map(reply -> {
                     List<GetCommentResponse> subReplies = reply.getReplies().stream()
                             .map(subReply -> new GetCommentResponse(
                                     subReply.getId(),
+                                    subReply.getNotice().getId(),
                                     subReply.getContent(),
                                     subReply.getUser().getName(),
                                     subReply.getCreatedDate(),
@@ -44,6 +45,7 @@ public class GetCommentResponse {
                             .collect(Collectors.toList());
                     return new GetCommentResponse(
                             reply.getId(),
+                            reply.getNotice().getId(),
                             reply.getContent(),
                             reply.getUser().getName(),
                             reply.getCreatedDate(),
@@ -55,6 +57,7 @@ public class GetCommentResponse {
 
         return new GetCommentResponse(
                 comment.getId(),
+                comment.getNotice().getId(),
                 comment.getContent(),
                 comment.getUser().getName(),
                 comment.getCreatedDate(),

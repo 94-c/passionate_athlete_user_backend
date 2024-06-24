@@ -6,7 +6,10 @@ import com.backend.athlete.presentation.comment.request.UpdateCommentRequest;
 import com.backend.athlete.presentation.comment.response.CreateCommentResponse;
 import com.backend.athlete.presentation.comment.response.GetCommentResponse;
 import com.backend.athlete.presentation.comment.response.UpdateCommentResponse;
+import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,6 +25,12 @@ public class CommentController {
         this.commentService = commentService;
     }
 
+    @GetMapping
+    public ResponseEntity<PagedResponse<GetCommentResponse>> getComments(@PathVariable Long noticeId, Pageable pageable) {
+        Page<GetCommentResponse> commentsPage = commentService.findAllComments(noticeId, pageable);
+        PagedResponse<GetCommentResponse> pagedResponse = PagedResponse.fromPage(commentsPage);
+        return ResponseEntity.ok(pagedResponse);
+    }
     @PostMapping
     public ResponseEntity<CreateCommentResponse> createComment(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
                                                                @PathVariable Long noticeId,
