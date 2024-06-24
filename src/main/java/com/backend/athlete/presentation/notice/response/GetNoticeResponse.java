@@ -12,6 +12,7 @@ public class GetNoticeResponse {
     private String title;
     private String content;
     private String imagePath;
+    private Long userId;
     private String userName;
     private int likeCount;
     private boolean status;
@@ -19,11 +20,12 @@ public class GetNoticeResponse {
     private String modifiedDate;
     private List<GetNoticeCommentResponse> comments;
 
-    public GetNoticeResponse(Long id, String title, String content, String imagePath, String userName, int likeCount, boolean status, String createdDate, String modifiedDate, List<GetNoticeCommentResponse> comments) {
+    public GetNoticeResponse(Long id, String title, String content, String imagePath, Long userId, String userName, int likeCount, boolean status, String createdDate, String modifiedDate, List<GetNoticeCommentResponse> comments) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.imagePath = imagePath;
+        this.userId = userId;
         this.userName = userName;
         this.likeCount = likeCount;
         this.status = status;
@@ -42,6 +44,7 @@ public class GetNoticeResponse {
                 notice.getTitle(),
                 notice.getContent(),
                 notice.getImagePath(),
+                notice.getUser().getId(),
                 notice.getUser().getName(),
                 notice.getLikes().size(),
                 notice.isStatus(),

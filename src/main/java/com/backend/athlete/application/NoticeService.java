@@ -36,15 +36,13 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
-    private final UserRepository userRepository;
 
     private final Path rootLocation = Paths.get("notice-images");
 
-    public NoticeService(NoticeRepository noticeRepository, CommentRepository commentRepository, LikeRepository likeRepository, UserRepository userRepository) {
+    public NoticeService(NoticeRepository noticeRepository, CommentRepository commentRepository, LikeRepository likeRepository) {
         this.noticeRepository = noticeRepository;
         this.commentRepository = commentRepository;
         this.likeRepository = likeRepository;
-        this.userRepository = userRepository;
     }
 
 
