@@ -46,13 +46,16 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
+                .claim("id", userPrincipal.getId())
+                .claim("code", userPrincipal.getCode())
                 .claim("userId", userPrincipal.getUsername())
                 .claim("name", userPrincipal.getName())
-                .claim("status", userPrincipal.getStatus())
+                .claim("status", userPrincipal.getStatus().toString())
+                .claim("branchName", userPrincipal.getBranchName())
                 .claim("roles", roles)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + tokenExpirationTime))
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(SignatureAlgorithm.HS512, key)
                 .compact();
     }
 

@@ -1,6 +1,7 @@
 package com.backend.athlete.support.jwt.service;
 
 import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.data.UserDetailsInfo;
 import com.backend.athlete.domain.user.type.UserStatusType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -17,24 +18,13 @@ public class CustomUserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     @Getter
-    private Long id;
-    private String code;
-    private String userId;
-    private String name;
-    @JsonIgnore
-    private String password;
-    private UserStatusType status;
+    private UserDetailsInfo userDetailsInfo;
 
+    @JsonIgnore
     private Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetailsImpl(Long id, String code, String userId, String name, String password, UserStatusType status,
-                                 Collection<? extends GrantedAuthority> authorities) {
-        this.id = id;
-        this.code = code;
-        this.userId = userId;
-        this.name = name;
-        this.password = password;
-        this.status = status;
+    public CustomUserDetailsImpl(UserDetailsInfo userDetailsInfo, Collection<? extends GrantedAuthority> authorities) {
+        this.userDetailsInfo = userDetailsInfo;
         this.authorities = authorities;
     }
 
@@ -43,14 +33,9 @@ public class CustomUserDetailsImpl implements UserDetails {
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
 
-        return new CustomUserDetailsImpl(
-                user.getId(),
-                user.getCode(),
-                user.getUserId(),
-                user.getName(),
-                user.getPassword(),
-                user.getStatus(),  // 추가된 status 필드 설정
-                authorities);
+        UserDetailsInfo userDetailsInfo = UserDetailsInfo.from(user);
+
+        return new CustomUserDetailsImpl(userDetailsInfo, authorities);
     }
 
     @Override
@@ -58,26 +43,34 @@ public class CustomUserDetailsImpl implements UserDetails {
         return authorities;
     }
 
+    public Long getId() {
+        return userDetailsInfo.getId();
+    }
+
     public String getCode() {
-        return this.code;
+        return userDetailsInfo.getCode();
     }
 
     public String getName() {
-        return this.name;
+        return userDetailsInfo.getName();
     }
 
     public UserStatusType getStatus() {
-        return this.status;
+        return userDetailsInfo.getStatus();
+    }
+
+    public String getBranchName() {
+        return userDetailsInfo.getBranchName();
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return userDetailsInfo.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return userId;
+        return userDetailsInfo.getUserId();
     }
 
     @Override
@@ -107,6 +100,6 @@ public class CustomUserDetailsImpl implements UserDetails {
         if (o == null || getClass() != o.getClass())
             return false;
         CustomUserDetailsImpl user = (CustomUserDetailsImpl) o;
-        return Objects.equals(id, user.id);
+        return Objects.equals(userDetailsInfo.getId(), user.userDetailsInfo.getId());
     }
 }
