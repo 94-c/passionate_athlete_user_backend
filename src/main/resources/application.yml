@@ -22,8 +22,12 @@ spring:
       properties:
         hibernate:
           format_sql: true
-          default_batch_fetch_size: 100
           dialect: org.hibernate.dialect.MySQL57Dialect  # MySQL ??? ?? Dialect? ??
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
   sql.init.mode: always
   data.rest:
     base-path: /api

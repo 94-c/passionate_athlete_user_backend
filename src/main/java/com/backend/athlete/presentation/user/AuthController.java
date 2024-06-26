@@ -5,6 +5,7 @@ import com.backend.athlete.presentation.user.request.LoginTokenRequest;
 import com.backend.athlete.presentation.user.request.RegisterUserRequest;
 import com.backend.athlete.presentation.user.response.LoginTokenResponse;
 import com.backend.athlete.presentation.user.response.RegisterUserResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,8 +29,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginTokenResponse> login(@RequestBody LoginTokenRequest request) {
+    public ResponseEntity<LoginTokenResponse> login(@RequestBody LoginTokenRequest request,
+                                                    HttpServletResponse servletResponse) {
         LoginTokenResponse response = authService.login(request);
+        authService.addJwtCookie(servletResponse, response);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

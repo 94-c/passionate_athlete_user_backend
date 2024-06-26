@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}">
+<head>
+    <title th:text="${pageTitle}"></title>
+
+    <link rel="stylesheet" href="../css/register.css">
+</head>
+<body class="text-center">
+
+<div class="container" layout:fragment="content">
+    <div id="registerBox">
+        <h2 id="registerBoxTitle">회원 가입</h2>
+        <form id="registerForm">
+            <div class="input-form-box">
+                <div class="input-with-icon">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="userId" name="userId" class="form-control" placeholder="아이디" required>
+                </div>
+            </div>
+            <div class="input-form-box">
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="비밀번호"
+                           required>
+                </div>
+            </div>
+            <div class="input-form-box">
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="passwordCheck" name="passwordCheck" class="form-control"
+                           placeholder="비밀번호 확인" required>
+                </div>
+            </div>
+            <div class="input-form-box">
+                <div class="input-with-icon">
+                    <i class="fas fa-id-card"></i>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="이름" required>
+                </div>
+            </div>
+            <div class="input-form-box">
+                <div class="input-with-icon">
+                    <div class="date-selectors d-flex align-items-center">
+                        <select id="birthYear" name="birthYear" class="form-control mr-2" required>
+                            <option value="">년</option>
+                            <script>
+                                const currentYear = new Date().getFullYear();
+                                for (let year = currentYear; year >= 1900; year--) {
+                                    document.write('<option value="' + year + '">' + year + '</option>');
+                                }
+                            </script>
+                        </select>
+                        <select id="birthMonth" name="birthMonth" class="form-control mr-2" required>
+                            <option value="">월</option>
+                            <option value="01">1</option>
+                            <option value="02">2</option>
+                            <option value="03">3</option>
+                            <option value="04">4</option>
+                            <option value="05">5</option>
+                            <option value="06">6</option>
+                            <option value="07">7</option>
+                            <option value="08">8</option>
+                            <option value="09">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                        <select id="birthDay" name="birthDay" class="form-control" required>
+                            <option value="">일</option>
+                            <script>
+                                for (let day = 1; day <= 31; day++) {
+                                    document.write('<option value="' + (day < 10 ? '0' + day : day) + '">' + day + '</option>');
+                                }
+                            </script>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="input-form-box">
+                <div class="input-with-icon">
+                    <i class="fas fa-venus-mars"></i>
+                    <select id="gender" name="gender" class="form-control" required>
+                        <option value="FEMALE">여성</option>
+                        <option value="MALE">남성</option>
+                    </select>
+                </div>
+            </div>
+            <div class="input-form-box">
+                <div class="input-with-icon">
+                    <i class="fas fa-weight"></i>
+                    <input type="number" id="weight" name="weight" class="form-control" placeholder="몸무게" required>
+                </div>
+            </div>
+            <div class="input-form-box">
+                <div class="input-with-icon">
+                    <i class="fas fa-ruler-vertical"></i>
+                    <input type="number" step="0.1" id="height" name="height" class="form-control" placeholder="키"
+                           required>
+                </div>
+            </div>
+            <div class="input-form-box">
+                <div class="input-with-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <select id="branch" name="branch" class="form-control" required>
+                        <option value="1">삼산</option>
+                        <option value="2">부평</option>
+                        <option value="3">계양</option>
+                        <option value="4">신중동</option>
+                        <option value="5">구월</option>
+                        <option value="6">논현</option>
+                        <option value="7">청라</option>
+                    </select>
+                </div>
+            </div>
+            <div class="button-register-box">
+                <button type="submit" class="btn btn-primary btn-xs">회원 가입</button>
+            </div>
+        </form>
+    </div>
+    <div class="login-links">
+        <a href="" class="link">비밀번호 찾기</a>
+        <a href="#" class="link">아이디 찾기</a>
+        <a th:href="@{/auth/login}" class="link">로그인</a>
+    </div>
+</div>
+</body>
+</html>
