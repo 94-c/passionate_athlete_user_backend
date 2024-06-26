@@ -24,40 +24,43 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailService customUserDetailService;
-    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenUtil, CustomUserDetailService customUserDetailService) {
-        this.jwtTokenProvider = jwtTokenUtil;
+
+    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider, CustomUserDetailService customUserDetailService) {
+        this.jwtTokenProvider = jwtTokenProvider;
         this.customUserDetailService = customUserDetailService;
     }
 
-    @Value("${jwt.header}") private String HEADER_STRING;
-    @Value("${jwt.prefix}") private String TOKEN_PREFIX;
-
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
-        String token = jwtTokenProvider.resolveToken(request);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        String requestURI = request.getRequestURI();
 
-        if (token != null && jwtTokenProvider.validateJwtToken(token)) {
-            String username = jwtTokenProvider.getUserNameFromJwtToken(token);
-
-            // Load user details from userDetailsService
-            UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
-
-            // Create authentication token
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-            // Set details of the authenticated user
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-            // Set the authentication in SecurityContext
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        if (requestURI.equals("/auth/login") || requestURI.equals("/auth/register") || requestURI.equals("/api/v1/auth/login")) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
-        // Continue the filter chain
+        try {
+            String token = jwtTokenProvider.resolveToken(request);
+            logger.debug("Resolved token: {}", token);
+
+            if (token != null && jwtTokenProvider.validateJwtToken(token)) {
+                String username = jwtTokenProvider.getUserNameFromJwtToken(token);
+                logger.debug("Username from token: {}", username);
+
+                UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
+
+                UsernamePasswordAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
+        } catch (Exception e) {
+            logger.error("Cannot set user authentication: {}", e.getMessage());
+        }
+
         filterChain.doFilter(request, response);
     }
-
-
 }

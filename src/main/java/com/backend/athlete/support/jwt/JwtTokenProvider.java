@@ -30,6 +30,12 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
+    @Value("${jwt.header}")
+    private String HEADER_STRING;
+
+    @Value("${jwt.prefix}")
+    private String TOKEN_PREFIX;
+
     private Key key;
 
     @PostConstruct
@@ -61,8 +67,8 @@ public class JwtTokenProvider {
 
 
     public String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+        String bearerToken = request.getHeader(HEADER_STRING);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
             return bearerToken.substring(7);
         }
         return null;
