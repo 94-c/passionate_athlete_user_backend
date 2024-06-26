@@ -14,15 +14,17 @@ public class GetCommentResponse {
     private Long id;
     private Long noticeId;
     private String content;
+    private Long userId;
     private String userName;
     private String createdDate;
     private String modifiedDate;
     private List<GetCommentResponse> replies = new ArrayList<>();
 
-    public GetCommentResponse(Long id, Long noticeId, String content, String userName, String createdDate, String modifiedDate, List<GetCommentResponse> replies) {
+    public GetCommentResponse(Long id, Long noticeId, String content, Long userId, String userName, String createdDate, String modifiedDate, List<GetCommentResponse> replies) {
         this.id = id;
         this.noticeId = noticeId;
         this.content = content;
+        this.userId = userId;
         this.userName = userName;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
@@ -37,6 +39,7 @@ public class GetCommentResponse {
                                     subReply.getId(),
                                     subReply.getNotice().getId(),
                                     subReply.getContent(),
+                                    subReply.getUser().getId(),
                                     subReply.getUser().getName(),
                                     subReply.getCreatedDate(),
                                     subReply.getModifiedDate(),
@@ -47,6 +50,7 @@ public class GetCommentResponse {
                             reply.getId(),
                             reply.getNotice().getId(),
                             reply.getContent(),
+                            reply.getUser().getId(),
                             reply.getUser().getName(),
                             reply.getCreatedDate(),
                             reply.getModifiedDate(),
@@ -59,6 +63,7 @@ public class GetCommentResponse {
                 comment.getId(),
                 comment.getNotice().getId(),
                 comment.getContent(),
+                comment.getUser().getId(),
                 comment.getUser().getName(),
                 comment.getCreatedDate(),
                 comment.getModifiedDate(),

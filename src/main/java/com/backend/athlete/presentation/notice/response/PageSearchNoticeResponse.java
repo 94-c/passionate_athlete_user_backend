@@ -39,6 +39,7 @@ public class PageSearchNoticeResponse {
                 .map(comment -> new GetNoticeCommentResponse(
                         comment.getId(),
                         comment.getContent(),
+                        comment.getUser().getId(),
                         comment.getUser().getName(),
                         comment.getCreatedDate()))
                 .collect(Collectors.toList());
