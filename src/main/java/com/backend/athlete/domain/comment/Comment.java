@@ -25,7 +25,7 @@ public class Comment extends BaseTimeEntity {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "notice_id", nullable = false)
+    @JoinColumn(name = "notice_id")
     @org.hibernate.annotations.Comment("게시글 인덱스")
     private Notice notice;
 
@@ -43,9 +43,16 @@ public class Comment extends BaseTimeEntity {
 
     protected Comment() {}
 
-    public Comment(User user, Notice notice, Comment parent, String content) {
+    //댓글 작성
+    public Comment(User user, Notice notice, String content) {
         this.user = user;
         this.notice = notice;
+        this.content = content;
+    }
+
+    //대댓글 작성
+    public Comment(User user, Comment parent, String content) {
+        this.user = user;
         this.parent = parent;
         this.content = content;
     }

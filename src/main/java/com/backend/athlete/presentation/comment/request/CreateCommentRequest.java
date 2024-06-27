@@ -9,17 +9,17 @@ import lombok.Setter;
 
 @Getter @Setter
 public class CreateCommentRequest {
-    private Long parentId;
     @NotNull(message = "댓글 내용을 입력 해주세요.")
     private String content;
 
-    public CreateCommentRequest(Long parentId, String content) {
-        this.parentId = parentId;
+    protected CreateCommentRequest() {}
+
+    public CreateCommentRequest(String content) {
         this.content = content;
     }
 
-    public static Comment toEntity(CreateCommentRequest request, Notice notice, User user, Comment parent) {
-        return new Comment(user, notice, parent, request.getContent());
+    public static Comment toEntity(CreateCommentRequest request, Notice notice, User user) {
+        return new Comment(user, notice, request.getContent());
     }
 
 }

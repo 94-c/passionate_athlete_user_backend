@@ -19,7 +19,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
     @Override
     public Optional<Comment> findByIdWithReplies(Long id) {
         Comment fetchedComment = factory.selectFrom(QComment.comment)
-                .leftJoin(QComment.comment.replies, QComment.comment.parent).fetchJoin()
+                .leftJoin(QComment.comment.replies).fetchJoin()
                 .where(QComment.comment.id.eq(id))
                 .fetchOne();
 

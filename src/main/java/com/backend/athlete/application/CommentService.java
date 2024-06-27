@@ -10,6 +10,7 @@ import com.backend.athlete.presentation.comment.request.CreateCommentRequest;
 import com.backend.athlete.presentation.comment.request.UpdateCommentRequest;
 import com.backend.athlete.presentation.comment.response.CreateCommentResponse;
 import com.backend.athlete.presentation.comment.response.GetCommentResponse;
+import com.backend.athlete.presentation.comment.response.GetReplyCommentResponse;
 import com.backend.athlete.presentation.comment.response.UpdateCommentResponse;
 import com.backend.athlete.support.exception.ServiceException;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
@@ -22,13 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
     private final NoticeRepository noticeRepository;
 
 
     public CommentService(CommentRepository commentRepository, UserRepository userRepository, NoticeRepository noticeRepository) {
         this.commentRepository = commentRepository;
-        this.userRepository = userRepository;
         this.noticeRepository = noticeRepository;
     }
 
@@ -41,9 +40,8 @@ public class CommentService {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
         Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> new ServiceException("게시글을 찾을 수 없습니다."));
-        Comment parent = request.getParentId() != null ? commentRepository.findById(request.getParentId()).orElseThrow(() -> new ServiceException("해당 댓글 " + request.getParentId() + " 찾을 수 없습니다.")) : null;
 
-        Comment createComment = commentRepository.save(CreateCommentRequest.toEntity(request, notice, user, parent));
+        Comment createComment = commentRepository.save(CreateCommentRequest.toEntity(request, notice, user));
 
         return CreateCommentResponse.fromEntity(createComment);
     }
@@ -65,7 +63,6 @@ public class CommentService {
 
         return UpdateCommentResponse.fromEntity(updatedComment);
     }
-
 
     @Transactional
     public void deleteComment(CustomUserDetailsImpl userPrincipal, Long id) {

@@ -53,11 +53,12 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteComment(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
                                               @PathVariable Long id) {
         commentService.deleteComment(userPrincipal, id);
         return ResponseEntity.ok().build();
     }
+
+
 }

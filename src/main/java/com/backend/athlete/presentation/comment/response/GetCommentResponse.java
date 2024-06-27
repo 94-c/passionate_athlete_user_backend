@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 @Getter
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GetCommentResponse {
     private Long id;
     private Long noticeId;
