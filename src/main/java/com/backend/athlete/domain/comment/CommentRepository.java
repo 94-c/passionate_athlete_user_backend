@@ -14,5 +14,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long>, Comment
     List<Comment> findByNoticeId(Long id);
     @Query("SELECT c FROM Comment c LEFT JOIN FETCH c.replies WHERE c.notice.id = :noticeId")
     Page<Comment> findByNoticeIdWithReplies(@Param("noticeId") Long noticeId, Pageable pageable);
+    Optional<Comment> findByIdAndParentId(Long id, Long parentId);
+    Page<Comment> findByParent(Comment parent, Pageable pageable);
+    Optional<Comment> findByIdAndNoticeId(Long id, Long noticeId);
+
 }
 

@@ -17,7 +17,7 @@ public class GetCommentResponse {
     private String userName;
     private String createdDate;
     private String modifiedDate;
-    private List<GetCommentResponse> replies = new ArrayList<>();
+    private List<GetCommentResponse> replies;
 
     public GetCommentResponse(Long id, Long noticeId, String content, Long userId, String userName, String createdDate, String modifiedDate, List<GetCommentResponse> replies) {
         this.id = id;
@@ -30,6 +30,17 @@ public class GetCommentResponse {
         this.replies = replies != null && !replies.isEmpty() ? replies : null;
     }
 
+    public GetCommentResponse(Long id, Long noticeId, String content, Long userId, String userName, String createdDate, String modifiedDate) {
+        this.id = id;
+        this.noticeId = noticeId;
+        this.content = content;
+        this.userId = userId;
+        this.userName = userName;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
+    }
+
+
     public static GetCommentResponse fromEntity(Comment comment) {
         List<GetCommentResponse> replyResponses = comment.getReplies().stream()
                 .map(reply -> {
@@ -41,8 +52,7 @@ public class GetCommentResponse {
                                     subReply.getUser().getId(),
                                     subReply.getUser().getName(),
                                     subReply.getCreatedDate(),
-                                    subReply.getModifiedDate(),
-                                    null
+                                    subReply.getModifiedDate()
                             ))
                             .collect(Collectors.toList());
                     return new GetCommentResponse(

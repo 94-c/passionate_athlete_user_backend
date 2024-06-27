@@ -7,6 +7,7 @@ import com.backend.athlete.presentation.comment.response.CreateCommentResponse;
 import com.backend.athlete.presentation.comment.response.GetCommentResponse;
 import com.backend.athlete.presentation.comment.response.UpdateCommentResponse;
 import com.backend.athlete.support.common.response.PagedResponse;
+import com.backend.athlete.support.constant.PageConstant;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,11 +27,14 @@ public class CommentController {
     }
 
     @GetMapping
-    public ResponseEntity<PagedResponse<GetCommentResponse>> getComments(@PathVariable Long noticeId, Pageable pageable) {
-        Page<GetCommentResponse> commentsPage = commentService.findAllComments(noticeId, pageable);
+    public ResponseEntity<PagedResponse<GetCommentResponse>> getComments(@PathVariable Long noticeId,
+                                                                         @RequestParam(defaultValue = PageConstant.DEFAULT_PAGE, required = false) int page,
+                                                                         @RequestParam(defaultValue = PageConstant.DEFAULT_PER_PAGE, required = false) int perPage) {
+        Page<GetCommentResponse> commentsPage = commentService.findAllComments(noticeId, page, perPage);
         PagedResponse<GetCommentResponse> pagedResponse = PagedResponse.fromPage(commentsPage);
         return ResponseEntity.ok(pagedResponse);
     }
+
     @PostMapping
     public ResponseEntity<CreateCommentResponse> createComment(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
                                                                @PathVariable Long noticeId,
@@ -47,9 +51,9 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<GetCommentResponse> getComment(@PathVariable Long id) {
-        GetCommentResponse response = commentService.getComment(id);
+    @GetMapping("/{commentId}")
+    public ResponseEntity<GetCommentResponse> getComment(@PathVariable Long noticeId, @PathVariable Long commentId) {
+        GetCommentResponse response = commentService.getComment(noticeId, commentId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

@@ -10,12 +10,12 @@ import com.backend.athlete.presentation.comment.request.CreateCommentRequest;
 import com.backend.athlete.presentation.comment.request.UpdateCommentRequest;
 import com.backend.athlete.presentation.comment.response.CreateCommentResponse;
 import com.backend.athlete.presentation.comment.response.GetCommentResponse;
-import com.backend.athlete.presentation.comment.response.GetReplyCommentResponse;
 import com.backend.athlete.presentation.comment.response.UpdateCommentResponse;
 import com.backend.athlete.support.exception.ServiceException;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FindUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +31,9 @@ public class CommentService {
         this.noticeRepository = noticeRepository;
     }
 
-    public Page<GetCommentResponse> findAllComments(Long noticeId, Pageable pageable) {
+    @Transactional(readOnly = true)
+    public Page<GetCommentResponse> findAllComments(Long noticeId, int page, int perPage) {
+        Pageable pageable = PageRequest.of(page, perPage);
         return commentRepository.findByNoticeIdWithReplies(noticeId, pageable)
                 .map(GetCommentResponse::fromEntity);
     }
@@ -46,8 +48,9 @@ public class CommentService {
         return CreateCommentResponse.fromEntity(createComment);
     }
     @Transactional(readOnly = true)
-    public GetCommentResponse getComment(Long id) {
-        Comment comment = commentRepository.findById(id).orElseThrow(() -> new ServiceException("댓글이 존재 하지 않습니다."));
+    public GetCommentResponse getComment(Long noticeId, Long commentId) {
+        Comment comment = commentRepository.findByIdAndNoticeId(commentId, noticeId)
+                .orElseThrow(() -> new ServiceException("댓글이 존재 하지 않습니다."));
         return GetCommentResponse.fromEntity(comment);
     }
 
@@ -55,7 +58,7 @@ public class CommentService {
     public UpdateCommentResponse updateComment(CustomUserDetailsImpl userPrincipal, Long id, UpdateCommentRequest request) {
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new ServiceException("댓글을 찾지 못했습니다"));
         if (!comment.getUser().getUserId().equals(userPrincipal.getUsername())) {
-            throw new RuntimeException("댓글의 삭제 권힌이 존재하지 않습니다.");
+            throw new ServiceException("댓글의 삭제 권힌이 존재하지 않습니다.");
         }
 
         comment.updateComment(request.getContent());
@@ -68,7 +71,7 @@ public class CommentService {
     public void deleteComment(CustomUserDetailsImpl userPrincipal, Long id) {
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new ServiceException("댓글을 찾지 못했습니다"));
         if (!comment.getUser().getUserId().equals(userPrincipal.getUsername())) {
-            throw new RuntimeException("댓글의 삭제 권힌이 존재하지 않습니다.");
+            throw new ServiceException("댓글의 삭제 권힌이 존재하지 않습니다.");
         }
         deleteCommentRecursively(comment);
     }

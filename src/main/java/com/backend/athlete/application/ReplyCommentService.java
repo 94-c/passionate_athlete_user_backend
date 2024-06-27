@@ -2,25 +2,19 @@ package com.backend.athlete.application;
 
 import com.backend.athlete.domain.comment.Comment;
 import com.backend.athlete.domain.comment.CommentRepository;
-import com.backend.athlete.domain.notice.Notice;
 import com.backend.athlete.domain.user.User;
-import com.backend.athlete.presentation.comment.request.CreateCommentRequest;
 import com.backend.athlete.presentation.comment.request.CreateReplyCommentRequest;
-import com.backend.athlete.presentation.comment.response.CreateCommentResponse;
+import com.backend.athlete.presentation.comment.request.UpdateCommentRequest;
 import com.backend.athlete.presentation.comment.response.CreateReplyCommentResponse;
 import com.backend.athlete.presentation.comment.response.GetReplyCommentResponse;
 import com.backend.athlete.support.exception.ServiceException;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FindUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ReplyCommentService {
@@ -30,19 +24,13 @@ public class ReplyCommentService {
         this.commentRepository = commentRepository;
     }
 
-    @Transactional(readOnly = true)
-    public Page<GetReplyCommentResponse> findCommentByReply(Long commentId, Pageable pageable) {
-        Optional<Comment> commentOptional = commentRepository.findByIdWithReplies(commentId);
+    public Page<GetReplyCommentResponse> getReplies(Long commentId, int page, int perPage) {
+        Pageable pageable = PageRequest.of(page, perPage);
+        Comment parentComment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ServiceException("댓글을 찾지 못했습니다."));
 
-        if (commentOptional.isPresent()) {
-            Comment comment = commentOptional.get();
-            GetReplyCommentResponse response = GetReplyCommentResponse.fromEntity(comment);
-            List<GetReplyCommentResponse> replyComments = response.getReplies();
-
-            return new PageImpl<>(replyComments, pageable, replyComments.size());
-        } else {
-            return Page.empty(pageable);
-        }
+        Page<Comment> replies = commentRepository.findByParent(parentComment, pageable);
+        return replies.map(GetReplyCommentResponse::fromEntity);
     }
 
     public CreateReplyCommentResponse createReplyComment(CustomUserDetailsImpl userPrincipal, Long parentId, CreateReplyCommentRequest request) {
@@ -53,5 +41,29 @@ public class ReplyCommentService {
         Comment createComment = commentRepository.save(CreateReplyCommentRequest.toEntity(request, user, parent));
 
         return CreateReplyCommentResponse.fromEntity(createComment);
+    }
+
+    public GetReplyCommentResponse updateReplyComment(CustomUserDetailsImpl userPrincipal, Long commentId, Long replyId, UpdateCommentRequest request) {
+        Comment reply = commentRepository.findByIdAndParentId(replyId, commentId)
+                .orElseThrow(() -> new ServiceException("대댓글을 찾지 못했습니다."));
+
+        if (!reply.getUser().getId().equals(userPrincipal.getId())) {
+            throw new ServiceException("해당 대댓글을 수정할 권한이 없습니다.");
+        }
+
+        request.setContent(reply.getContent());
+        Comment updatedReply = commentRepository.save(reply);
+
+        return GetReplyCommentResponse.fromEntity(updatedReply);
+    }
+
+    public void deleteReplyComment(CustomUserDetailsImpl userPrincipal, Long commentId, Long replyId) {
+        Comment reply = commentRepository.findByIdAndParentId(replyId, commentId)
+                .orElseThrow(() -> new ServiceException("대댓글을 찾지 못했습니다."));
+
+        if (!reply.getUser().getId().equals(userPrincipal.getId())) {
+            throw new ServiceException("해당 대댓글을 삭제할 권한이 없습니다.");
+        }
+        commentRepository.delete(reply);
     }
 }
