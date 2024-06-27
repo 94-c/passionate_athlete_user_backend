@@ -5,12 +5,14 @@ import com.backend.athlete.presentation.user.request.LoginTokenRequest;
 import com.backend.athlete.presentation.user.request.RegisterUserRequest;
 import com.backend.athlete.presentation.user.response.LoginTokenResponse;
 import com.backend.athlete.presentation.user.response.RegisterUserResponse;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,10 +31,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginTokenResponse> login(@RequestBody LoginTokenRequest request,
-                                                    HttpServletResponse servletResponse) {
+    public ResponseEntity<LoginTokenResponse> login(@RequestBody LoginTokenRequest request) {
         LoginTokenResponse response = authService.login(request);
-        authService.addJwtCookie(servletResponse, response);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
