@@ -23,11 +23,6 @@ spring:
         hibernate:
           format_sql: true
           dialect: org.hibernate.dialect.MySQL57Dialect  # MySQL ??? ?? Dialect? ??
-  thymeleaf:
-    cache: false
-    prefix: classpath:/templates/
-    suffix: .html
-    mode: HTML
   sql.init.mode: always
   data.rest:
     base-path: /api
@@ -54,4 +49,4 @@ jwt:
   header: "Authorization"
   prefix: "Bearer "
   secret: eyJhbGciOiJIUzUxMiJ9eyJzdWIiOiJ1c2VyIn0I2qOfhAZMGSH1pCecUH5sV2Lg2pSWNQMPzXsMcne6NJ1SlkBoirhGAmKfTYNcRyhu6nQtRzgAd6VXyttoX9A
-  expiration_time: 18000
+  expiration_time: 18000000
