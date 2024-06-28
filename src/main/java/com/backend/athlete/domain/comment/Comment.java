@@ -51,8 +51,9 @@ public class Comment extends BaseTimeEntity {
     }
 
     //대댓글 작성
-    public Comment(User user, Comment parent, String content) {
+    public Comment(User user, Notice notice, Comment parent, String content) {
         this.user = user;
+        this.notice = notice;
         this.parent = parent;
         this.content = content;
     }

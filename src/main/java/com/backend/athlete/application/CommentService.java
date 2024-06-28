@@ -17,6 +17,7 @@ import com.backend.athlete.support.util.FindUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +34,8 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public Page<GetCommentResponse> findAllComments(Long noticeId, int page, int perPage) {
-        Pageable pageable = PageRequest.of(page, perPage);
+        Pageable pageable = PageRequest.of(page, perPage, Sort.by(Sort.Direction.DESC, "createdDate"));
+
         return commentRepository.findByNoticeIdWithReplies(noticeId, pageable)
                 .map(GetCommentResponse::fromEntity);
     }
