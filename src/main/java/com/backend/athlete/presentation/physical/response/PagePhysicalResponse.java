@@ -40,12 +40,7 @@ public class PagePhysicalResponse {
     }
 
     // Entity-> Dto
-    public static PagePhysicalResponse fromEntity(Physical physical, Physical previousPhysical) {
-        Double weightChange = (previousPhysical != null) ? physical.getWeight() - previousPhysical.getWeight() : 0.0;
-        Double heightChange = (previousPhysical != null) ? physical.getHeight() - previousPhysical.getHeight() : 0.0;
-        Double muscleMassChange = (previousPhysical != null) ? physical.getMuscleMass() - previousPhysical.getMuscleMass() : 0.0;
-        Double bodyFatMassChange = (previousPhysical != null) ? physical.getBodyFatMass() - previousPhysical.getBodyFatMass() : 0.0;
-
+    public static PagePhysicalResponse fromEntity(Physical physical) {
         return new PagePhysicalResponse(
                 physical.getWeight(),
                 physical.getHeight(),
@@ -56,10 +51,10 @@ public class PagePhysicalResponse {
                 physical.getBodyFatPercentage(),
                 physical.getVisceralFatPercentage(),
                 physical.getBmr(),
-                weightChange,
-                heightChange,
-                muscleMassChange,
-                bodyFatMassChange
+                physical.getWeightChange(),
+                physical.getHeightChange(),
+                physical.getMuscleMassChange(),
+                physical.getBodyFatMassChange()
         );
     }
 }

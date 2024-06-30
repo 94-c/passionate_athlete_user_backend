@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -100,7 +101,6 @@ public class PhysicalService {
 
         Physical physical = physicals.get(0);
 
-        // Find the previous physical data
         Physical previousPhysical = physicalRepository.findTopByUserAndMeasureDateBeforeOrderByMeasureDateDesc(user, dailyDate.atStartOfDay());
 
         return GetPhysicalResponse.fromEntity(physical, previousPhysical);
@@ -113,14 +113,9 @@ public class PhysicalService {
         Pageable pageable = PageRequest.of(page, size);
         Page<Physical> physicalPage = physicalRepository.findByUserIdOrderByMeasureDateDesc(user.getId(), pageable);
 
-        List<PagePhysicalResponse> responses = new ArrayList<>();
-        Physical previousPhysical = null;
-
-        for (Physical physical : physicalPage) {
-            PagePhysicalResponse response = PagePhysicalResponse.fromEntity(physical, previousPhysical);
-            previousPhysical = physical;
-            responses.add(response);
-        }
+        List<PagePhysicalResponse> responses = physicalPage.stream()
+                .map(PagePhysicalResponse::fromEntity)
+                .collect(Collectors.toList());
 
         return new PageImpl<>(responses, pageable, physicalPage.getTotalElements());
     }
