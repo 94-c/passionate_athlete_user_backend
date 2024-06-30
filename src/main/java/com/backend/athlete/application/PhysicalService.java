@@ -22,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -123,4 +125,30 @@ public class PhysicalService {
         return LastGetPhysicalResponse.fromEntity(lastPhysical);
     }
 
+    public List<GetPhysicalRankingResponse> getRankings(CustomUserDetailsImpl userPrincipal, String type, LocalDateTime date) {
+        LocalDateTime startDateTime;
+        LocalDateTime endDateTime = switch (type.toLowerCase()) {
+            case "daily" -> {
+                startDateTime = date.toLocalDate().atStartOfDay();
+                yield startDateTime.plusDays(1);
+            }
+            case "weekly" -> {
+                startDateTime = date.with(ChronoField.DAY_OF_WEEK, 1).toLocalDate().atStartOfDay();
+                yield startDateTime.plusWeeks(1);
+            }
+            case "monthly" -> {
+                startDateTime = date.with(ChronoField.DAY_OF_MONTH, 1).toLocalDate().atStartOfDay();
+                yield startDateTime.plusMonths(1);
+            }
+            default -> throw new IllegalArgumentException("Invalid type: " + type);
+        };
+
+        List<Physical> physicals = physicalRepository.findPhysicalsByMeasureDateBetween(startDateTime, endDateTime);
+
+        physicals.sort(Comparator.comparingDouble(Physical::getBodyFatMassChange).reversed());
+
+        return physicals.stream()
+                .map(GetPhysicalRankingResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
 }
