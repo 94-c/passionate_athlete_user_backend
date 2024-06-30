@@ -56,12 +56,4 @@ public class PhysicalController {
         return ResponseEntity.ok(pagedResponse);
     }
 
-    @GetMapping("/rankings")
-    public ResponseEntity<List<GetPhysicalRankingResponse>> getRankings(
-            @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-            @RequestParam(name = "type") String type,
-            @RequestParam(name = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
-        List<GetPhysicalRankingResponse> response = physicalService.getRankings(userPrincipal, type, date);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
 }
