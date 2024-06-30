@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
-public class PagePhysicalResponse {
+public class DashboardPhysicalResponse {
 
     private Double weight;
     private Double height;
@@ -23,7 +23,7 @@ public class PagePhysicalResponse {
     private Double muscleMassChange;
     private Double bodyFatMassChange;
 
-    public PagePhysicalResponse(Double weight, Double height, Double muscleMass, Double bodyFatMass, LocalDateTime measureDate, Double bmi, Double bodyFatPercentage, Double visceralFatPercentage, Double bmr, Double weightChange, Double heightChange, Double muscleMassChange, Double bodyFatMassChange) {
+    public DashboardPhysicalResponse(Double weight, Double height, Double muscleMass, Double bodyFatMass, LocalDateTime measureDate, Double bmi, Double bodyFatPercentage, Double visceralFatPercentage, Double bmr, Double weightChange, Double heightChange, Double muscleMassChange, Double bodyFatMassChange) {
         this.weight = weight;
         this.height = height;
         this.muscleMass = muscleMass;
@@ -40,13 +40,13 @@ public class PagePhysicalResponse {
     }
 
     // Entity-> Dto
-    public static PagePhysicalResponse fromEntity(Physical physical, Physical previousPhysical) {
+    public static DashboardPhysicalResponse fromEntity(Physical physical, Physical previousPhysical) {
         Double weightChange = (previousPhysical != null) ? physical.getWeight() - previousPhysical.getWeight() : 0.0;
         Double heightChange = (previousPhysical != null) ? physical.getHeight() - previousPhysical.getHeight() : 0.0;
         Double muscleMassChange = (previousPhysical != null) ? physical.getMuscleMass() - previousPhysical.getMuscleMass() : 0.0;
         Double bodyFatMassChange = (previousPhysical != null) ? physical.getBodyFatMass() - previousPhysical.getBodyFatMass() : 0.0;
 
-        return new PagePhysicalResponse(
+        return new DashboardPhysicalResponse(
                 physical.getWeight(),
                 physical.getHeight(),
                 physical.getMuscleMass(),
@@ -63,4 +63,3 @@ public class PagePhysicalResponse {
         );
     }
 }
-

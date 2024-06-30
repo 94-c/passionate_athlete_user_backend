@@ -6,8 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@Getter @Setter
+@Getter
 public class GetPhysicalResponse {
 
     private Long id;
@@ -20,9 +21,13 @@ public class GetPhysicalResponse {
     private Double bodyFatPercentage;
     private Double visceralFatPercentage;
     private Double bmr;
-    private LocalDate measureDate;
+    private LocalDateTime measureDate;
+    private Double weightChange;
+    private Double heightChange;
+    private Double muscleMassChange;
+    private Double bodyFatMassChange;
 
-    public GetPhysicalResponse(Long id, String username, Double weight, Double height, Double muscleMass, Double bodyFatMass, Double bmi, Double bodyFatPercentage, Double visceralFatPercentage, Double bmr, LocalDate measureDate) {
+    public GetPhysicalResponse(Long id, String username, Double weight, Double height, Double muscleMass, Double bodyFatMass, Double bmi, Double bodyFatPercentage, Double visceralFatPercentage, Double bmr, LocalDateTime measureDate, Double weightChange, Double heightChange, Double muscleMassChange, Double bodyFatMassChange) {
         this.id = id;
         this.username = username;
         this.weight = weight;
@@ -34,11 +39,21 @@ public class GetPhysicalResponse {
         this.visceralFatPercentage = visceralFatPercentage;
         this.bmr = bmr;
         this.measureDate = measureDate;
+        this.weightChange = weightChange;
+        this.heightChange = heightChange;
+        this.muscleMassChange = muscleMassChange;
+        this.bodyFatMassChange = bodyFatMassChange;
     }
 
-    //Entity -> Dto
-    public static GetPhysicalResponse fromEntity(Physical physical) {
+    // Entity -> Dto
+    public static GetPhysicalResponse fromEntity(Physical physical, Physical previousPhysical) {
         User findUser = physical.getUser();
+
+        Double weightChange = (previousPhysical != null) ? physical.getWeight() - previousPhysical.getWeight() : 0.0;
+        Double heightChange = (previousPhysical != null) ? physical.getHeight() - previousPhysical.getHeight() : 0.0;
+        Double muscleMassChange = (previousPhysical != null) ? physical.getMuscleMass() - previousPhysical.getMuscleMass() : 0.0;
+        Double bodyFatMassChange = (previousPhysical != null) ? physical.getBodyFatMass() - previousPhysical.getBodyFatMass() : 0.0;
+
         return new GetPhysicalResponse(
                 physical.getId(),
                 findUser.getName(),
@@ -50,7 +65,11 @@ public class GetPhysicalResponse {
                 physical.getBodyFatPercentage(),
                 physical.getVisceralFatPercentage(),
                 physical.getBmr(),
-                physical.getMeasureDate()
+                physical.getMeasureDate(),
+                weightChange,
+                heightChange,
+                muscleMassChange,
+                bodyFatMassChange
         );
     }
 }
