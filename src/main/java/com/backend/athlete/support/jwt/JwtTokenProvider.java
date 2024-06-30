@@ -57,6 +57,7 @@ public class JwtTokenProvider {
                 .claim("userId", userPrincipal.getUsername())
                 .claim("name", userPrincipal.getName())
                 .claim("status", userPrincipal.getStatus().toString())
+                .claim("gender", userPrincipal.getGender())
                 .claim("branchName", userPrincipal.getBranchName())
                 .claim("roles", roles)
                 .setIssuedAt(new Date())

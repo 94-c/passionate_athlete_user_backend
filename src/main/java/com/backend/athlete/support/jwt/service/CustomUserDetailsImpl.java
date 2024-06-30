@@ -2,6 +2,7 @@ package com.backend.athlete.support.jwt.service;
 
 import com.backend.athlete.domain.user.User;
 import com.backend.athlete.domain.user.data.UserDetailsInfo;
+import com.backend.athlete.domain.user.type.UserGenderType;
 import com.backend.athlete.domain.user.type.UserStatusType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -55,6 +56,7 @@ public class CustomUserDetailsImpl implements UserDetails {
         return userDetailsInfo.getName();
     }
 
+    public UserGenderType getGender() {return userDetailsInfo.getGender();}
     public UserStatusType getStatus() {
         return userDetailsInfo.getStatus();
     }
