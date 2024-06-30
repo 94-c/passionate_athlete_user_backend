@@ -5,10 +5,7 @@ import com.backend.athlete.domain.physical.PhysicalRepository;
 import com.backend.athlete.domain.user.User;
 import com.backend.athlete.domain.user.UserRepository;
 import com.backend.athlete.presentation.physical.request.CreatePhysicalRequest;
-import com.backend.athlete.presentation.physical.response.DashboardPhysicalResponse;
-import com.backend.athlete.presentation.physical.response.PagePhysicalResponse;
-import com.backend.athlete.presentation.physical.response.GetPhysicalResponse;
-import com.backend.athlete.presentation.physical.response.CreatePhysicalResponse;
+import com.backend.athlete.presentation.physical.response.*;
 import com.backend.athlete.support.exception.ServiceException;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FileUtils;
@@ -45,15 +42,16 @@ public class PhysicalService {
     public CreatePhysicalResponse savePhysical(CustomUserDetailsImpl userPrincipal, CreatePhysicalRequest request) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
-        LocalDateTime today = LocalDateTime.now();
-        request.setMeasureDate(today);
+        LocalDate today = LocalDate.now();
+        LocalDateTime todayStart = today.atStartOfDay();
+        request.setMeasureDate(LocalDateTime.now());
 
         boolean existsSave = physicalRepository.existsByUserAndMeasureDate(user, today);
         if (existsSave) {
             throw new ServiceException("하루에 한번만 입력 하실 수 있습니다.");
         }
 
-        Physical previousPhysical = physicalRepository.findTopByUserAndMeasureDateBeforeOrderByMeasureDateDesc(user, today);
+        Physical previousPhysical = physicalRepository.findTopByUserAndMeasureDateBeforeOrderByMeasureDateDesc(user, todayStart);
 
         double bmi = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMI(request.getWeight(), request.getHeight()));
         request.setBmi(bmi);
@@ -118,6 +116,11 @@ public class PhysicalService {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(responses, pageable, physicalPage.getTotalElements());
+    }
+
+    public LastGetPhysicalResponse findLastPhysical() {
+        Physical lastPhysical = physicalRepository.findTopByOrderByMeasureDateDesc();
+        return LastGetPhysicalResponse.fromEntity(lastPhysical);
     }
 
 }

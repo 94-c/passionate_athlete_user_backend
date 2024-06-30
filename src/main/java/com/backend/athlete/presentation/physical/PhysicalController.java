@@ -2,10 +2,7 @@ package com.backend.athlete.presentation.physical;
 
 import com.backend.athlete.application.PhysicalService;
 import com.backend.athlete.presentation.physical.request.CreatePhysicalRequest;
-import com.backend.athlete.presentation.physical.response.DashboardPhysicalResponse;
-import com.backend.athlete.presentation.physical.response.PagePhysicalResponse;
-import com.backend.athlete.presentation.physical.response.GetPhysicalResponse;
-import com.backend.athlete.presentation.physical.response.CreatePhysicalResponse;
+import com.backend.athlete.presentation.physical.response.*;
 import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.constant.PageConstant;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
@@ -33,6 +30,11 @@ public class PhysicalController {
                                                                @Valid @RequestBody CreatePhysicalRequest request) {
         CreatePhysicalResponse response = physicalService.savePhysical(userPrincipal, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+    @GetMapping("/last")
+    public ResponseEntity<LastGetPhysicalResponse> getLastPhysical() {
+        LastGetPhysicalResponse response = physicalService.findLastPhysical();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/daily")
