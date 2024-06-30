@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 public class CreatePhysicalResponse {
@@ -20,9 +21,9 @@ public class CreatePhysicalResponse {
     private Double bodyFatPercentage;
     private Double visceralFatPercentage;
     private Double bmr;
-    private LocalDate measureDate;
+    private LocalDateTime measureDate;
 
-    public CreatePhysicalResponse(Long id, String username, Double weight, Double height, Double muscleMass, Double bodyFatMass, Double bmi, Double bodyFatPercentage, Double visceralFatPercentage, Double bmr, LocalDate measureDate) {
+    public CreatePhysicalResponse(Long id, String username, Double weight, Double height, Double muscleMass, Double bodyFatMass, Double bmi, Double bodyFatPercentage, Double visceralFatPercentage, Double bmr, LocalDateTime measureDate) {
         this.id = id;
         this.username = username;
         this.weight = weight;

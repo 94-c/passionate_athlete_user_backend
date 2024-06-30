@@ -5,6 +5,7 @@ import com.backend.athlete.domain.physical.PhysicalRepository;
 import com.backend.athlete.domain.user.User;
 import com.backend.athlete.domain.user.UserRepository;
 import com.backend.athlete.presentation.physical.request.CreatePhysicalRequest;
+import com.backend.athlete.presentation.physical.response.DashboardPhysicalResponse;
 import com.backend.athlete.presentation.physical.response.PagePhysicalResponse;
 import com.backend.athlete.presentation.physical.response.GetPhysicalResponse;
 import com.backend.athlete.presentation.physical.response.CreatePhysicalResponse;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -42,15 +44,17 @@ public class PhysicalService {
     public CreatePhysicalResponse savePhysical(CustomUserDetailsImpl userPrincipal, CreatePhysicalRequest request) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
-        LocalDate today = LocalDate.now();
+        LocalDateTime today = LocalDateTime.now();
         request.setMeasureDate(today);
 
         boolean existsSave = physicalRepository.existsByUserAndMeasureDate(user, today);
         if (existsSave) {
-            throw new IllegalArgumentException("하루에 한번만 입력 하실 수 있습니다.");
+            throw new ServiceException("하루에 한번만 입력 하실 수 있습니다.");
         }
 
-        double bmi = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMI(user.getWeight(), request.getHeight()));
+        Physical previousPhysical = physicalRepository.findTopByUserAndMeasureDateBeforeOrderByMeasureDateDesc(user, today);
+
+        double bmi = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMI(request.getWeight(), request.getHeight()));
         request.setBmi(bmi);
 
         double bodyFatPercentage = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBodyFatPercentage(request.getBodyFatMass(), request.getWeight()));
@@ -62,7 +66,19 @@ public class PhysicalService {
         double bmr = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMR(request.getWeight(), request.getHeight(), 30, user.getGender().toString()));
         request.setBmr(bmr);
 
-        Physical savePhysical = physicalRepository.save(CreatePhysicalRequest.toEntity(request, user));
+        double weightChange = previousPhysical != null ? request.getWeight() - previousPhysical.getWeight() : 0.0;
+        double heightChange = previousPhysical != null ? request.getHeight() - previousPhysical.getHeight() : 0.0;
+        double muscleMassChange = previousPhysical != null ? request.getMuscleMass() - previousPhysical.getMuscleMass() : 0.0;
+        double bodyFatMassChange = previousPhysical != null ? request.getBodyFatMass() - previousPhysical.getBodyFatMass() : 0.0;
+
+        request.setWeightChange(weightChange);
+        request.setHeightChange(heightChange);
+        request.setMuscleMassChange(muscleMassChange);
+        request.setBodyFatMassChange(bodyFatMassChange);
+
+        Physical savePhysical = CreatePhysicalRequest.toEntity(request, user);
+
+        savePhysical = physicalRepository.save(savePhysical);
 
         if (!Objects.equals(user.getHeight(), request.getHeight()) || !Objects.equals(user.getWeight(), request.getWeight())) {
             user.updatePhysicalAttributes(request.getWeight(), request.getHeight());
@@ -84,7 +100,10 @@ public class PhysicalService {
 
         Physical physical = physicals.get(0);
 
-        return GetPhysicalResponse.fromEntity(physical);
+        // Find the previous physical data
+        Physical previousPhysical = physicalRepository.findTopByUserAndMeasureDateBeforeOrderByMeasureDateDesc(user, dailyDate.atStartOfDay());
+
+        return GetPhysicalResponse.fromEntity(physical, previousPhysical);
     }
 
     @Transactional
@@ -105,7 +124,5 @@ public class PhysicalService {
 
         return new PageImpl<>(responses, pageable, physicalPage.getTotalElements());
     }
-
-
 
 }

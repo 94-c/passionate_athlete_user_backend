@@ -2,9 +2,12 @@ package com.backend.athlete.presentation.physical;
 
 import com.backend.athlete.application.PhysicalService;
 import com.backend.athlete.presentation.physical.request.CreatePhysicalRequest;
+import com.backend.athlete.presentation.physical.response.DashboardPhysicalResponse;
 import com.backend.athlete.presentation.physical.response.PagePhysicalResponse;
 import com.backend.athlete.presentation.physical.response.GetPhysicalResponse;
 import com.backend.athlete.presentation.physical.response.CreatePhysicalResponse;
+import com.backend.athlete.support.common.response.PagedResponse;
+import com.backend.athlete.support.constant.PageConstant;
 import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -25,11 +28,6 @@ public class PhysicalController {
         this.physicalService = physicalService;
     }
 
-    /**
-     * 1. 인바디 측정
-     * 2. 당일 인바딩 조회
-     * 3. 인바디 전체 조회 (페이징, 차감순)
-     */
     @PostMapping
     public ResponseEntity<CreatePhysicalResponse> savePhysical(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
                                                                @Valid @RequestBody CreatePhysicalRequest request) {
@@ -45,11 +43,12 @@ public class PhysicalController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Page<PagePhysicalResponse>> getAllPhysical(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                                     @RequestParam(defaultValue = "0") int page,
-                                                                     @RequestParam(defaultValue = "10") int size) {
-        Page<PagePhysicalResponse> response = physicalService.getPhysicalData(userPrincipal, page, size);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+    public ResponseEntity<PagedResponse<PagePhysicalResponse>> getAllPhysical(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
+                                                                              @RequestParam(defaultValue = PageConstant.DEFAULT_PAGE, required = false) int page,
+                                                                              @RequestParam(defaultValue = PageConstant.DEFAULT_PER_PAGE, required = false) int perPage) {
+        Page<PagePhysicalResponse> response = physicalService.getPhysicalData(userPrincipal, page, perPage);
+        PagedResponse<PagePhysicalResponse> pagedResponse = PagedResponse.fromPage(response);
+        return ResponseEntity.ok(pagedResponse);
     }
 
 }

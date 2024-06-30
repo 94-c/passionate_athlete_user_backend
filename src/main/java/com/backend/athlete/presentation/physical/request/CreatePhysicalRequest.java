@@ -7,23 +7,33 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter @Setter
 public class CreatePhysicalRequest {
 
+    @NotNull(message = "신장을 입력 해주세요.")
+    private Double height;
+
     @NotNull(message = "체중을 입력 해주세요.")
     private Double weight;
-    @NotNull(message = "몸무게를 입력 해주세요.")
-    private Double height;
-    @NotNull(message = "근육량을 입력 해주세요.")
+
+    @NotNull(message = "골격근량을 입력 해주세요.")
     private Double muscleMass;
+
     @NotNull(message = "체지방량을 입력 해주세요.")
     private Double bodyFatMass;
-    private LocalDate measureDate;
+
+    private LocalDateTime measureDate;
     private Double bmi;
     private Double bodyFatPercentage;
     private Double visceralFatPercentage;
     private Double bmr;
+    private Double weightChange;
+    private Double heightChange;
+    private Double muscleMassChange;
+    private Double bodyFatMassChange;
+
     protected CreatePhysicalRequest() {}
 
     public static Physical toEntity(CreatePhysicalRequest request, User user) {
@@ -37,7 +47,12 @@ public class CreatePhysicalRequest {
                 request.getBmi(),
                 request.getBodyFatPercentage(),
                 request.getVisceralFatPercentage(),
-                request.getBmr()
+                request.getBmr(),
+                request.getWeightChange(),
+                request.getHeightChange(),
+                request.getMuscleMassChange(),
+                request.getBodyFatMassChange()
         );
     }
 }
+
