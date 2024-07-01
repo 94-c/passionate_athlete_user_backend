@@ -13,13 +13,19 @@ public class LastGetPhysicalResponse {
     private Double weight;
     private Double muscleMass;
     private Double bodyFatMass;
+    private Double bodyFatMassChange;
+    private Double muscleMassChange;
+    private Double weightChange;
 
-    public LastGetPhysicalResponse(LocalDateTime measureDate, Double height, Double weight, Double muscleMass, Double bodyFatMass) {
+    public LastGetPhysicalResponse(LocalDateTime measureDate, Double height, Double weight, Double muscleMass, Double bodyFatMass, Double bodyFatMassChange, Double muscleMassChange, Double weightChange) {
         this.measureDate = measureDate;
         this.height = height;
         this.weight = weight;
         this.muscleMass = muscleMass;
         this.bodyFatMass = bodyFatMass;
+        this.bodyFatMassChange = bodyFatMassChange;
+        this.muscleMassChange = muscleMassChange;
+        this.weightChange = weightChange;
     }
 
     public static LastGetPhysicalResponse fromEntity(Physical physical) {
@@ -28,7 +34,10 @@ public class LastGetPhysicalResponse {
                 physical.getHeight(),
                 physical.getWeight(),
                 physical.getMuscleMass(),
-                physical.getBodyFatMass()
+                physical.getBodyFatMass(),
+                physical.getBodyFatMassChange(),
+                physical.getMuscleMassChange(),
+                physical.getWeightChange()
         );
     }
 
