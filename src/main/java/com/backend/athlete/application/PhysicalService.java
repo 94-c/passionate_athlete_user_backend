@@ -53,7 +53,7 @@ public class PhysicalService {
             throw new ServiceException("하루에 한번만 입력 하실 수 있습니다.");
         }
 
-        Physical previousPhysical = physicalRepository.findTopByUserAndMeasureDateBeforeOrderByMeasureDateDesc(user, todayStart);
+        Physical previousPhysical = physicalRepository.findFirstByUserAndMeasureDateBeforeOrderByMeasureDateDesc(user, todayStart);
 
         double bmi = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMI(request.getWeight(), request.getHeight()));
         request.setBmi(bmi);

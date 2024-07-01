@@ -15,6 +15,7 @@ import java.util.List;
 public interface PhysicalRepository extends JpaRepository<Physical, Long>, PhysicalRepositoryCustom {
     @Query("SELECT COUNT(p) > 0 FROM Physical p WHERE p.user = :user AND FUNCTION('DATE', p.measureDate) = :date")
     boolean existsByUserAndMeasureDate(@Param("user") User user, @Param("date") LocalDate date);
+    Physical findFirstByUserAndMeasureDateBeforeOrderByMeasureDateDesc(User user, LocalDateTime date);
     @Query("SELECT p FROM Physical p WHERE p.user = :user AND p.measureDate < :date ORDER BY p.measureDate DESC")
     Physical findTopByUserAndMeasureDateBeforeOrderByMeasureDateDesc(@Param("user") User user, @Param("date") LocalDateTime date);
     Page<Physical> findByUserIdOrderByMeasureDateDesc(Long id, Pageable pageable);
