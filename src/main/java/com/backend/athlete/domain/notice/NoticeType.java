@@ -13,6 +13,7 @@ public class NoticeType extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String type;
     public NoticeType() {}
 
