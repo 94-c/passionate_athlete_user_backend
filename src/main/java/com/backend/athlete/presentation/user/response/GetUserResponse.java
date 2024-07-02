@@ -16,16 +16,22 @@ public class GetUserResponse {
     private String gender;
     private Double weight;
     private Double height;
+    private String birthDate;
+    private String phoneNumber;
+    private String branchName;
     private Set<String> roles;
     private String createdDate;
 
-    public GetUserResponse(String code, String userId, String name, String gender, Double weight, Double height, Set<String> roles, String createdDate) {
+    public GetUserResponse(String code, String userId, String name, String gender, Double weight, Double height, String birthDate, String phoneNumber, String branchName, Set<String> roles, String createdDate) {
         this.code = code;
         this.userId = userId;
         this.name = name;
         this.gender = gender;
         this.weight = weight;
         this.height = height;
+        this.birthDate = birthDate;
+        this.phoneNumber = phoneNumber;
+        this.branchName = branchName;
         this.roles = roles;
         this.createdDate = createdDate;
     }
@@ -42,6 +48,9 @@ public class GetUserResponse {
                 user.getGender().toString(),
                 user.getWeight(),
                 user.getHeight(),
+                user.getBirthDate(),
+                user.getPhoneNumber(),
+                user.getBranch().getName(),
                 roleNames,
                 user.getCreatedDate()
         );

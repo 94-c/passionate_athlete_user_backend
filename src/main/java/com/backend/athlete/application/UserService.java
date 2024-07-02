@@ -1,5 +1,7 @@
 package com.backend.athlete.application;
 
+import com.backend.athlete.domain.branch.Branch;
+import com.backend.athlete.domain.branch.BranchRepository;
 import com.backend.athlete.domain.user.Role;
 import com.backend.athlete.domain.user.RoleRepository;
 import com.backend.athlete.domain.user.User;
@@ -21,6 +23,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
 public class UserService {
@@ -28,11 +32,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final BranchRepository branchRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, BranchRepository branchRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.branchRepository = branchRepository;
     }
 
     public GetUserResponse getUserInfo(CustomUserDetailsImpl userPrincipal) {
@@ -46,11 +52,17 @@ public class UserService {
 
         String encodedPassword = passwordEncoder.encode(request.getPassword());
 
+        Branch branch = branchRepository.findByName(request.getBranchName())
+                .orElseThrow(() -> new ServiceException("해당 지점을 찾을 수 없습니다."));
+
         user.updateUser(
                 encodedPassword,
                 request.getGender(),
                 request.getWeight(),
-                request.getHeight()
+                request.getHeight(),
+                branch,
+                request.getBirthDate(),
+                request.getPhoneNumber()
         );
 
         userRepository.save(user);
