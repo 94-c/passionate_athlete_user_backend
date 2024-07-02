@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @Entity
 @Table(name = "notices_type")
-public class NoticeType extends BaseTimeEntity {
+public class NoticeType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,11 +15,14 @@ public class NoticeType extends BaseTimeEntity {
 
     @Column(unique = true)
     private String type;
+
+    private String role;
     public NoticeType() {}
 
-    public NoticeType(Long id, String type) {
+    public NoticeType(Long id, String type, String role) {
         this.id = id;
         this.type = type;
+        this.role = role;
     }
 
 }

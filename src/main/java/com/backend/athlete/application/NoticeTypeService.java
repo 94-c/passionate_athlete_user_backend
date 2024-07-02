@@ -23,4 +23,12 @@ public class NoticeTypeService {
                 .collect(Collectors.toList());
     }
 
+
+    public List<GetNoticeTypeResponse> getNoticeTypesByRole(String role) {
+        List<NoticeType> noticeTypes = noticeTypeRepository.findByRole(role);
+        return noticeTypes.stream()
+                .map(GetNoticeTypeResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
 }

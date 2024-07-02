@@ -7,12 +7,15 @@ import lombok.Getter;
 public class GetNoticeTypeResponse {
     private Long id;
     private String type;
+    private String role;
 
-    public GetNoticeTypeResponse(Long id, String type) {
+    public GetNoticeTypeResponse(Long id, String type, String role) {
         this.id = id;
         this.type = type;
+        this.role = role;
     }
+
     public static GetNoticeTypeResponse fromEntity(NoticeType noticeType) {
-        return new GetNoticeTypeResponse(noticeType.getId(), noticeType.getType());
+        return new GetNoticeTypeResponse(noticeType.getId(), noticeType.getType(), noticeType.getRole());
     }
 }
