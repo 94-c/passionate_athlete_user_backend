@@ -11,7 +11,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/athlete
     username: root
-    password:
+    password: Qlalfqjsgh1!
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     open-in-view: false
