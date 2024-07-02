@@ -3,6 +3,7 @@ package com.backend.athlete.infrastructure;
 import com.backend.athlete.domain.notice.Notice;
 import com.backend.athlete.domain.notice.NoticeType;
 import com.backend.athlete.domain.notice.QNotice;
+import com.backend.athlete.domain.notice.QNoticeType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
 
     private final JPAQueryFactory factory;
 
-    private BooleanBuilder toBooleanBuilder(String name, String title, NoticeType kind) {
+    private BooleanBuilder toBooleanBuilder(String name, String title, Long kindId) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         if (name != null && !name.isEmpty()) {
             booleanBuilder.and(QNotice.notice.user.name.containsIgnoreCase(name));
@@ -29,15 +30,21 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
         if (title != null && !title.isEmpty()) {
             booleanBuilder.and(QNotice.notice.title.containsIgnoreCase(title));
         }
-        if (kind != null) {
-            booleanBuilder.and(QNotice.notice.kind.eq(kind));
+        if (kindId != null && kindId != 0) {
+            NoticeType kind = factory.selectFrom(QNoticeType.noticeType)
+                    .where(QNoticeType.noticeType.id.eq(kindId))
+                    .fetchOne();
+            if (kind != null) {
+                booleanBuilder.and(QNotice.notice.kind.eq(kind));
+            }
         }
         return booleanBuilder;
     }
 
+
     @Override
-    public Page<Notice> findAllByUserAndTitleAndKindAndStatus(String name, String title, Pageable pageable, NoticeType kind, boolean status) {
-        BooleanBuilder booleanBuilder = toBooleanBuilder(name, title, kind);
+    public Page<Notice> findAllByUserAndTitleAndKindAndStatus(String name, String title, Pageable pageable, Long kindId, boolean status) {
+        BooleanBuilder booleanBuilder = toBooleanBuilder(name, title, kindId);
 
         List<Notice> content = factory.selectFrom(QNotice.notice)
                 .where(booleanBuilder.and(QNotice.notice.status.eq(status)))

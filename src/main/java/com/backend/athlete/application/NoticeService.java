@@ -45,10 +45,10 @@ public class NoticeService {
         this.noticeTypeRepository = noticeTypeRepository;
     }
 
+    @Transactional(readOnly = true)
     public Page<PageSearchNoticeResponse> searchNotices(PageSearchNoticeRequest request, int page, int perPage, Long kindId, boolean status) {
         Pageable pageable = PageRequest.of(page, perPage);
-        NoticeType kind = noticeTypeRepository.findById(kindId).orElseThrow(() -> new ServiceException("Invalid notice type"));
-        Page<Notice> notices = noticeRepository.findAllByUserAndTitleAndKindAndStatus(request.getName(), request.getTitle(), pageable, kind, status);
+        Page<Notice> notices = noticeRepository.findAllByUserAndTitleAndKindAndStatus(request.getName(), request.getTitle(), pageable, kindId, status);
 
         return notices.map(notice -> {
             int likeCount = likeRepository.countByNoticeId(notice.getId());
