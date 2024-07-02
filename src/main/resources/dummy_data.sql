@@ -50,4 +50,41 @@ INSERT INTO physicals_info (term, description) VALUES
                                                    ('복부지방률', '복부에 있는 지방의 비율을 나타냅니다.');
 
 
+INSERT INTO NOTICES_TYPE (`type`,`role`) VALUES ("공지", "ADMIN");
+INSERT INTO NOTICES_TYPE (`type`, `role`) VALUES ("멱살", "ADMIN");
+INSERT INTO NOTICES_TYPE (`type`, `role`) VALUES ("자유", "USER");
+INSERT INTO NOTICES_TYPE (`type`, `role`) VALUES ("자랑", "USER");
+
+INSERT INTO notices (user_id, title, content, kind_id, status)
+VALUES
+    (1, 'Title 1', 'Content 1', 1, 0),
+    (1, 'Title 2', 'Content 2', 2, 0),
+    (1, 'Title 3', 'Content 3', 3, 0),
+    (1, 'Title 4', 'Content 4', 4, 0),
+    (1, 'Title 5', 'Content 5', 1, 0),
+    (1, 'Title 6', 'Content 6', 2, 0),
+    (1, 'Title 7', 'Content 7', 3, 0),
+    (1, 'Title 8', 'Content 8', 4, 0),
+    (1, 'Title 9', 'Content 9', 1, 0),
+    (1, 'Title 10', 'Content 10', 2, 0),
+    (1, 'Title 11', 'Content 11', 3, 0),
+    (1, 'Title 12', 'Content 12', 4, 0),
+    (1, 'Title 13', 'Content 13', 1, 0),
+    (1, 'Title 14', 'Content 14', 2, 0),
+    (1, 'Title 15', 'Content 15', 3, 0),
+    (1, 'Title 16', 'Content 16', 4, 0),
+    (1, 'Title 17', 'Content 17', 1, 0),
+    (1, 'Title 18', 'Content 18', 2, 0),
+    (1, 'Title 19', 'Content 19', 3, 0),
+    (1, 'Title 20', 'Content 20', 4, 0),
+    (1, 'Title 21', 'Content 21', 1, 0),
+    (1, 'Title 22', 'Content 22', 2, 0),
+    (1, 'Title 23', 'Content 23', 3, 0),
+    (1, 'Title 24', 'Content 24', 4, 0),
+    (1, 'Title 25', 'Content 25', 1, 0),
+    (1, 'Title 26', 'Content 26', 2, 0),
+    (1, 'Title 27', 'Content 27', 3, 0),
+    (1, 'Title 28', 'Content 28', 4, 0),
+    (1, 'Title 29', 'Content 29', 1, 0),
+    (1, 'Title 30', 'Content 30', 2, 0);
 
