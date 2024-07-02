@@ -2,9 +2,7 @@ package com.backend.athlete.application;
 
 import com.backend.athlete.domain.comment.Comment;
 import com.backend.athlete.domain.comment.CommentRepository;
-import com.backend.athlete.domain.notice.LikeRepository;
-import com.backend.athlete.domain.notice.Notice;
-import com.backend.athlete.domain.notice.NoticeRepository;
+import com.backend.athlete.domain.notice.*;
 import com.backend.athlete.domain.user.User;
 import com.backend.athlete.domain.user.UserRepository;
 import com.backend.athlete.presentation.notice.request.PageSearchNoticeRequest;
@@ -36,18 +34,20 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
+    private final NoticeTypeRepository noticeTypeRepository;
 
     private final Path rootLocation = Paths.get("notice-images");
 
-    public NoticeService(NoticeRepository noticeRepository, CommentRepository commentRepository, LikeRepository likeRepository) {
+    public NoticeService(NoticeRepository noticeRepository, CommentRepository commentRepository, LikeRepository likeRepository, NoticeTypeRepository noticeTypeRepository) {
         this.noticeRepository = noticeRepository;
         this.commentRepository = commentRepository;
         this.likeRepository = likeRepository;
+        this.noticeTypeRepository = noticeTypeRepository;
     }
 
-
-    public Page<PageSearchNoticeResponse> searchNotices(PageSearchNoticeRequest request, int page, int perPage, Integer kind, boolean status) {
+    public Page<PageSearchNoticeResponse> searchNotices(PageSearchNoticeRequest request, int page, int perPage, Long kindId, boolean status) {
         Pageable pageable = PageRequest.of(page, perPage);
+        NoticeType kind = noticeTypeRepository.findById(kindId).orElseThrow(() -> new ServiceException("Invalid notice type"));
         Page<Notice> notices = noticeRepository.findAllByUserAndTitleAndKindAndStatus(request.getName(), request.getTitle(), pageable, kind, status);
 
         return notices.map(notice -> {
@@ -57,15 +57,16 @@ public class NoticeService {
         });
     }
 
-
     public CreateNoticeResponse saveNotice(CustomUserDetailsImpl userPrincipal, CreateNoticeRequest noticeRequest, MultipartFile file) throws IOException {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
+        NoticeType kind = noticeTypeRepository.findById(noticeRequest.getKindId()).orElseThrow(() -> new ServiceException("Invalid notice type"));
 
+        String imagePath = null;
         if (!file.isEmpty()) {
-            String imagePath = FileUtils.saveFile(file, rootLocation);
+            imagePath = FileUtils.saveFile(file, rootLocation);
         }
 
-        Notice savedNotice = noticeRepository.save(CreateNoticeRequest.toEntity(noticeRequest, user));
+        Notice savedNotice = noticeRepository.save(CreateNoticeRequest.toEntity(noticeRequest, user, kind, imagePath));
 
         return CreateNoticeResponse.fromEntity(savedNotice);
     }
@@ -119,7 +120,4 @@ public class NoticeService {
 
         return GetNoticeResponse.fromEntity(setStatusNotice);
     }
-
-
-
 }

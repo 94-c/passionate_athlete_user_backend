@@ -1,6 +1,7 @@
 package com.backend.athlete.infrastructure;
 
 import com.backend.athlete.domain.notice.Notice;
+import com.backend.athlete.domain.notice.NoticeType;
 import com.backend.athlete.domain.notice.QNotice;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,7 +20,8 @@ import java.util.List;
 public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
 
     private final JPAQueryFactory factory;
-    private BooleanBuilder toBooleanBuilder(String name, String title, Integer kind) {
+
+    private BooleanBuilder toBooleanBuilder(String name, String title, NoticeType kind) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         if (name != null && !name.isEmpty()) {
             booleanBuilder.and(QNotice.notice.user.name.containsIgnoreCase(name));
@@ -34,11 +36,11 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
     }
 
     @Override
-    public Page<Notice> findAllByUserAndTitleAndKindAndStatus(String name, String title, Pageable pageable, Integer kind, boolean status) {
+    public Page<Notice> findAllByUserAndTitleAndKindAndStatus(String name, String title, Pageable pageable, NoticeType kind, boolean status) {
         BooleanBuilder booleanBuilder = toBooleanBuilder(name, title, kind);
 
         List<Notice> content = factory.selectFrom(QNotice.notice)
-                .where(booleanBuilder)
+                .where(booleanBuilder.and(QNotice.notice.status.eq(status)))
                 .orderBy(QNotice.notice.createdDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -46,9 +48,11 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
 
         long count = factory.select(QNotice.notice.count())
                 .from(QNotice.notice)
-                .where(booleanBuilder)
+                .where(booleanBuilder.and(QNotice.notice.status.eq(status)))
                 .fetchOne();
 
         return PageableExecutionUtils.getPage(content, pageable, () -> count);
     }
 }
+
+

@@ -1,6 +1,7 @@
 package com.backend.athlete.presentation.notice.request;
 
 import com.backend.athlete.domain.notice.Notice;
+import com.backend.athlete.domain.notice.NoticeType;
 import com.backend.athlete.domain.user.User;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -12,9 +13,10 @@ public class CreateNoticeRequest {
     private String title;
     private String content;
     private String imagePath;
-    private Integer kind;
+    private Long kindId;
     private boolean status;
-    public static Notice toEntity(CreateNoticeRequest request, User user) {
-        return new Notice(request.getTitle(), request.getContent(), request.getKind(), request.getImagePath(), request.isStatus(), user);
+
+    public static Notice toEntity(CreateNoticeRequest request, User user, NoticeType kind, String imagePath) {
+        return new Notice(request.getTitle(), request.getContent(), kind, imagePath, request.isStatus(), user);
     }
 }

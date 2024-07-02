@@ -29,8 +29,10 @@ public class Notice extends BaseTimeEntity {
     @Comment("게시판 내용")
     private String content;
 
+    @ManyToOne
+    @JoinColumn(name = "kind_id", nullable = false)
     @Comment("게시판 종류")
-    private Integer kind;
+    private NoticeType kind;
 
     @Comment("이미지 파일 경로")
     private String imagePath;
@@ -46,7 +48,7 @@ public class Notice extends BaseTimeEntity {
 
     public Notice() {}
 
-    public Notice(String title, String content, Integer kind, String imagePath, boolean status, User user) {
+    public Notice(String title, String content, NoticeType kind, String imagePath, boolean status, User user) {
         this.title = title;
         this.content = content;
         this.kind = kind;
@@ -64,5 +66,5 @@ public class Notice extends BaseTimeEntity {
     public void setStatus(boolean status) {
         this.status = status;
     }
-
 }
+

@@ -38,15 +38,13 @@ public class NoticeController {
             @RequestParam(defaultValue = "", required = false) String name,
             @RequestParam(defaultValue = PageConstant.DEFAULT_PAGE, required = false) int page,
             @RequestParam(defaultValue = PageConstant.DEFAULT_PER_PAGE, required = false) int perPage,
-            @RequestParam(required = false) String kind,
+            @RequestParam(required = false) Long kindId,
             @RequestParam(defaultValue = "true") boolean status
     ) {
-        Integer kindValue = kind != null ? Integer.valueOf(kind) : null;
         PageSearchNoticeRequest request = new PageSearchNoticeRequest(title, name);
-        Page<PageSearchNoticeResponse> response = noticeService.searchNotices(request, page, perPage, kindValue, status);
+        Page<PageSearchNoticeResponse> response = noticeService.searchNotices(request, page, perPage, kindId, status);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-
     @PostMapping
     public ResponseEntity<CreateNoticeResponse> createNotice(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
                                                              @RequestParam("notice") String notice,

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Getter
 public class PageSearchNoticeResponse {
     private Long id;
-    private Integer kind;
+    private String kind;
     private String title;
     private String content;
     private String imagePath;
@@ -21,7 +21,7 @@ public class PageSearchNoticeResponse {
     private String modifiedDate;
     private List<GetNoticeCommentResponse> comments;
 
-    public PageSearchNoticeResponse(Long id, Integer kind, String title, String content, String imagePath, String userName, int likeCount, String createdDate, String modifiedDate, List<GetNoticeCommentResponse> comments) {
+    public PageSearchNoticeResponse(Long id, String kind, String title, String content, String imagePath, String userName, int likeCount, String createdDate, String modifiedDate, List<GetNoticeCommentResponse> comments) {
         this.id = id;
         this.kind = kind;
         this.title = title;
@@ -46,7 +46,7 @@ public class PageSearchNoticeResponse {
 
         return new PageSearchNoticeResponse(
                 notice.getId(),
-                notice.getKind(),
+                notice.getKind().getType(),
                 notice.getTitle(),
                 notice.getContent(),
                 notice.getImagePath(),
