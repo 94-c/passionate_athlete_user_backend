@@ -8,5 +8,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PhysicalRepositoryCustom {
+    List<Physical> findPhysicalRankings(LocalDate startDate, LocalDate endDate, String gender, int limit);
 
 }

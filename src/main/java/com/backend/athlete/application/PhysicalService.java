@@ -20,9 +20,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -125,4 +127,24 @@ public class PhysicalService {
         return LastGetPhysicalResponse.fromEntity(lastPhysical);
     }
 
+    public List<GetPhysicalRankingResponse> getRankingPhysical(String type, String gender, int limit) {
+        LocalDate now = LocalDate.now();
+        LocalDate startDate;
+        LocalDate endDate;
+
+        if ("weekly".equalsIgnoreCase(type)) {
+            startDate = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+            endDate = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        } else if ("monthly".equalsIgnoreCase(type)) {
+            startDate = now.with(TemporalAdjusters.firstDayOfMonth());
+            endDate = now.with(TemporalAdjusters.lastDayOfMonth());
+        } else {
+            throw new ServiceException("Invalid type: " + type);
+        }
+
+        List<Physical> rankingPhysical = physicalRepository.findPhysicalRankings(startDate, endDate, gender, limit);
+        return rankingPhysical.stream()
+                .map(physical -> GetPhysicalRankingResponse.fromEntity(physical, startDate, endDate))
+                .collect(Collectors.toList());
+    }
 }

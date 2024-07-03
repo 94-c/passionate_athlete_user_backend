@@ -21,5 +21,4 @@ public interface PhysicalRepository extends JpaRepository<Physical, Long>, Physi
     Page<Physical> findByUserIdOrderByMeasureDateDesc(Long id, Pageable pageable);
     List<Physical> findPhysicalsByUserIdAndMeasureDate(Long userId, LocalDate measureDate);
     Physical findTopByOrderByMeasureDateDesc();
-
 }

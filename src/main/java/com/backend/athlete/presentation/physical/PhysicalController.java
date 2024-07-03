@@ -56,4 +56,13 @@ public class PhysicalController {
         return ResponseEntity.ok(pagedResponse);
     }
 
+    @GetMapping("/rankings")
+    public ResponseEntity<List<GetPhysicalRankingResponse>> getRankingPhysical(
+            @RequestParam(name = "type") String type,
+            @RequestParam(name = "gender") String gender,
+            @RequestParam(name = "limit", defaultValue = "5") int limit) {
+        List<GetPhysicalRankingResponse> response = physicalService.getRankingPhysical(type, gender, limit);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }
