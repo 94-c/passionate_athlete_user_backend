@@ -1,6 +1,4 @@
-INSERT INTO roles (name) VALUES ('ADMIN');
-INSERT INTO roles (name) VALUES ('MANAGER');
-INSERT INTO roles (name) VALUES ('USER');
+INSERT INTO roles (name) VALUES ('ADMIN'),('MANAGER'),('USER');
 
 INSERT INTO exercises (name, description) VALUES
                                                       ('버피', '스쿼트, 푸시업, 점프를 포함한 전신 운동.'),
@@ -50,10 +48,8 @@ INSERT INTO physicals_info (term, description) VALUES
                                                    ('복부지방률', '복부에 있는 지방의 비율을 나타냅니다.');
 
 
-INSERT INTO NOTICES_TYPE (`type`,`role`) VALUES ("공지", "ADMIN");
-INSERT INTO NOTICES_TYPE (`type`, `role`) VALUES ("멱살", "ADMIN");
-INSERT INTO NOTICES_TYPE (`type`, `role`) VALUES ("자유", "USER");
-INSERT INTO NOTICES_TYPE (`type`, `role`) VALUES ("자랑", "USER");
+INSERT INTO NOTICES_TYPE (`type`,`role`) VALUES ("공지", "ADMIN"), ("멱살", "ADMIN"), ("자유", "USER"), ("자랑", "USER");
+
 
 INSERT INTO notices (user_id, title, content, kind_id, status)
 VALUES
