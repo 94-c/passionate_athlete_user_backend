@@ -65,4 +65,10 @@ public class PhysicalController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @GetMapping("/monthly-fat-change")
+    public ResponseEntity<MonthlyFatChangeResponse> getMonthlyFatChange(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
+        MonthlyFatChangeResponse response = physicalService.calculateMonthlyFatChange(userPrincipal.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }

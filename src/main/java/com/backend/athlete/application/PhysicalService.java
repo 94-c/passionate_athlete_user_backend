@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
@@ -146,5 +147,26 @@ public class PhysicalService {
         return rankingPhysical.stream()
                 .map(physical -> GetPhysicalRankingResponse.fromEntity(physical, startDate, endDate))
                 .collect(Collectors.toList());
+    }
+
+    public MonthlyFatChangeResponse calculateMonthlyFatChange(Long userId) {
+        LocalDate now = LocalDate.now();
+        LocalDate oneMonthAgo = now.minusMonths(1);
+
+        List<Physical> physicals = physicalRepository.findByUserIdAndMeasureDateBetween(userId, oneMonthAgo.atStartOfDay(), now.atTime(LocalTime.MAX));
+
+        double initialFatMass = physicals.stream()
+                .min(Comparator.comparing(Physical::getMeasureDate))
+                .map(Physical::getBodyFatMass)
+                .orElse(0.0);
+
+        double finalFatMass = physicals.stream()
+                .max(Comparator.comparing(Physical::getMeasureDate))
+                .map(Physical::getBodyFatMass)
+                .orElse(0.0);
+
+        double fatChange = initialFatMass - finalFatMass;
+
+        return MonthlyFatChangeResponse.fromEntity(fatChange);
     }
 }
