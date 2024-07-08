@@ -1,8 +1,8 @@
 package com.backend.athlete.application;
 
-import com.backend.athlete.domain.athlete.Athlete;
-import com.backend.athlete.domain.athlete.AthleteRepository;
-import com.backend.athlete.domain.athlete.type.AthleteSuccessType;
+import com.backend.athlete.domain.athlete.domain.Athlete;
+import com.backend.athlete.domain.athlete.domain.AthleteRepository;
+import com.backend.athlete.domain.athlete.domain.type.AthleteSuccessType;
 import com.backend.athlete.domain.attendance.Attendance;
 import com.backend.athlete.domain.attendance.AttendanceRepository;
 import com.backend.athlete.domain.user.domain.User;
