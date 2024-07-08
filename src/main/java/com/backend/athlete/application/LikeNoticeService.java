@@ -3,13 +3,14 @@ package com.backend.athlete.application;
 import com.backend.athlete.domain.notice.Like;
 import com.backend.athlete.domain.notice.LikeRepository;
 import com.backend.athlete.domain.notice.Notice;
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.presentation.notice.response.CreateLikeNoticeResponse;
 import com.backend.athlete.presentation.notice.response.DeleteLikeNoticeResponse;
 import com.backend.athlete.presentation.notice.response.GetLikeNoticeResponse;
-import com.backend.athlete.support.exception.ServiceException;
-import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.support.exception.NotFoundException;
+import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FindUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +28,7 @@ public class LikeNoticeService {
         Notice notice = FindUtils.findByNoticeId(noticeId);
 
         if (likeRepository.existsByUserAndNotice(user, notice)) {
-            throw new ServiceException("이미 좋아요를 누르셨습니다.");
+            throw new NotFoundException("이미 좋아요를 누르셨습니다.", HttpStatus.NOT_FOUND);
         }
 
         Like like = new Like(user, notice);
@@ -45,7 +46,7 @@ public class LikeNoticeService {
         Notice notice = FindUtils.findByNoticeId(noticeId);
 
         if (!likeRepository.existsByUserAndNotice(user, notice)) {
-            throw new ServiceException("Not liked yet");
+            throw new NotFoundException("Not liked yet", HttpStatus.NOT_FOUND);
         }
 
         likeRepository.deleteByUserAndNotice(user, notice);

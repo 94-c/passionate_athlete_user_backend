@@ -2,7 +2,7 @@ package com.backend.athlete.presentation.comment.request;
 
 import com.backend.athlete.domain.comment.Comment;
 import com.backend.athlete.domain.notice.Notice;
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;

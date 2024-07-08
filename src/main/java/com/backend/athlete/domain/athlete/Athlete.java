@@ -1,7 +1,7 @@
 package com.backend.athlete.domain.athlete;
 
 import com.backend.athlete.domain.athlete.type.AthleteSuccessType;
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;

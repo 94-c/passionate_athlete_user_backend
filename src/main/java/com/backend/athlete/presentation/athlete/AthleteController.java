@@ -5,7 +5,7 @@ import com.backend.athlete.presentation.athlete.request.CreateAthleteRequest;
 import com.backend.athlete.presentation.athlete.response.CreateAthleteResponse;
 import com.backend.athlete.presentation.athlete.response.GetDailyAthleteResponse;
 import com.backend.athlete.presentation.athlete.response.GetMonthlyAthleteResponse;
-import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

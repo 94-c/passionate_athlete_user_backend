@@ -6,10 +6,11 @@ import com.backend.athlete.presentation.exercise.request.CreateWorkoutInfoReques
 import com.backend.athlete.presentation.exercise.request.CreateWorkoutRequest;
 import com.backend.athlete.presentation.exercise.response.GetWorkoutResponse;
 import com.backend.athlete.support.common.response.PagedResponse;
-import com.backend.athlete.support.exception.ServiceException;
+import com.backend.athlete.support.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +42,7 @@ public class WorkoutService {
             List<WorkoutInfo> workoutInfos = request.getWorkoutInfos().stream()
                     .map(infoRequest -> {
                         Exercise exercise = exerciseRepository.findById(infoRequest.getExerciseId())
-                                .orElseThrow(() -> new ServiceException("운동 종목을 찾지 못했습니다."));
+                                .orElseThrow(() -> new NotFoundException("운동 종목을 찾지 못했습니다.", HttpStatus.NOT_FOUND));
                         return CreateWorkoutInfoRequest.toEntity(infoRequest, workout, exercise);
                     })
                     .collect(Collectors.toList());
@@ -84,7 +85,7 @@ public class WorkoutService {
     protected void duplicateWorkoutTitle(String title) {
         Optional<Workout> workout = workoutRepository.findByTitle(title);
         if (workout.isPresent()) {
-            throw new ServiceException("이미 등록 된 오늘의 운동명입니다.");
+            throw new NotFoundException("이미 등록 된 오늘의 운동명입니다.", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -109,7 +110,7 @@ public class WorkoutService {
     @Transactional
     public void deleteWorkout(Long id) {
         Workout workout = workoutRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("오늘의 운동을 찾지 못했습니다."));
+                .orElseThrow(() -> new NotFoundException("오늘의 운동을 찾지 못했습니다.", HttpStatus.NOT_FOUND));
 
         workoutRepository.delete(workout);
     }

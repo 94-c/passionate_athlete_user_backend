@@ -1,6 +1,6 @@
 package com.backend.athlete.domain.branch.data;
 
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 

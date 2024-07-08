@@ -1,7 +1,7 @@
 package com.backend.athlete.presentation.notice.response;
 
 import com.backend.athlete.domain.notice.Notice;
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 import lombok.Getter;
 
 import java.util.List;

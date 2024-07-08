@@ -1,6 +1,6 @@
 package com.backend.athlete.domain.notice;
 
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {

@@ -1,7 +1,7 @@
 package com.backend.athlete.domain.comment;
 
 import com.backend.athlete.domain.notice.Notice;
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.support.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;

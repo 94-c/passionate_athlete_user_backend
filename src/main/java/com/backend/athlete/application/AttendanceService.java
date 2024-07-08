@@ -2,16 +2,17 @@ package com.backend.athlete.application;
 
 import com.backend.athlete.domain.attendance.Attendance;
 import com.backend.athlete.domain.attendance.AttendanceRepository;
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.presentation.attendance.request.CreateAttendanceRequest;
 import com.backend.athlete.presentation.attendance.response.CreateAttendanceResponse;
 import com.backend.athlete.presentation.attendance.response.GetContinuousAttendanceResponse;
 import com.backend.athlete.presentation.attendance.response.GetDailyAttendanceResponse;
 import com.backend.athlete.presentation.attendance.response.GetMonthlyAttendanceResponse;
-import com.backend.athlete.support.exception.ServiceException;
-import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.support.exception.NotFoundException;
+import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FindUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +38,7 @@ public class AttendanceService {
         LocalDate eventDate = request.getEventDate();
 
         if (attendanceRepository.findByUserIdAndAttendanceDate(user.getId(), eventDate).isPresent()) {
-            throw new ServiceException("이미 해당 " +  eventDate + " 일에 출석 했습니다. ");
+            throw new NotFoundException("이미 해당 " +  eventDate + " 일에 출석 했습니다. ", HttpStatus.NOT_FOUND);
         }
 
         Attendance attendance = attendanceRepository.save(CreateAttendanceRequest.toEntity(request, user));
@@ -52,7 +53,7 @@ public class AttendanceService {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
         Attendance attendance = attendanceRepository.findByUserIdAndAttendanceDate(user.getId(), dailyDate)
-                .orElseThrow(() -> new ServiceException(dailyDate + " 의 출석이 없습니다."));
+                .orElseThrow(() -> new NotFoundException(dailyDate + " 의 출석이 없습니다." , HttpStatus.NOT_FOUND));
 
 
         return GetDailyAttendanceResponse.fromEntity(attendance);

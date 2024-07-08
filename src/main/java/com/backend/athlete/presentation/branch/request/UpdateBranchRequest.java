@@ -1,7 +1,7 @@
 package com.backend.athlete.presentation.branch.request;
 
 import com.backend.athlete.domain.branch.Branch;
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;

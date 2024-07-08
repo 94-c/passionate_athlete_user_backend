@@ -5,15 +5,13 @@ import com.backend.athlete.domain.athlete.AthleteRepository;
 import com.backend.athlete.domain.athlete.type.AthleteSuccessType;
 import com.backend.athlete.domain.attendance.Attendance;
 import com.backend.athlete.domain.attendance.AttendanceRepository;
-import com.backend.athlete.domain.user.User;
-import com.backend.athlete.domain.user.UserRepository;
+import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.presentation.report.response.GetWeeklyAttendanceResponse;
-import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FindUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;

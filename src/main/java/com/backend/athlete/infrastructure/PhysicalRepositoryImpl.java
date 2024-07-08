@@ -4,17 +4,14 @@ import com.backend.athlete.domain.branch.QBranch;
 import com.backend.athlete.domain.physical.Physical;
 import com.backend.athlete.domain.physical.QPhysical;
 import com.backend.athlete.domain.user.QUser;
-import com.backend.athlete.domain.user.type.UserGenderType;
+import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 @Repository

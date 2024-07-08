@@ -2,7 +2,7 @@ package com.backend.athlete.presentation.athlete.request;
 
 import com.backend.athlete.domain.athlete.Athlete;
 import com.backend.athlete.domain.athlete.type.AthleteSuccessType;
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

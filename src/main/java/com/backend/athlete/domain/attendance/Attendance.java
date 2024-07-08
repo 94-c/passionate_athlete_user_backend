@@ -1,6 +1,6 @@
 package com.backend.athlete.domain.attendance;
 
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.Comment;

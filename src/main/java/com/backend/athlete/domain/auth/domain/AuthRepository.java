@@ -1,6 +1,6 @@
 package com.backend.athlete.domain.auth.domain;
 
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

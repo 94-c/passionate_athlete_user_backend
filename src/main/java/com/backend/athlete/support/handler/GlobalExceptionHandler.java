@@ -1,9 +1,7 @@
 package com.backend.athlete.support.handler;
 
-import com.backend.athlete.support.exception.response.ExceptionResponse;
-import com.backend.athlete.support.exception.AuthException;
-import com.backend.athlete.support.exception.JwtException;
-import com.backend.athlete.support.exception.ServiceException;
+import com.backend.athlete.support.exception.ExceptionResponse;
+import com.backend.athlete.domain.auth.jwt.exception.JwtException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,36 +12,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.Instant;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-
-import java.time.Instant;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(AuthException.class)
-    public ResponseEntity<ExceptionResponse> handleAuthException(AuthException ex) {
-        ExceptionResponse response = new ExceptionResponse(
-                HttpStatus.NOT_FOUND.value(),
-                ex.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-    }
-
-    @ExceptionHandler(ServiceException.class)
-    public ResponseEntity<ExceptionResponse> handleServiceException(ServiceException ex) {
-        ExceptionResponse response = new ExceptionResponse(
-                HttpStatus.NOT_FOUND.value(),
-                ex.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-    }
-
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<ExceptionResponse> handleCustomJwtException(JwtException ex) {
         ExceptionResponse response = new ExceptionResponse(

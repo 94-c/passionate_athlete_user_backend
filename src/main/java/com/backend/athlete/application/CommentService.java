@@ -4,20 +4,21 @@ import com.backend.athlete.domain.comment.Comment;
 import com.backend.athlete.domain.comment.CommentRepository;
 import com.backend.athlete.domain.notice.Notice;
 import com.backend.athlete.domain.notice.NoticeRepository;
-import com.backend.athlete.domain.user.User;
-import com.backend.athlete.domain.user.UserRepository;
+import com.backend.athlete.domain.user.domain.User;
+import com.backend.athlete.domain.user.domain.UserRepository;
 import com.backend.athlete.presentation.comment.request.CreateCommentRequest;
 import com.backend.athlete.presentation.comment.request.UpdateCommentRequest;
 import com.backend.athlete.presentation.comment.response.CreateCommentResponse;
 import com.backend.athlete.presentation.comment.response.GetCommentResponse;
 import com.backend.athlete.presentation.comment.response.UpdateCommentResponse;
-import com.backend.athlete.support.exception.ServiceException;
-import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.support.exception.NotFoundException;
+import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FindUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +44,7 @@ public class CommentService {
     public CreateCommentResponse createComment(CustomUserDetailsImpl userPrincipal, Long noticeId, CreateCommentRequest request) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
-        Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> new ServiceException("게시글을 찾을 수 없습니다."));
+        Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 
         Comment createComment = commentRepository.save(CreateCommentRequest.toEntity(request, notice, user));
 
@@ -52,15 +53,15 @@ public class CommentService {
     @Transactional(readOnly = true)
     public GetCommentResponse getComment(Long noticeId, Long commentId) {
         Comment comment = commentRepository.findByIdAndNoticeId(commentId, noticeId)
-                .orElseThrow(() -> new ServiceException("댓글이 존재 하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("댓글이 존재 하지 않습니다.", HttpStatus.NOT_FOUND));
         return GetCommentResponse.fromEntity(comment);
     }
 
     @Transactional
     public UpdateCommentResponse updateComment(CustomUserDetailsImpl userPrincipal, Long id, UpdateCommentRequest request) {
-        Comment comment = commentRepository.findById(id).orElseThrow(() -> new ServiceException("댓글을 찾지 못했습니다"));
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new NotFoundException("댓글을 찾지 못했습니다", HttpStatus.NOT_FOUND));
         if (!comment.getUser().getUserId().equals(userPrincipal.getUsername())) {
-            throw new ServiceException("댓글의 삭제 권힌이 존재하지 않습니다.");
+            throw new NotFoundException("댓글의 삭제 권힌이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
         }
 
         comment.updateComment(request.getContent());
@@ -71,9 +72,9 @@ public class CommentService {
 
     @Transactional
     public void deleteComment(CustomUserDetailsImpl userPrincipal, Long id) {
-        Comment comment = commentRepository.findById(id).orElseThrow(() -> new ServiceException("댓글을 찾지 못했습니다"));
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new NotFoundException("댓글을 찾지 못했습니다", HttpStatus.NOT_FOUND));
         if (!comment.getUser().getUserId().equals(userPrincipal.getUsername())) {
-            throw new ServiceException("댓글의 삭제 권힌이 존재하지 않습니다.");
+            throw new NotFoundException("댓글의 삭제 권힌이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
         }
         deleteCommentRecursively(comment);
     }

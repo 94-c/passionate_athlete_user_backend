@@ -7,9 +7,8 @@ import com.backend.athlete.presentation.comment.response.CreateReplyCommentRespo
 import com.backend.athlete.presentation.comment.response.GetReplyCommentResponse;
 import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.constant.PageConstant;
-import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

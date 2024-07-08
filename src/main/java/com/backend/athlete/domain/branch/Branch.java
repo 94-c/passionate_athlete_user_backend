@@ -1,6 +1,6 @@
 package com.backend.athlete.domain.branch;
 
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.support.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;

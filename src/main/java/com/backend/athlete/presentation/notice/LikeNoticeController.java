@@ -4,7 +4,7 @@ import com.backend.athlete.application.LikeNoticeService;
 import com.backend.athlete.presentation.notice.response.CreateLikeNoticeResponse;
 import com.backend.athlete.presentation.notice.response.DeleteLikeNoticeResponse;
 import com.backend.athlete.presentation.notice.response.GetLikeNoticeResponse;
-import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

@@ -2,13 +2,12 @@ package com.backend.athlete.application;
 
 import com.backend.athlete.domain.physical.Physical;
 import com.backend.athlete.domain.physical.PhysicalRepository;
-import com.backend.athlete.domain.user.User;
-import com.backend.athlete.domain.user.UserRepository;
+import com.backend.athlete.domain.user.domain.User;
+import com.backend.athlete.domain.user.domain.UserRepository;
 import com.backend.athlete.presentation.physical.request.CreatePhysicalRequest;
 import com.backend.athlete.presentation.physical.response.*;
-import com.backend.athlete.support.exception.ServiceException;
-import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
-import com.backend.athlete.support.util.FileUtils;
+import com.backend.athlete.support.exception.NotFoundException;
+import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FindUtils;
 import com.backend.athlete.support.util.MathUtils;
 import com.backend.athlete.support.util.PhysicalUtils;
@@ -17,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +24,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -53,7 +51,7 @@ public class PhysicalService {
 
         boolean existsSave = physicalRepository.existsByUserAndMeasureDate(user, today);
         if (existsSave) {
-            throw new ServiceException("하루에 한번만 입력 하실 수 있습니다.");
+            throw new NotFoundException("하루에 한번만 입력 하실 수 있습니다." , HttpStatus.NOT_FOUND);
         }
 
         Physical previousPhysical = physicalRepository.findFirstByUserAndMeasureDateBeforeOrderByMeasureDateDesc(user, todayStart);
@@ -99,7 +97,7 @@ public class PhysicalService {
         List<Physical> physicals = physicalRepository.findPhysicalsByUserIdAndMeasureDate(user.getId(), dailyDate);
 
         if (physicals.isEmpty()) {
-            throw new ServiceException(dailyDate + " 의 인바디 정보가 존재하지 않습니다.");
+            throw new NotFoundException(dailyDate + " 의 인바디 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
         }
 
         Physical physical = physicals.get(0);
@@ -140,7 +138,7 @@ public class PhysicalService {
             startDate = now.with(TemporalAdjusters.firstDayOfMonth());
             endDate = now.with(TemporalAdjusters.lastDayOfMonth());
         } else {
-            throw new ServiceException("Invalid type: " + type);
+            throw new NotFoundException("Invalid type: " + type, HttpStatus.NOT_FOUND);
         }
 
         List<Physical> rankingPhysical = physicalRepository.findPhysicalRankings(startDate, endDate, gender, limit);

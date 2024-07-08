@@ -1,7 +1,7 @@
 package com.backend.athlete.presentation.athlete.response;
 
 import com.backend.athlete.domain.athlete.Athlete;
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 import lombok.Getter;
 
 import java.time.LocalDate;

@@ -2,7 +2,7 @@ package com.backend.athlete.presentation.report;
 
 import com.backend.athlete.application.ReportService;
 import com.backend.athlete.presentation.report.response.GetWeeklyAttendanceResponse;
-import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

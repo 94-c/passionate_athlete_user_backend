@@ -1,8 +1,6 @@
 package com.backend.athlete.presentation.branch.response;
 
 import com.backend.athlete.domain.branch.Branch;
-import com.backend.athlete.domain.branch.data.ManagerData;
-import com.backend.athlete.domain.user.User;
 import lombok.Getter;
 
 @Getter

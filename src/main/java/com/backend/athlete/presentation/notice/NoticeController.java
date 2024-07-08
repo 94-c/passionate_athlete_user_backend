@@ -9,7 +9,7 @@ import com.backend.athlete.presentation.notice.response.PageSearchNoticeResponse
 import com.backend.athlete.presentation.notice.response.CreateNoticeResponse;
 import com.backend.athlete.presentation.notice.response.UpdateNoticeResponse;
 import com.backend.athlete.support.constant.PageConstant;
-import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

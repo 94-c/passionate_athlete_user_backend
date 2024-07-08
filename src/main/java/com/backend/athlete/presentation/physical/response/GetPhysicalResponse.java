@@ -1,11 +1,9 @@
 package com.backend.athlete.presentation.physical.response;
 
 import com.backend.athlete.domain.physical.Physical;
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 import lombok.Getter;
-import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter

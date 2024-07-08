@@ -2,7 +2,7 @@ package com.backend.athlete.presentation.branch.response;
 
 import com.backend.athlete.domain.branch.Branch;
 import com.backend.athlete.domain.branch.data.BranchUserData;
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 import lombok.Getter;
 
 import java.util.List;

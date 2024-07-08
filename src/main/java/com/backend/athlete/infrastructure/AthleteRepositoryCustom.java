@@ -2,7 +2,7 @@ package com.backend.athlete.infrastructure;
 
 import com.backend.athlete.domain.athlete.Athlete;
 import com.backend.athlete.domain.athlete.data.AthleteData;
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 
 import java.time.LocalDate;
 import java.util.List;

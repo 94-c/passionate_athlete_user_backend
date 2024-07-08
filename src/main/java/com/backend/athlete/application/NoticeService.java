@@ -3,8 +3,7 @@ package com.backend.athlete.application;
 import com.backend.athlete.domain.comment.Comment;
 import com.backend.athlete.domain.comment.CommentRepository;
 import com.backend.athlete.domain.notice.*;
-import com.backend.athlete.domain.user.User;
-import com.backend.athlete.domain.user.UserRepository;
+import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.presentation.notice.request.PageSearchNoticeRequest;
 import com.backend.athlete.presentation.notice.request.CreateNoticeRequest;
 import com.backend.athlete.presentation.notice.request.UpdateNoticeRequest;
@@ -12,19 +11,19 @@ import com.backend.athlete.presentation.notice.response.GetNoticeResponse;
 import com.backend.athlete.presentation.notice.response.PageSearchNoticeResponse;
 import com.backend.athlete.presentation.notice.response.CreateNoticeResponse;
 import com.backend.athlete.presentation.notice.response.UpdateNoticeResponse;
-import com.backend.athlete.support.exception.ServiceException;
-import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.support.exception.NotFoundException;
+import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FileUtils;
 import com.backend.athlete.support.util.FindUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -59,7 +58,7 @@ public class NoticeService {
 
     public CreateNoticeResponse saveNotice(CustomUserDetailsImpl userPrincipal, CreateNoticeRequest noticeRequest, MultipartFile file) throws IOException {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
-        NoticeType kind = noticeTypeRepository.findById(noticeRequest.getKindId()).orElseThrow(() -> new ServiceException("Invalid notice type"));
+        NoticeType kind = noticeTypeRepository.findById(noticeRequest.getKindId()).orElseThrow(() -> new NotFoundException("Invalid notice type", HttpStatus.NOT_FOUND));
 
         String imagePath = null;
         if (!file.isEmpty()) {
@@ -82,7 +81,7 @@ public class NoticeService {
         Notice notice = FindUtils.findByNoticeId(id);
 
         if (!notice.getUser().getUserId().equals(userPrincipal.getUsername())) {
-            throw new ServiceException("게시글의 권한이 존재하지 않습니다.");
+            throw new NotFoundException("게시글의 권한이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
         }
 
         String imagePath = notice.getImagePath();
@@ -101,7 +100,7 @@ public class NoticeService {
         Notice notice = FindUtils.findByNoticeId(id);
 
         if (!notice.getUser().getUserId().equals(userPrincipal.getUsername())) {
-            throw new ServiceException("이 게시물를 삭제할 권한이 없습니다.");
+            throw new NotFoundException("이 게시물를 삭제할 권한이 없습니다.", HttpStatus.NOT_FOUND);
         }
 
         noticeRepository.delete(notice);
@@ -111,7 +110,7 @@ public class NoticeService {
         Notice notice = FindUtils.findByNoticeId(id);
 
         if (!notice.getUser().getUserId().equals(userPrincipal.getUsername())) {
-            throw new ServiceException("이 게시물를 삭제할 권한이 없습니다.");
+            throw new NotFoundException("이 게시물를 삭제할 권한이 없습니다.", HttpStatus.NOT_FOUND);
         }
 
         notice.setStatus(true);

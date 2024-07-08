@@ -2,18 +2,19 @@ package com.backend.athlete.application;
 
 import com.backend.athlete.domain.branch.Branch;
 import com.backend.athlete.domain.branch.BranchRepository;
-import com.backend.athlete.domain.user.User;
-import com.backend.athlete.domain.user.UserRepository;
-import com.backend.athlete.domain.user.type.UserRoleType;
+import com.backend.athlete.domain.user.domain.User;
+import com.backend.athlete.domain.user.domain.UserRepository;
+import com.backend.athlete.domain.user.domain.type.UserRoleType;
 import com.backend.athlete.presentation.branch.request.CreateBranchRequest;
 import com.backend.athlete.presentation.branch.request.PageSearchBranchRequest;
 import com.backend.athlete.presentation.branch.request.UpdateBranchRequest;
 import com.backend.athlete.presentation.branch.response.*;
-import com.backend.athlete.support.exception.ServiceException;
+import com.backend.athlete.support.exception.NotFoundException;
 import com.backend.athlete.support.util.FindUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class BranchService {
 
     public CreateBranchResponse createBranch(CreateBranchRequest request) {
         if (branchRepository.findByName(request.getName()).isPresent()) {
-            throw new ServiceException("지점명이 이미 존재합니다.");
+            throw new NotFoundException("지점명이 이미 존재합니다.", HttpStatus.NOT_FOUND);
         }
 
         User manager = FindUtils.findById(request.getManagerId());
@@ -53,14 +54,14 @@ public class BranchService {
 
     public GetBranchResponse getBranch(Long id) {
         Branch branch = branchRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("해당 지점을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 지점을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 
         return GetBranchResponse.fromEntity(branch);
     }
 
     public UpdateBranchResponse updateBranch(Long id, UpdateBranchRequest request) {
         Branch branch = branchRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("해당 지점을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 지점을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 
         User manager = FindUtils.findById(request.getManagerId());
 
@@ -81,7 +82,7 @@ public class BranchService {
 
     public GetBranchUsersResponse searchBranchUsersByName(String name) {
         Branch branch = branchRepository.findByNameContaining(name)
-                .orElseThrow(() -> new ServiceException("해당 지점을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 지점을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 
         List<User> users = userRepository.findByBranchAndRole(branch, UserRoleType.USER);
 

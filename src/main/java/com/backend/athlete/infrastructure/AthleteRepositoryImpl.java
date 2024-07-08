@@ -3,16 +3,13 @@ package com.backend.athlete.infrastructure;
 import com.backend.athlete.domain.athlete.Athlete;
 import com.backend.athlete.domain.athlete.QAthlete;
 import com.backend.athlete.domain.athlete.data.AthleteData;
-import com.backend.athlete.domain.user.User;
+import com.backend.athlete.domain.user.domain.User;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
