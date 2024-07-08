@@ -1,8 +1,8 @@
 package com.backend.athlete.domain.user.infrastructure;
 
 import com.backend.athlete.domain.branch.Branch;
-import com.backend.athlete.domain.user.QRole;
-import com.backend.athlete.domain.user.QUser;
+import com.backend.athlete.domain.user.domain.QRole;
+import com.backend.athlete.domain.user.domain.QUser;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.type.UserRoleType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
