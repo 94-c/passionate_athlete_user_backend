@@ -1,14 +1,13 @@
 package com.backend.athlete.support.config;
 
-import com.backend.athlete.support.jwt.JwtAuthenticationEntryPoint;
-import com.backend.athlete.support.jwt.JwtAuthenticationFilter;
-import com.backend.athlete.support.jwt.JwtTokenProvider;
-import com.backend.athlete.support.jwt.service.CustomUserDetailService;
+import com.backend.athlete.domain.auth.jwt.JwtAuthenticationEntryPoint;
+import com.backend.athlete.domain.auth.jwt.JwtAuthenticationFilter;
+import com.backend.athlete.domain.auth.jwt.JwtTokenProvider;
+import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;

@@ -1,7 +1,7 @@
-package com.backend.athlete.support.jwt;
+package com.backend.athlete.domain.auth.jwt;
 
-import com.backend.athlete.support.exception.JwtException;
-import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.domain.auth.jwt.exception.JwtException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

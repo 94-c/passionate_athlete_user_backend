@@ -1,4 +1,4 @@
-package com.backend.athlete.support.jwt;
+package com.backend.athlete.domain.auth.jwt;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

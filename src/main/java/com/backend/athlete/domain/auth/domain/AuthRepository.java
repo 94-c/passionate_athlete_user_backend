@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.auth;
+package com.backend.athlete.domain.auth.domain;
 
 import com.backend.athlete.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;

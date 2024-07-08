@@ -1,22 +1,25 @@
-package com.backend.athlete.application;
+package com.backend.athlete.domain.auth.application;
 
-import com.backend.athlete.domain.auth.AuthRepository;
+import com.backend.athlete.domain.auth.domain.AuthRepository;
+import com.backend.athlete.domain.auth.exception.DuplicatePasswordException;
+import com.backend.athlete.domain.auth.exception.IsExistUserIddException;
+import com.backend.athlete.domain.auth.exception.NotFoundBranchException;
+import com.backend.athlete.domain.auth.exception.NotFoundRoleException;
 import com.backend.athlete.domain.branch.Branch;
 import com.backend.athlete.domain.branch.BranchRepository;
 import com.backend.athlete.domain.user.Role;
 import com.backend.athlete.domain.user.RoleRepository;
 import com.backend.athlete.domain.user.User;
 import com.backend.athlete.domain.user.type.UserRoleType;
-import com.backend.athlete.presentation.user.request.LoginTokenRequest;
-import com.backend.athlete.presentation.user.request.RegisterUserRequest;
-import com.backend.athlete.presentation.user.response.LoginTokenResponse;
-import com.backend.athlete.presentation.user.response.RegisterUserResponse;
-import com.backend.athlete.support.exception.AuthException;
-import com.backend.athlete.support.exception.ServiceException;
-import com.backend.athlete.support.jwt.JwtTokenProvider;
-import com.backend.athlete.support.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.domain.auth.dto.request.LoginRequest;
+import com.backend.athlete.domain.auth.dto.request.RegisterRequest;
+import com.backend.athlete.domain.auth.dto.response.LoginResponse;
+import com.backend.athlete.domain.auth.dto.response.RegisterResponse;
+import com.backend.athlete.domain.auth.jwt.JwtTokenProvider;
+import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.UserCodeUtils;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,7 +32,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-@Slf4j
+@RequiredArgsConstructor
 public class AuthService {
 
     private final AuthRepository authRepository;
@@ -39,16 +42,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenUtil;
 
-    public AuthService(AuthRepository authRepository, RoleRepository roleRepository, BranchRepository branchRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenUtil) {
-        this.authRepository = authRepository;
-        this.roleRepository = roleRepository;
-        this.branchRepository = branchRepository;
-        this.authenticationManager = authenticationManager;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtTokenUtil = jwtTokenUtil;
-    }
-
-    public RegisterUserResponse register(RegisterUserRequest request) {
+    public RegisterResponse register(RegisterRequest request) {
         isExistUserId(request.getUserId());
         checkDuplicatePassword(request.getPassword(), request.getPasswordCheck());
 
@@ -57,19 +51,19 @@ public class AuthService {
         request.setCode(generateUserCode());
 
         Branch branch = branchRepository.findByName(request.getBranchName())
-                .orElseThrow(() -> new ServiceException("해당 지점을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundBranchException(HttpStatus.NOT_FOUND));
 
         Set<Role> roles = new HashSet<>();
         roles.add(getUserRoleTypeRole());
         request.setRoleIds(roles);
 
-        User registerUser = authRepository.save(RegisterUserRequest.toEntity(request, branch));
+        User registerUser = authRepository.save(RegisterRequest.toEntity(request, branch));
 
-        return RegisterUserResponse.fromEntity(registerUser);
+        return RegisterResponse.fromEntity(registerUser);
     }
 
 
-    public LoginTokenResponse login(LoginTokenRequest request) {
+    public LoginResponse login(LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUserId(), request.getPassword()));
 
@@ -81,7 +75,7 @@ public class AuthService {
 
         checkEncodePassword(request.getPassword(), userDetails.getPassword());
 
-        return LoginTokenResponse.fromEntity(userDetails, token);
+        return LoginResponse.fromEntity(userDetails, token);
     }
 
     public boolean checkUserIdExists(String userId) {
@@ -95,28 +89,25 @@ public class AuthService {
 
     protected void isExistUserId(String userId) {
         if (authRepository.findByUserId(userId).isPresent()) {
-            throw new AuthException("이미 사용 중인 아이디 입니다.");
+            throw new IsExistUserIddException(HttpStatus.BAD_REQUEST);
         }
     }
 
     protected void checkDuplicatePassword(String password, String passwordCheck) {
         if (!password.equals(passwordCheck)) {
-            throw new AuthException("패스워드가 불일치 합니다.");
+            throw new DuplicatePasswordException(HttpStatus.BAD_REQUEST);
         }
     }
 
     protected void checkEncodePassword(String rawPassword, String encodedPassword) {
         if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
-            throw new AuthException("패스워드가 불일치 합니다.");
+            throw new DuplicatePasswordException(HttpStatus.BAD_REQUEST);
         }
     }
 
-    /**
-     * 회원 권한
-     */
     protected Role getUserRoleTypeRole() {
         Optional<Role> roleOptional = roleRepository.findByName(UserRoleType.USER);
-        return roleOptional.orElseThrow(() -> new AuthException("해당 권한이 존재 하지 않습니다."));
+        return roleOptional.orElseThrow(() -> new NotFoundRoleException(HttpStatus.NOT_FOUND));
     }
 
 }
