@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.user.dto.request;
+package com.backend.athlete.domain.admin.dto;
 
 import com.backend.athlete.domain.user.domain.type.UserStatusType;
 import jakarta.validation.constraints.NotNull;

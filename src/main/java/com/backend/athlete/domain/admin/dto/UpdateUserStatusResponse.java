@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.user.dto.response;
+package com.backend.athlete.domain.admin.dto;
 
 import com.backend.athlete.domain.user.domain.User;
 import lombok.Getter;
