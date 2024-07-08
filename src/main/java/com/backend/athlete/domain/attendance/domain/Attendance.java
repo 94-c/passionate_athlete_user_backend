@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.attendance;
+package com.backend.athlete.domain.attendance.domain;
 
 import com.backend.athlete.domain.user.domain.User;
 import jakarta.persistence.*;

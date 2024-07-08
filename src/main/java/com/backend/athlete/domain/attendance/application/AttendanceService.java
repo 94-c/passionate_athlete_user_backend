@@ -1,16 +1,17 @@
-package com.backend.athlete.application;
+package com.backend.athlete.domain.attendance.application;
 
-import com.backend.athlete.domain.attendance.Attendance;
-import com.backend.athlete.domain.attendance.AttendanceRepository;
+import com.backend.athlete.domain.attendance.domain.Attendance;
+import com.backend.athlete.domain.attendance.domain.AttendanceRepository;
 import com.backend.athlete.domain.user.domain.User;
-import com.backend.athlete.presentation.attendance.request.CreateAttendanceRequest;
-import com.backend.athlete.presentation.attendance.response.CreateAttendanceResponse;
-import com.backend.athlete.presentation.attendance.response.GetContinuousAttendanceResponse;
-import com.backend.athlete.presentation.attendance.response.GetDailyAttendanceResponse;
-import com.backend.athlete.presentation.attendance.response.GetMonthlyAttendanceResponse;
+import com.backend.athlete.domain.attendance.dto.request.CreateAttendanceRequest;
+import com.backend.athlete.domain.attendance.dto.response.CreateAttendanceResponse;
+import com.backend.athlete.domain.attendance.dto.response.GetContinuousAttendanceResponse;
+import com.backend.athlete.domain.attendance.dto.response.GetDailyAttendanceResponse;
+import com.backend.athlete.domain.attendance.dto.response.GetMonthlyAttendanceResponse;
 import com.backend.athlete.support.exception.NotFoundException;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FindUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,13 +24,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
+@RequiredArgsConstructor
 public class AttendanceService {
     private final AttendanceRepository attendanceRepository;
-    public AttendanceService(AttendanceRepository attendanceRepository) {
-        this.attendanceRepository = attendanceRepository;
-    }
-
     public CreateAttendanceResponse createAttendanceEvent(CustomUserDetailsImpl userPrincipal, CreateAttendanceRequest request) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
@@ -99,7 +96,6 @@ public class AttendanceService {
             if (attendanceDate.getDayOfWeek() == DayOfWeek.SATURDAY || attendanceDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
                 continue;
             }
-
             // 첫 출석일 초기화
             if (previousDate == null) {
                 continuousAttendanceCount = 1;
@@ -116,7 +112,6 @@ public class AttendanceService {
                     }
                 }
             }
-
             // 연속 출석 최대 일 수 업데이트
             maxContinuousDays = Math.max(maxContinuousDays, continuousAttendanceCount);
             previousDate = attendanceDate;

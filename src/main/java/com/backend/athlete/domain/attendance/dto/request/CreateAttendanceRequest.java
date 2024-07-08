@@ -1,6 +1,6 @@
-package com.backend.athlete.presentation.attendance.request;
+package com.backend.athlete.domain.attendance.dto.request;
 
-import com.backend.athlete.domain.attendance.Attendance;
+import com.backend.athlete.domain.attendance.domain.Attendance;
 import com.backend.athlete.domain.user.domain.User;
 import lombok.Getter;
 import lombok.Setter;

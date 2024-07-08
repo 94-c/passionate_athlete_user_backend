@@ -1,4 +1,4 @@
-package com.backend.athlete.presentation.attendance.response;
+package com.backend.athlete.domain.attendance.dto.response;
 
 import lombok.Getter;
 

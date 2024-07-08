@@ -1,7 +1,6 @@
-package com.backend.athlete.presentation.attendance.response;
+package com.backend.athlete.domain.attendance.dto.response;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;

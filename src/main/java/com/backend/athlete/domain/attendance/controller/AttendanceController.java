@@ -1,12 +1,13 @@
-package com.backend.athlete.presentation.attendance;
+package com.backend.athlete.domain.attendance.controller;
 
-import com.backend.athlete.application.AttendanceService;
-import com.backend.athlete.presentation.attendance.request.CreateAttendanceRequest;
-import com.backend.athlete.presentation.attendance.response.CreateAttendanceResponse;
-import com.backend.athlete.presentation.attendance.response.GetContinuousAttendanceResponse;
-import com.backend.athlete.presentation.attendance.response.GetDailyAttendanceResponse;
-import com.backend.athlete.presentation.attendance.response.GetMonthlyAttendanceResponse;
+import com.backend.athlete.domain.attendance.application.AttendanceService;
+import com.backend.athlete.domain.attendance.dto.request.CreateAttendanceRequest;
+import com.backend.athlete.domain.attendance.dto.response.CreateAttendanceResponse;
+import com.backend.athlete.domain.attendance.dto.response.GetContinuousAttendanceResponse;
+import com.backend.athlete.domain.attendance.dto.response.GetDailyAttendanceResponse;
+import com.backend.athlete.domain.attendance.dto.response.GetMonthlyAttendanceResponse;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,14 +19,15 @@ import java.time.YearMonth;
 
 @Controller
 @RequestMapping("/api/v1/attendances")
+@RequiredArgsConstructor
 public class AttendanceController {
 
+    /**
+     * 일별 출석 조회
+     * 월별 출석 조회
+     * 연속 출석 조회
+     */
     private final AttendanceService attendanceService;
-
-    public AttendanceController(AttendanceService attendanceService) {
-        this.attendanceService = attendanceService;
-    }
-
     @PostMapping
     public ResponseEntity<CreateAttendanceResponse> dailyAttendance(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
                                                                     @RequestBody CreateAttendanceRequest request) {
