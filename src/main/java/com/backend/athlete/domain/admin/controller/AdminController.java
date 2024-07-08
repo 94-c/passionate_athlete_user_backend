@@ -1,15 +1,20 @@
 package com.backend.athlete.domain.admin.controller;
 
 import com.backend.athlete.domain.admin.application.AdminService;
+import com.backend.athlete.domain.athlete.dto.request.CreateAthleteRequest;
+import com.backend.athlete.domain.athlete.dto.response.CreateAthleteResponse;
+import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.domain.user.application.UserService;
 import com.backend.athlete.domain.admin.dto.UpdateUserRoleRequest;
 import com.backend.athlete.domain.admin.dto.UpdateUserStatusRequest;
 import com.backend.athlete.domain.admin.dto.UpdateUserRoleResponse;
 import com.backend.athlete.domain.admin.dto.UpdateUserStatusResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,7 +26,6 @@ public class AdminController {
     /**
      * TODO : 어드민 프로젝트로 이관 예정
      */
-
     private final AdminService adminService;
 
     @PutMapping("/users/{userId}/status")
@@ -38,5 +42,13 @@ public class AdminController {
                                                              @RequestBody UpdateUserRoleRequest request) {
         UpdateUserRoleResponse response = adminService.updateUserRole(userId, request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PostMapping("/athletes")
+    @PreAuthorize("hasAnyAuthority('USER') or hasAnyAuthority('MANAGER')")
+    public ResponseEntity<CreateAthleteResponse> createAthlete(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
+                                                               @Valid @RequestBody CreateAthleteRequest request) {
+        CreateAthleteResponse response = adminService.createAthlete(userPrincipal, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }
