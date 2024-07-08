@@ -2,7 +2,7 @@ package com.backend.athlete.infrastructure;
 
 import com.backend.athlete.domain.branch.Branch;
 import com.backend.athlete.domain.branch.QBranch;
-import com.backend.athlete.domain.user.QUser;
+import com.backend.athlete.domain.user.domain.QUser;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

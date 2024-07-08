@@ -3,7 +3,7 @@ package com.backend.athlete.infrastructure;
 import com.backend.athlete.domain.branch.QBranch;
 import com.backend.athlete.domain.physical.Physical;
 import com.backend.athlete.domain.physical.QPhysical;
-import com.backend.athlete.domain.user.QUser;
+import com.backend.athlete.domain.user.domain.QUser;
 import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;

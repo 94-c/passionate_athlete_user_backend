@@ -1,10 +1,10 @@
 package com.backend.athlete.domain.auth.application;
 
 import com.backend.athlete.domain.auth.domain.AuthRepository;
-import com.backend.athlete.domain.auth.exception.DuplicatePasswordException;
-import com.backend.athlete.domain.auth.exception.IsExistUserIddException;
-import com.backend.athlete.domain.auth.exception.NotFoundBranchException;
-import com.backend.athlete.domain.auth.exception.NotFoundRoleException;
+import com.backend.athlete.support.exception.DuplicatePasswordException;
+import com.backend.athlete.support.exception.IsExistUserIddException;
+import com.backend.athlete.support.exception.NotFoundBranchException;
+import com.backend.athlete.support.exception.NotFoundRoleException;
 import com.backend.athlete.domain.branch.Branch;
 import com.backend.athlete.domain.branch.BranchRepository;
 import com.backend.athlete.domain.user.domain.Role;

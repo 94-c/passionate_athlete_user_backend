@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.auth.exception;
+package com.backend.athlete.support.exception;
 
 import com.backend.athlete.support.exception.HttpException;
 import org.springframework.http.HttpStatus;
