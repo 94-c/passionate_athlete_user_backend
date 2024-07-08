@@ -5,11 +5,10 @@ import lombok.Getter;
 
 @Getter
 public class ExceptionResponse {
-    private int status;
-    private String message;
-    private long timestamp;
+    private final int status;
+    private final String message;
+    private final long timestamp;
 
-    @Builder
     public ExceptionResponse(int status, String message, long timestamp) {
         this.status = status;
         this.message = message;
