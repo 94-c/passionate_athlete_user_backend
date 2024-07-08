@@ -4,10 +4,25 @@
 
 ```
 Project
-
+    L domain
+        L auth
+            L application
+            L controller
+            L domain
+            L infrastructure
+            L dto
+            L exception
+    L support
+        L common
+        L config
+        L constant
+        L exception
+        L handler
+        L jwt
+        L util
 ```
 
-## 컨트롤러
+## Controller
 
 ```java
 
@@ -15,30 +30,30 @@ Project
 @RequestMapping("/v1")
 @RequiredArgsConstructor
 public class ExampleApi {
-	private final ExampleRepository exampleRepository;
+    
 	private final ExampleService exampleService;
 
 	@GetMapping("/example/{example_id}")
 	public ResponseEntity<GetResponse> getExample(
 		@PathVariable(name = "example_id") final Long id
 	) {
+        GetResponse response = exampleService.getExample(id);
 		return ResponseEntity.status(HttpStatus.OK)
-			.contentType(MediaType.APPLICATION_JSON)
-			.body(exampleService.getExample(id));
+			.body(response);
 	}
 
 	@PostMapping("/example")
 	public ResponseEntity<AddResponse> addExample(
 		@RequestBody final ExampleDTORequest request
 	) {
+        AddResponse response = exampleService.postExample(request);
 		return ResponseEntity.status(HttpStatus.OK)
-			.contentType(MediaType.APPLICATION_JSON)
-			.body(exampleService.addExamples(ExampleDTO.of(request)));
+			.body(response);
 	}
 }
 ```
 
-## 서비스
+## Application
 
 ```java
 
@@ -52,36 +67,41 @@ public class ExampleService {
 	@Transactional(readOnly = true)
 	public GetResponse getExample(final long exampleId) {
 		final ExampleEntity exampleEntity = exampleRepository.findById(memberId);
-		return GetResponse.from(exampleEntity);
+		return GetResponse.fromEntity(exampleEntity);
 	}
 
 	public AddResponse add(final long memberId, final MemberProfileUpdate dto) {
 		final ExampleEntity exampleEntity = exampleRepository.save(memberId);
-		return AddResponse.from(exampleEntity);
+		return AddResponse.fromEntity(exampleEntity);
 	}
 }
 ```
 
-- 클래스 어노테이션에 `Transactional`을 붙인다.
+## Repository
+```java
+public interface ExampleRepository extends JpaRepository<ExampleEntity, Long> {
+    ExampleEntity findById(long id);
+}
+
+```
 
 ## DTO
-
-- `record` 를 사용합니다.
 
 ### RequestDTO
 
 ```java
 
-@Builder
-public record ExampleRequest(
-	@NotNull int a,
-	@NotNull String b
-) {
+@Getter @Setter
+public class ExampleRequest {
+        
+    private String a;
+    private String b;
+    
 	public static ExampleEntity toEntity(final ExampleResponse response) {
-		return ExampleEntity.builder()
-			.a(response.a)
-			.b(response.b)
-			.build();
+		return new ExampleEntity(
+                response.getA(),
+                response.getB()
+        );
 	}
 }
 ```
@@ -90,21 +110,22 @@ public record ExampleRequest(
 
 ```java
 
-@Builder
-public record ExampleResponse(
-	int a,
-	String b
-) {
+@Getter
+public class ExampleResponse{
+    
+    private String a;
+    private String b;
+    
 	public static ExampleResponse from(final ExampleEntity entity) {
-		return ExampleResponse.builder()
-			.a(a)
-			.b(b)
-			.build();
+		return new ExampleResponse(
+                entity.getA(),
+                entity.getB()
+        );
 	}
 }
 ```
 
-## Entity
+## Domain
 
 ```java
 
@@ -137,7 +158,6 @@ public class Example {
 	@Column(name = "discount", nullable = false)
 	private Double discount;
 
-	@Builder
 	private Example(Email email, Name name, boolean used, double discount) {
 		this.email = email;
 		this.name = name;
