@@ -22,6 +22,11 @@ import java.time.YearMonth;
 @RequiredArgsConstructor
 public class AthleteController {
 
+    /**
+     * 오늘 운동 기록 조회
+     * 월별 운동 조회
+     * 오늘 운동 기록 삭제
+     */
     private final AthleteService athleteService;
 
     @GetMapping("/daily")
