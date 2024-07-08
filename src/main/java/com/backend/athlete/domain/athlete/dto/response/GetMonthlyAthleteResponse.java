@@ -1,4 +1,4 @@
-package com.backend.athlete.presentation.athlete.response;
+package com.backend.athlete.domain.athlete.dto.response;
 
 import lombok.Getter;
 
@@ -16,7 +16,6 @@ public class GetMonthlyAthleteResponse {
         this.dailyRecords = dailyRecords;
     }
 
-    // Entity -> Dto
     public static GetMonthlyAthleteResponse fromEntity(YearMonth month, List<GetDailyAthleteResponse> dailyRecords) {
         return new GetMonthlyAthleteResponse(month, dailyRecords);
     }

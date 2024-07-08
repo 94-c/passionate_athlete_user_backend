@@ -1,7 +1,7 @@
-package com.backend.athlete.presentation.athlete.request;
+package com.backend.athlete.domain.athlete.dto.request;
 
-import com.backend.athlete.domain.athlete.Athlete;
-import com.backend.athlete.domain.athlete.type.AthleteSuccessType;
+import com.backend.athlete.domain.athlete.domain.Athlete;
+import com.backend.athlete.domain.athlete.domain.type.AthleteSuccessType;
 import com.backend.athlete.domain.user.domain.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

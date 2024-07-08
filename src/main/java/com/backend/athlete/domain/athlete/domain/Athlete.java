@@ -1,9 +1,11 @@
-package com.backend.athlete.domain.athlete;
+package com.backend.athlete.domain.athlete.domain;
 
-import com.backend.athlete.domain.athlete.type.AthleteSuccessType;
+import com.backend.athlete.domain.athlete.domain.type.AthleteSuccessType;
 import com.backend.athlete.domain.user.domain.User;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.annotation.CreatedDate;
@@ -13,6 +15,7 @@ import java.time.LocalTime;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "athletes")
 public class Athlete {
 
@@ -48,8 +51,9 @@ public class Athlete {
     @Comment("비고")
     private String etc;
 
-    protected Athlete() {}
-
+    /**
+     * TODO : 어드민 프로젝트로 이관 예정
+     */
     public Athlete(User user, LocalDate dailyTime, String athletics, AthleteSuccessType type, LocalTime record, Integer round, String etc) {
         this.user = user;
         this.dailyTime = dailyTime;

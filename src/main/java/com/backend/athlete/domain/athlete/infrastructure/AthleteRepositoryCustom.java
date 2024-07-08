@@ -1,6 +1,6 @@
-package com.backend.athlete.infrastructure;
+package com.backend.athlete.domain.athlete.infrastructure;
 
-import com.backend.athlete.domain.athlete.Athlete;
+import com.backend.athlete.domain.athlete.domain.Athlete;
 import com.backend.athlete.domain.athlete.data.AthleteData;
 import com.backend.athlete.domain.user.domain.User;
 

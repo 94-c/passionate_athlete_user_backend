@@ -1,10 +1,8 @@
 package com.backend.athlete.domain.athlete.data;
 
-import com.backend.athlete.domain.athlete.type.AthleteSuccessType;
+import com.backend.athlete.domain.athlete.domain.type.AthleteSuccessType;
 import lombok.Getter;
-import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 

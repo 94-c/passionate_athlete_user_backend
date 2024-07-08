@@ -1,6 +1,6 @@
 package com.backend.athlete.domain.athlete.converter;
 
-import com.backend.athlete.domain.athlete.type.AthleteSuccessType;
+import com.backend.athlete.domain.athlete.domain.type.AthleteSuccessType;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

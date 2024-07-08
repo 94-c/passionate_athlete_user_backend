@@ -1,6 +1,6 @@
-package com.backend.athlete.presentation.athlete.response;
+package com.backend.athlete.domain.athlete.dto.response;
 
-import com.backend.athlete.domain.athlete.Athlete;
+import com.backend.athlete.domain.athlete.domain.Athlete;
 import com.backend.athlete.domain.user.domain.User;
 import lombok.Getter;
 
@@ -8,9 +8,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Getter
-public class CreateAthleteResponse {
+public class GetDailyAthleteResponse {
 
-    private Long id;
     private LocalDate dailyTime;
     private String athletics;
     private String type;
@@ -19,8 +18,7 @@ public class CreateAthleteResponse {
     private String etc;
     private String username;
 
-    public CreateAthleteResponse(Long id, LocalDate dailyTime, String athletics, String type, LocalTime record, Integer round, String etc, String username) {
-        this.id = id;
+    public GetDailyAthleteResponse(LocalDate dailyTime, String athletics, String type, LocalTime record, Integer round, String etc, String username) {
         this.dailyTime = dailyTime;
         this.athletics = athletics;
         this.type = type;
@@ -30,11 +28,9 @@ public class CreateAthleteResponse {
         this.username = username;
     }
 
-    //Entity -> Dto
-    public static CreateAthleteResponse fromEntity(Athlete athlete) {
+    public static GetDailyAthleteResponse fromEntity(Athlete athlete) {
         User findUser = athlete.getUser();
-        return new CreateAthleteResponse(
-                athlete.getId(),
+        return new GetDailyAthleteResponse(
                 athlete.getDailyTime(),
                 athlete.getAthletics(),
                 athlete.getType().toString(),

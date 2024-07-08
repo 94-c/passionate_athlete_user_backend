@@ -1,17 +1,21 @@
-package com.backend.athlete.application;
+package com.backend.athlete.domain.athlete.application;
 
-import com.backend.athlete.domain.athlete.Athlete;
-import com.backend.athlete.domain.athlete.AthleteRepository;
+import com.backend.athlete.domain.athlete.domain.Athlete;
+import com.backend.athlete.domain.athlete.domain.AthleteRepository;
 import com.backend.athlete.domain.athlete.data.AthleteData;
 import com.backend.athlete.domain.user.domain.User;
-import com.backend.athlete.presentation.athlete.request.CreateAthleteRequest;
-import com.backend.athlete.presentation.athlete.response.CreateAthleteResponse;
-import com.backend.athlete.presentation.athlete.response.GetDailyAthleteResponse;
-import com.backend.athlete.presentation.athlete.response.GetMonthlyAthleteResponse;
+import com.backend.athlete.domain.athlete.dto.request.CreateAthleteRequest;
+import com.backend.athlete.domain.athlete.dto.response.CreateAthleteResponse;
+import com.backend.athlete.domain.athlete.dto.response.GetDailyAthleteResponse;
+import com.backend.athlete.domain.athlete.dto.response.GetMonthlyAthleteResponse;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.support.exception.DeleteDailyAthleteException;
+import com.backend.athlete.support.exception.IsNotEmptyAthleteException;
 import com.backend.athlete.support.util.FindUtils;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,32 +25,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
+@RequiredArgsConstructor
+@Transactional
 public class AthleteService {
 
     private final AthleteRepository athleteRepository;
-    public AthleteService(AthleteRepository athleteRepository) {
-        this.athleteRepository = athleteRepository;
-    }
 
-    public CreateAthleteResponse createAthlete(CustomUserDetailsImpl userPrincipal, CreateAthleteRequest request) {
-        User user = FindUtils.findByUserId(userPrincipal.getUsername());
-
-        request.setDailyTime(LocalDate.now());
-
-        Athlete createAthlete = athleteRepository.save(CreateAthleteRequest.toEntity(request, user));
-
-        return CreateAthleteResponse.fromEntity(createAthlete);
-    }
-
-    @Transactional
     public GetDailyAthleteResponse getDailyAthlete(CustomUserDetailsImpl userPrincipal, LocalDate dailyDate) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
         List<Athlete> athletes = athleteRepository.findAthletesByUserIdAndDailyTime(user.getId(), dailyDate);
 
         if (athletes.isEmpty()) {
-            throw new EntityNotFoundException("No athlete found for the given user and date.");
+            throw new IsNotEmptyAthleteException(HttpStatus.NOT_FOUND);
         }
 
         Athlete athlete = athletes.get(0);
@@ -54,7 +45,6 @@ public class AthleteService {
         return GetDailyAthleteResponse.fromEntity(athlete);
     }
 
-    @Transactional
     public GetMonthlyAthleteResponse getMonthlyAthlete(CustomUserDetailsImpl userPrincipal, YearMonth yearMonth) {
         LocalDate startDate = yearMonth.atDay(1);
         LocalDate endDate = yearMonth.atEndOfMonth();
@@ -82,7 +72,7 @@ public class AthleteService {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
         Athlete athlete = athleteRepository.findByIdAndUserId(id, user.getId())
-                .orElseThrow(() -> new RuntimeException("Athlete record not found or not authorized"));
+                .orElseThrow(() -> new DeleteDailyAthleteException(HttpStatus.FORBIDDEN));
 
         athleteRepository.delete(athlete);
     }
