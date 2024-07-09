@@ -1,6 +1,6 @@
-package com.backend.athlete.presentation.branch.request;
+package com.backend.athlete.domain.admin.dto.branch;
 
-import com.backend.athlete.domain.branch.Branch;
+import com.backend.athlete.domain.branch.domain.Branch;
 import com.backend.athlete.domain.user.domain.User;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
