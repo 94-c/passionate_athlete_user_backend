@@ -20,7 +20,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             throws IOException, ServletException {
         String requestURI = request.getRequestURI();
 
-        if (requestURI.equals("/auth/login") || requestURI.equals("/auth/register")) {
+        if (requestURI.equals("/auth/login") || requestURI.equals("/auth/register") || requestURI.equals("/api/v1/branches/find-all")) {
             // 로그인 페이지 및 등록 페이지에 대해 401 오류를 반환하지 않고 리디렉션
             response.sendRedirect(request.getContextPath() + "/auth/login");
         } else {

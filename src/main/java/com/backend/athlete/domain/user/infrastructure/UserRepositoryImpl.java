@@ -1,6 +1,6 @@
 package com.backend.athlete.domain.user.infrastructure;
 
-import com.backend.athlete.domain.branch.Branch;
+import com.backend.athlete.domain.branch.domain.Branch;
 import com.backend.athlete.domain.user.domain.QRole;
 import com.backend.athlete.domain.user.domain.QUser;
 import com.backend.athlete.domain.user.domain.User;

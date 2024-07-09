@@ -1,6 +1,6 @@
 package com.backend.athlete.domain.user.domain;
 
-import com.backend.athlete.domain.branch.Branch;
+import com.backend.athlete.domain.branch.domain.Branch;
 import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.backend.athlete.domain.user.domain.type.UserStatusType;
 import com.backend.athlete.support.common.BaseTimeEntity;

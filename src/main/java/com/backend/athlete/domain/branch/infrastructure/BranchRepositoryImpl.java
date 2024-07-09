@@ -1,7 +1,7 @@
-package com.backend.athlete.infrastructure;
+package com.backend.athlete.domain.branch.infrastructure;
 
-import com.backend.athlete.domain.branch.Branch;
-import com.backend.athlete.domain.branch.QBranch;
+import com.backend.athlete.domain.branch.domain.Branch;
+import com.backend.athlete.domain.branch.domain.QBranch;
 import com.backend.athlete.domain.user.domain.QUser;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -21,14 +21,6 @@ import java.util.Optional;
 public class BranchRepositoryImpl implements BranchRepositoryCustom {
 
     private final JPAQueryFactory factory;
-
-    @Override
-    public Optional<Branch> findByName(String name) {
-        return Optional.ofNullable(factory.selectFrom(QBranch.branch)
-                .leftJoin(QBranch.branch.users).fetchJoin()
-                .where(QBranch.branch.name.eq(name))
-                .fetchOne());
-    }
 
     @Override
     public Optional<Branch> findByNameContaining(String name) {

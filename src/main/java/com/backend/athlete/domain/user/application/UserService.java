@@ -1,22 +1,16 @@
 package com.backend.athlete.domain.user.application;
 
 import com.backend.athlete.support.exception.DuplicatePasswordException;
-import com.backend.athlete.domain.branch.Branch;
-import com.backend.athlete.domain.branch.BranchRepository;
-import com.backend.athlete.domain.user.domain.Role;
+import com.backend.athlete.domain.branch.domain.Branch;
+import com.backend.athlete.domain.branch.domain.BranchRepository;
 import com.backend.athlete.domain.user.domain.RoleRepository;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.UserRepository;
 import com.backend.athlete.domain.user.dto.request.UpdateUserRequest;
-import com.backend.athlete.domain.admin.dto.UpdateUserRoleRequest;
-import com.backend.athlete.domain.admin.dto.UpdateUserStatusRequest;
 import com.backend.athlete.domain.user.dto.response.GetUserResponse;
 import com.backend.athlete.domain.user.dto.response.UpdateUserResponse;
-import com.backend.athlete.domain.admin.dto.UpdateUserRoleResponse;
-import com.backend.athlete.domain.admin.dto.UpdateUserStatusResponse;
 import com.backend.athlete.support.exception.NotFoundBranchException;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
-import com.backend.athlete.support.exception.NotFoundRoleException;
 import com.backend.athlete.support.util.FindUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

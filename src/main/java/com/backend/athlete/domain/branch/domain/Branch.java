@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.branch;
+package com.backend.athlete.domain.branch.domain;
 
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.support.common.BaseTimeEntity;
