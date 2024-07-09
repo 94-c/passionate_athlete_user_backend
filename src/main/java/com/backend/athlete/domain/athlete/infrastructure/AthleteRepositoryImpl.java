@@ -1,8 +1,8 @@
 package com.backend.athlete.domain.athlete.infrastructure;
 
 import com.backend.athlete.domain.athlete.domain.Athlete;
-import com.backend.athlete.domain.athlete.QAthlete;
 import com.backend.athlete.domain.athlete.data.AthleteData;
+import com.backend.athlete.domain.athlete.domain.QAthlete;
 import com.backend.athlete.domain.user.domain.User;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;

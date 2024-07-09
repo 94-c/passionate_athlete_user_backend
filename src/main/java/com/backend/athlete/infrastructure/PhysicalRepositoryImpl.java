@@ -1,6 +1,6 @@
 package com.backend.athlete.infrastructure;
 
-import com.backend.athlete.domain.branch.QBranch;
+import com.backend.athlete.domain.branch.domain.QBranch;
 import com.backend.athlete.domain.physical.Physical;
 import com.backend.athlete.domain.physical.QPhysical;
 import com.backend.athlete.domain.user.domain.QUser;

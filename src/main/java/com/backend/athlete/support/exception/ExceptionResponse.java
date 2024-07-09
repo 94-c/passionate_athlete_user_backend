@@ -8,7 +8,7 @@ public class ExceptionResponse {
     private final int status;
     private final String message;
     private final long timestamp;
-
+    @Builder
     public ExceptionResponse(int status, String message, long timestamp) {
         this.status = status;
         this.message = message;
