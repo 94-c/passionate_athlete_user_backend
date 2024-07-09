@@ -1,6 +1,6 @@
-package com.backend.athlete.presentation.branch.response;
+package com.backend.athlete.domain.admin.dto.branch;
 
-import com.backend.athlete.domain.branch.Branch;
+import com.backend.athlete.domain.branch.domain.Branch;
 import com.backend.athlete.domain.branch.data.BranchUserData;
 import com.backend.athlete.domain.user.domain.User;
 import lombok.Getter;

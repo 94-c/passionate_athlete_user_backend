@@ -1,4 +1,4 @@
-package com.backend.athlete.presentation.branch.request;
+package com.backend.athlete.domain.admin.dto.branch;
 
 import lombok.Getter;
 import lombok.Setter;
