@@ -3,13 +3,16 @@ package com.backend.athlete.domain.branch.domain;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.support.common.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 import java.util.Set;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "branch_offices")
 public class Branch extends BaseTimeEntity {
     @Id
@@ -45,8 +48,6 @@ public class Branch extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "branch")
     private Set<User> users;
-
-    protected Branch() {}
 
     public Branch(String name, User manager, String address, String detailedAddress, String postalCode, String phoneNumber, String etc) {
         this.name = name;

@@ -2,13 +2,16 @@ package com.backend.athlete.domain.attendance.domain;
 
 import com.backend.athlete.domain.user.domain.User;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDate;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "attendance")
 public class Attendance {
 
@@ -24,8 +27,6 @@ public class Attendance {
     @Column(name = "attendance_date", nullable = false)
     @Comment("출석일자")
     private LocalDate attendanceDate;
-
-    protected Attendance() {}
 
     public Attendance(User user, LocalDate attendanceDate) {
         this.user = user;
