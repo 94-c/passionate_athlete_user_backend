@@ -1,9 +1,8 @@
 package com.backend.athlete.presentation.notice.response;
 
-import com.backend.athlete.domain.comment.Comment;
+import com.backend.athlete.domain.comment.domain.Comment;
 import com.backend.athlete.domain.notice.Notice;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 import java.util.stream.Collectors;

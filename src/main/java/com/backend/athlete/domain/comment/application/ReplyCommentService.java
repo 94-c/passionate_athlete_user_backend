@@ -1,14 +1,14 @@
-package com.backend.athlete.application;
+package com.backend.athlete.domain.comment.application;
 
-import com.backend.athlete.domain.comment.Comment;
-import com.backend.athlete.domain.comment.CommentRepository;
+import com.backend.athlete.domain.comment.domain.Comment;
+import com.backend.athlete.domain.comment.domain.CommentRepository;
 import com.backend.athlete.domain.notice.Notice;
 import com.backend.athlete.domain.notice.NoticeRepository;
 import com.backend.athlete.domain.user.domain.User;
-import com.backend.athlete.presentation.comment.request.CreateReplyCommentRequest;
-import com.backend.athlete.presentation.comment.request.UpdateCommentRequest;
-import com.backend.athlete.presentation.comment.response.CreateReplyCommentResponse;
-import com.backend.athlete.presentation.comment.response.GetReplyCommentResponse;
+import com.backend.athlete.domain.comment.dto.request.CreateReplyCommentRequest;
+import com.backend.athlete.domain.comment.dto.request.UpdateCommentRequest;
+import com.backend.athlete.domain.comment.dto.response.CreateReplyCommentResponse;
+import com.backend.athlete.domain.comment.dto.response.GetReplyCommentResponse;
 import com.backend.athlete.support.exception.NotFoundException;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FindUtils;

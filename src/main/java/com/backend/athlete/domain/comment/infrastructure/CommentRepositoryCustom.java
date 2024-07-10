@@ -1,6 +1,6 @@
-package com.backend.athlete.infrastructure;
+package com.backend.athlete.domain.comment.infrastructure;
 
-import com.backend.athlete.domain.comment.Comment;
+import com.backend.athlete.domain.comment.domain.Comment;
 
 import java.util.Optional;
 

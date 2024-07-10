@@ -1,10 +1,10 @@
-package com.backend.athlete.presentation.comment;
+package com.backend.athlete.domain.comment.controller;
 
-import com.backend.athlete.application.ReplyCommentService;
-import com.backend.athlete.presentation.comment.request.CreateReplyCommentRequest;
-import com.backend.athlete.presentation.comment.request.UpdateCommentRequest;
-import com.backend.athlete.presentation.comment.response.CreateReplyCommentResponse;
-import com.backend.athlete.presentation.comment.response.GetReplyCommentResponse;
+import com.backend.athlete.domain.comment.application.ReplyCommentService;
+import com.backend.athlete.domain.comment.dto.request.CreateReplyCommentRequest;
+import com.backend.athlete.domain.comment.dto.request.UpdateCommentRequest;
+import com.backend.athlete.domain.comment.dto.response.CreateReplyCommentResponse;
+import com.backend.athlete.domain.comment.dto.response.GetReplyCommentResponse;
 import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.constant.PageConstant;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;

@@ -1,8 +1,7 @@
 package com.backend.athlete.presentation.notice.response;
 
-import com.backend.athlete.domain.comment.Comment;
+import com.backend.athlete.domain.comment.domain.Comment;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class GetNoticeCommentResponse {

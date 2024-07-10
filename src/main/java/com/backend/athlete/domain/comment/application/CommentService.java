@@ -1,19 +1,20 @@
-package com.backend.athlete.application;
+package com.backend.athlete.domain.comment.application;
 
-import com.backend.athlete.domain.comment.Comment;
-import com.backend.athlete.domain.comment.CommentRepository;
+import com.backend.athlete.domain.comment.domain.Comment;
+import com.backend.athlete.domain.comment.domain.CommentRepository;
 import com.backend.athlete.domain.notice.Notice;
 import com.backend.athlete.domain.notice.NoticeRepository;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.UserRepository;
-import com.backend.athlete.presentation.comment.request.CreateCommentRequest;
-import com.backend.athlete.presentation.comment.request.UpdateCommentRequest;
-import com.backend.athlete.presentation.comment.response.CreateCommentResponse;
-import com.backend.athlete.presentation.comment.response.GetCommentResponse;
-import com.backend.athlete.presentation.comment.response.UpdateCommentResponse;
+import com.backend.athlete.domain.comment.dto.request.CreateCommentRequest;
+import com.backend.athlete.domain.comment.dto.request.UpdateCommentRequest;
+import com.backend.athlete.domain.comment.dto.response.CreateCommentResponse;
+import com.backend.athlete.domain.comment.dto.response.GetCommentResponse;
+import com.backend.athlete.domain.comment.dto.response.UpdateCommentResponse;
 import com.backend.athlete.support.exception.NotFoundException;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FindUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,16 +24,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
     private final NoticeRepository noticeRepository;
-
-
-    public CommentService(CommentRepository commentRepository, UserRepository userRepository, NoticeRepository noticeRepository) {
-        this.commentRepository = commentRepository;
-        this.noticeRepository = noticeRepository;
-    }
-
     @Transactional(readOnly = true)
     public Page<GetCommentResponse> findAllComments(Long noticeId, int page, int perPage) {
         Pageable pageable = PageRequest.of(page, perPage, Sort.by(Sort.Direction.DESC, "createdDate"));
@@ -44,7 +39,8 @@ public class CommentService {
     public CreateCommentResponse createComment(CustomUserDetailsImpl userPrincipal, Long noticeId, CreateCommentRequest request) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
-        Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+        Notice notice = noticeRepository.findById(noticeId)
+                .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 
         Comment createComment = commentRepository.save(CreateCommentRequest.toEntity(request, notice, user));
 

@@ -1,7 +1,7 @@
 package com.backend.athlete.application;
 
-import com.backend.athlete.domain.comment.Comment;
-import com.backend.athlete.domain.comment.CommentRepository;
+import com.backend.athlete.domain.comment.domain.Comment;
+import com.backend.athlete.domain.comment.domain.CommentRepository;
 import com.backend.athlete.domain.notice.*;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.presentation.notice.request.PageSearchNoticeRequest;

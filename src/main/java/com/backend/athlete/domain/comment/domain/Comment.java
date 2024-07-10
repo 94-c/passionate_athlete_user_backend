@@ -1,16 +1,19 @@
-package com.backend.athlete.domain.comment;
+package com.backend.athlete.domain.comment.domain;
 
 import com.backend.athlete.domain.notice.Notice;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.support.common.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "comments")
 public class Comment extends BaseTimeEntity {
 
@@ -40,8 +43,6 @@ public class Comment extends BaseTimeEntity {
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
     @org.hibernate.annotations.Comment("대댓글 목록")
     private List<Comment> replies = new ArrayList<>();
-
-    protected Comment() {}
 
     //댓글 작성
     public Comment(User user, Notice notice, String content) {
