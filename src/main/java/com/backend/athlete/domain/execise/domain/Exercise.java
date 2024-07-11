@@ -1,11 +1,14 @@
 package com.backend.athlete.domain.execise.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "exercises")
 public class Exercise {
 
@@ -22,18 +25,5 @@ public class Exercise {
 
     @Comment("운동 영상")
     private String link;
-    protected Exercise() {}
-
-    public Exercise(String name, String description, String link) {
-        this.name = name;
-        this.description = description;
-        this.link = link;
-    }
-
-    public void update(String name, String description, String link) {
-        this.name = name;
-        this.description = description;
-        this.link = link;
-    }
 
 }
