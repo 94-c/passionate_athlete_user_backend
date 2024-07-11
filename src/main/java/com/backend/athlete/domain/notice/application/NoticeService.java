@@ -15,6 +15,7 @@ import com.backend.athlete.support.exception.NotFoundException;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FileUtils;
 import com.backend.athlete.support.util.FindUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,23 +27,19 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class NoticeService {
     private final NoticeRepository noticeRepository;
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
     private final NoticeTypeRepository noticeTypeRepository;
-
+    private final FileRepository fileRepository;
     private final Path rootLocation = Paths.get("notice-images");
-
-    public NoticeService(NoticeRepository noticeRepository, CommentRepository commentRepository, LikeRepository likeRepository, NoticeTypeRepository noticeTypeRepository) {
-        this.noticeRepository = noticeRepository;
-        this.commentRepository = commentRepository;
-        this.likeRepository = likeRepository;
-        this.noticeTypeRepository = noticeTypeRepository;
-    }
 
     @Transactional(readOnly = true)
     public Page<PageSearchNoticeResponse> searchNotices(PageSearchNoticeRequest request, int page, int perPage, Long kindId, boolean status) {
@@ -56,20 +53,33 @@ public class NoticeService {
         });
     }
 
-    public CreateNoticeResponse saveNotice(CustomUserDetailsImpl userPrincipal, CreateNoticeRequest noticeRequest, MultipartFile file) throws IOException {
+    @Transactional(readOnly = true)
+    public List<GetNoticeResponse> getAllNotices() {
+        List<Notice> notices = noticeRepository.findAll();
+        return notices.stream()
+                .map(GetNoticeResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    public CreateNoticeResponse saveNotice(CustomUserDetailsImpl userPrincipal, CreateNoticeRequest noticeRequest, List<MultipartFile> files) throws IOException {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
         NoticeType kind = noticeTypeRepository.findById(noticeRequest.getKindId()).orElseThrow(() -> new NotFoundException("Invalid notice type", HttpStatus.NOT_FOUND));
 
-        String imagePath = null;
-        if (!file.isEmpty()) {
-            imagePath = FileUtils.saveFile(file, rootLocation);
+        List<File> savedFiles = new ArrayList<>();
+        for (MultipartFile file : files) {
+            if (!file.isEmpty()) {
+                String filePath = FileUtils.saveFile(file, rootLocation);
+                File savedFile = new File(file.getOriginalFilename(), filePath, file.getContentType(), file.getSize());
+                fileRepository.save(savedFile);
+                savedFiles.add(savedFile);
+            }
         }
 
-        Notice savedNotice = noticeRepository.save(CreateNoticeRequest.toEntity(noticeRequest, user, kind, imagePath));
+        Notice notice = CreateNoticeRequest.toEntity(noticeRequest, user, kind, savedFiles);
+        Notice savedNotice = noticeRepository.save(notice);
 
         return CreateNoticeResponse.fromEntity(savedNotice);
     }
-
     @Transactional
     public GetNoticeResponse getNotice(Long id) {
         Notice notice = FindUtils.findByNoticeId(id);
@@ -77,19 +87,25 @@ public class NoticeService {
     }
 
     @Transactional
-    public UpdateNoticeResponse updateNotice(Long id, CustomUserDetailsImpl userPrincipal, UpdateNoticeRequest noticeRequest, MultipartFile file) throws IOException {
+    public UpdateNoticeResponse updateNotice(Long id, CustomUserDetailsImpl userPrincipal, UpdateNoticeRequest noticeRequest, List<MultipartFile> files) throws IOException {
         Notice notice = FindUtils.findByNoticeId(id);
 
         if (!notice.getUser().getUserId().equals(userPrincipal.getUsername())) {
             throw new NotFoundException("게시글의 권한이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
         }
 
-        String imagePath = notice.getImagePath();
-        if (!file.isEmpty()) {
-            imagePath = FileUtils.saveFile(file, rootLocation);
-        }
+        notice.updateNotice(noticeRequest.getTitle(), noticeRequest.getContent());
 
-        notice.updateNotice(noticeRequest.getTitle(), noticeRequest.getContent(), imagePath);
+        if (files != null && !files.isEmpty()) {
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) {
+                    String filePath = FileUtils.saveFile(file, rootLocation);
+                    File savedFile = new File(file.getOriginalFilename(), filePath, file.getContentType(), file.getSize());
+                    notice.addFile(savedFile);
+                    fileRepository.save(savedFile);
+                }
+            }
+        }
 
         Notice updatedNotice = noticeRepository.save(notice);
 

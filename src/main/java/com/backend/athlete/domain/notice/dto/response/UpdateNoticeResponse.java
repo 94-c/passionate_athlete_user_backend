@@ -1,5 +1,6 @@
 package com.backend.athlete.domain.notice.dto.response;
 
+import com.backend.athlete.domain.notice.domain.File;
 import com.backend.athlete.domain.notice.domain.Notice;
 import com.backend.athlete.domain.user.domain.User;
 import lombok.Getter;
@@ -12,15 +13,15 @@ public class UpdateNoticeResponse {
     private Long id;
     private String title;
     private String content;
-    private String imagePath;
+    private List<String> imagePaths; // 다중 이미지 경로를 위한 필드
     private String userName;
     private List<GetNoticeCommentResponse> comments;
 
-    public UpdateNoticeResponse(Long id, String title, String content, String imagePath, String userName, List<GetNoticeCommentResponse> comments) {
+    public UpdateNoticeResponse(Long id, String title, String content, List<String> imagePaths, String userName, List<GetNoticeCommentResponse> comments) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.imagePath = imagePath;
+        this.imagePaths = imagePaths;
         this.userName = userName;
         this.comments = comments;
     }
@@ -31,11 +32,15 @@ public class UpdateNoticeResponse {
                 .map(GetNoticeCommentResponse::fromEntity)
                 .collect(Collectors.toList());
 
+        List<String> imagePaths = notice.getFiles().stream()
+                .map(File::getFilePath)
+                .collect(Collectors.toList());
+
         return new UpdateNoticeResponse(
                 notice.getId(),
                 notice.getTitle(),
                 notice.getContent(),
-                notice.getImagePath(),
+                imagePaths,
                 findUser.getName(),
                 commentResponses
         );

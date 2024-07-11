@@ -1,6 +1,7 @@
 package com.backend.athlete.domain.notice.dto.response;
 
 import com.backend.athlete.domain.comment.domain.Comment;
+import com.backend.athlete.domain.notice.domain.File;
 import com.backend.athlete.domain.notice.domain.Notice;
 import lombok.Getter;
 
@@ -13,19 +14,19 @@ public class PageSearchNoticeResponse {
     private String kind;
     private String title;
     private String content;
-    private String imagePath;
+    private List<String> imagePaths; // 다중 이미지를 위한 필드
     private String userName;
     private int likeCount;
     private String createdDate;
     private String modifiedDate;
     private List<GetNoticeCommentResponse> comments;
 
-    public PageSearchNoticeResponse(Long id, String kind, String title, String content, String imagePath, String userName, int likeCount, String createdDate, String modifiedDate, List<GetNoticeCommentResponse> comments) {
+    public PageSearchNoticeResponse(Long id, String kind, String title, String content, List<String> imagePaths, String userName, int likeCount, String createdDate, String modifiedDate, List<GetNoticeCommentResponse> comments) {
         this.id = id;
         this.kind = kind;
         this.title = title;
         this.content = content;
-        this.imagePath = imagePath;
+        this.imagePaths = imagePaths;
         this.userName = userName;
         this.likeCount = likeCount;
         this.createdDate = createdDate;
@@ -43,12 +44,17 @@ public class PageSearchNoticeResponse {
                         comment.getCreatedDate()))
                 .collect(Collectors.toList());
 
+        // Notice 엔티티에서 파일 경로 목록을 가져옴
+        List<String> imagePaths = notice.getFiles().stream()
+                .map(File::getFilePath)
+                .collect(Collectors.toList());
+
         return new PageSearchNoticeResponse(
                 notice.getId(),
                 notice.getKind().getType(),
                 notice.getTitle(),
                 notice.getContent(),
-                notice.getImagePath(),
+                imagePaths,
                 notice.getUser().getName(),
                 likeCount,
                 notice.getCreatedDate(),
@@ -56,6 +62,4 @@ public class PageSearchNoticeResponse {
                 commentResponses
         );
     }
-
-
 }

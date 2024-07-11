@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -37,32 +38,41 @@ public class Notice extends BaseTimeEntity {
     @Comment("게시판 종류")
     private NoticeType kind;
 
-    @Comment("이미지 파일 경로")
-    private String imagePath;
+    @OneToMany(mappedBy = "notice", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<File> files = new ArrayList<>();
 
     @Comment("게시글 활성화")
     private boolean status;
 
     @OneToMany(mappedBy = "notice", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<com.backend.athlete.domain.comment.domain.Comment> comments;
+    private List<com.backend.athlete.domain.comment.domain.Comment> comments = new ArrayList<>();
 
-    public Notice(String title, String content, NoticeType kind, String imagePath, boolean status, User user) {
+    public Notice(String title, String content, NoticeType kind, boolean status, User user) {
         this.title = title;
         this.content = content;
         this.kind = kind;
-        this.imagePath = imagePath;
         this.status = status;
         this.user = user;
     }
 
-    public void updateNotice(String title, String content, String imagePath) {
+    public void updateNotice(String title, String content) {
         this.title = title;
         this.content = content;
-        this.imagePath = imagePath;
     }
 
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+    public void addFile(File file) {
+        files.add(file);
+        file.setNotice(this);
+    }
+
+    public void removeFile(File file) {
+        files.remove(file);
+        file.setNotice(null);
+    }
 }
+
 

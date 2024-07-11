@@ -13,6 +13,7 @@ import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,35 +22,50 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/notices")
 @RequiredArgsConstructor
 public class NoticeController {
     private final NoticeService noticeService;
-    private final ObjectMapper objectMapper;
 
-    @GetMapping
-    public ResponseEntity<?> searchNotice(
-            @RequestParam(defaultValue = "", required = false) String title,
-            @RequestParam(defaultValue = "", required = false) String name,
-            @RequestParam(defaultValue = PageConstant.DEFAULT_PAGE, required = false) int page,
-            @RequestParam(defaultValue = PageConstant.DEFAULT_PER_PAGE, required = false) int perPage,
+    @GetMapping("/search")
+    public ResponseEntity<Page<PageSearchNoticeResponse>> searchNotices(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String title,
+            @RequestParam int page,
+            @RequestParam int perPage,
             @RequestParam(required = false) Long kindId,
-            @RequestParam(defaultValue = "true") boolean status
-    ) {
-        PageSearchNoticeRequest request = new PageSearchNoticeRequest(title, name);
+            @RequestParam boolean status) {
+
+        PageSearchNoticeRequest request = new PageSearchNoticeRequest(name, title);
         Page<PageSearchNoticeResponse> response = noticeService.searchNotices(request, page, perPage, kindId, status);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.ok(response);
     }
+
     @PostMapping
     public ResponseEntity<CreateNoticeResponse> createNotice(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                             @RequestParam("notice") String notice,
-                                                             @RequestParam("file") MultipartFile file) {
+                                                             @RequestParam("notice") String noticeJson,
+                                                             @RequestParam(value = "files", required = false) List<MultipartFile> files) {
         try {
-            CreateNoticeRequest noticeRequest = objectMapper.readValue(notice, CreateNoticeRequest.class);
-            CreateNoticeResponse response = noticeService.saveNotice(userPrincipal, noticeRequest, file);
+            CreateNoticeRequest noticeRequest = new ObjectMapper().readValue(noticeJson, CreateNoticeRequest.class);
+            CreateNoticeResponse response = noticeService.saveNotice(userPrincipal, noticeRequest, files);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UpdateNoticeResponse> updateNotice(@PathVariable Long id,
+                                                             @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
+                                                             @RequestParam("notice") String noticeJson,
+                                                             @RequestParam(value = "files", required = false) List<MultipartFile> files) {
+        try {
+            UpdateNoticeRequest noticeRequest = new ObjectMapper().readValue(noticeJson, UpdateNoticeRequest.class);
+            UpdateNoticeResponse response = noticeService.updateNotice(id, userPrincipal, noticeRequest, files);
+            return ResponseEntity.ok(response);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -58,34 +74,13 @@ public class NoticeController {
     @GetMapping("/{id}")
     public ResponseEntity<GetNoticeResponse> getNotice(@PathVariable Long id) {
         GetNoticeResponse response = noticeService.getNotice(id);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UpdateNoticeResponse> updateNotice(@PathVariable Long id,
-                                                             @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                             @RequestParam("notice") String notice,
-                                                             @RequestParam("file") MultipartFile file) {
-        try {
-            UpdateNoticeRequest noticeRequest = objectMapper.readValue(notice, UpdateNoticeRequest.class);
-            UpdateNoticeResponse response = noticeService.updateNotice(id, userPrincipal, noticeRequest, file);
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteNotice(@PathVariable Long id,
-                                             @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
-        noticeService.deleteNotice(id, userPrincipal);
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("/{id}/is-active")
-    public ResponseEntity<GetNoticeResponse> setStatus(@PathVariable Long id,
-                                                       @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
-        GetNoticeResponse response = noticeService.setStatus(id, userPrincipal);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+    @GetMapping
+    public ResponseEntity<List<GetNoticeResponse>> getAllNotices() {
+        List<GetNoticeResponse> response = noticeService.getAllNotices();
+        return ResponseEntity.ok(response);
     }
 }
+
