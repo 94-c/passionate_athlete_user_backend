@@ -1,12 +1,12 @@
-package com.backend.athlete.application;
+package com.backend.athlete.domain.notice.application;
 
-import com.backend.athlete.domain.notice.Like;
-import com.backend.athlete.domain.notice.LikeRepository;
-import com.backend.athlete.domain.notice.Notice;
+import com.backend.athlete.domain.notice.domain.Like;
+import com.backend.athlete.domain.notice.domain.LikeRepository;
+import com.backend.athlete.domain.notice.domain.Notice;
 import com.backend.athlete.domain.user.domain.User;
-import com.backend.athlete.presentation.notice.response.CreateLikeNoticeResponse;
-import com.backend.athlete.presentation.notice.response.DeleteLikeNoticeResponse;
-import com.backend.athlete.presentation.notice.response.GetLikeNoticeResponse;
+import com.backend.athlete.domain.notice.dto.response.CreateLikeNoticeResponse;
+import com.backend.athlete.domain.notice.dto.response.DeleteLikeNoticeResponse;
+import com.backend.athlete.domain.notice.dto.response.GetLikeNoticeResponse;
 import com.backend.athlete.support.exception.NotFoundException;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FindUtils;
@@ -39,7 +39,6 @@ public class LikeNoticeService {
         return CreateLikeNoticeResponse.fromEntity(like, likeCount);
 
     }
-
 
     public DeleteLikeNoticeResponse unlikeNotice(Long noticeId, CustomUserDetailsImpl userPrincipal) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());

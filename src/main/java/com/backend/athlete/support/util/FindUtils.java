@@ -1,7 +1,7 @@
 package com.backend.athlete.support.util;
 
-import com.backend.athlete.domain.notice.Notice;
-import com.backend.athlete.domain.notice.NoticeRepository;
+import com.backend.athlete.domain.notice.domain.Notice;
+import com.backend.athlete.domain.notice.domain.NoticeRepository;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.UserRepository;
 import com.backend.athlete.support.exception.NotFoundException;

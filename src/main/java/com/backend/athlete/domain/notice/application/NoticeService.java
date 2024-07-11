@@ -1,16 +1,16 @@
-package com.backend.athlete.application;
+package com.backend.athlete.domain.notice.application;
 
 import com.backend.athlete.domain.comment.domain.Comment;
 import com.backend.athlete.domain.comment.domain.CommentRepository;
-import com.backend.athlete.domain.notice.*;
+import com.backend.athlete.domain.notice.domain.*;
 import com.backend.athlete.domain.user.domain.User;
-import com.backend.athlete.presentation.notice.request.PageSearchNoticeRequest;
-import com.backend.athlete.presentation.notice.request.CreateNoticeRequest;
-import com.backend.athlete.presentation.notice.request.UpdateNoticeRequest;
-import com.backend.athlete.presentation.notice.response.GetNoticeResponse;
-import com.backend.athlete.presentation.notice.response.PageSearchNoticeResponse;
-import com.backend.athlete.presentation.notice.response.CreateNoticeResponse;
-import com.backend.athlete.presentation.notice.response.UpdateNoticeResponse;
+import com.backend.athlete.domain.notice.dto.request.PageSearchNoticeRequest;
+import com.backend.athlete.domain.notice.dto.request.CreateNoticeRequest;
+import com.backend.athlete.domain.notice.dto.request.UpdateNoticeRequest;
+import com.backend.athlete.domain.notice.dto.response.GetNoticeResponse;
+import com.backend.athlete.domain.notice.dto.response.PageSearchNoticeResponse;
+import com.backend.athlete.domain.notice.dto.response.CreateNoticeResponse;
+import com.backend.athlete.domain.notice.dto.response.UpdateNoticeResponse;
 import com.backend.athlete.support.exception.NotFoundException;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FileUtils;

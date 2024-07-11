@@ -1,7 +1,6 @@
-package com.backend.athlete.infrastructure;
+package com.backend.athlete.domain.notice.infrastructure;
 
-import com.backend.athlete.domain.notice.Notice;
-import com.backend.athlete.domain.notice.NoticeType;
+import com.backend.athlete.domain.notice.domain.Notice;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -1,16 +1,18 @@
-package com.backend.athlete.presentation.notice;
+package com.backend.athlete.domain.notice.controller;
 
-import com.backend.athlete.application.NoticeService;
-import com.backend.athlete.presentation.notice.request.PageSearchNoticeRequest;
-import com.backend.athlete.presentation.notice.request.CreateNoticeRequest;
-import com.backend.athlete.presentation.notice.request.UpdateNoticeRequest;
-import com.backend.athlete.presentation.notice.response.GetNoticeResponse;
-import com.backend.athlete.presentation.notice.response.PageSearchNoticeResponse;
-import com.backend.athlete.presentation.notice.response.CreateNoticeResponse;
-import com.backend.athlete.presentation.notice.response.UpdateNoticeResponse;
+import com.backend.athlete.domain.notice.application.NoticeService;
+import com.backend.athlete.domain.notice.dto.request.PageSearchNoticeRequest;
+import com.backend.athlete.domain.notice.dto.request.CreateNoticeRequest;
+import com.backend.athlete.domain.notice.dto.request.UpdateNoticeRequest;
+import com.backend.athlete.domain.notice.dto.response.GetNoticeResponse;
+import com.backend.athlete.domain.notice.dto.response.PageSearchNoticeResponse;
+import com.backend.athlete.domain.notice.dto.response.CreateNoticeResponse;
+import com.backend.athlete.domain.notice.dto.response.UpdateNoticeResponse;
 import com.backend.athlete.support.constant.PageConstant;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,15 +24,10 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/notices")
+@RequiredArgsConstructor
 public class NoticeController {
-
     private final NoticeService noticeService;
     private final ObjectMapper objectMapper;
-
-    public NoticeController(NoticeService noticeService, ObjectMapper objectMapper) {
-        this.noticeService = noticeService;
-        this.objectMapper = objectMapper;
-    }
 
     @GetMapping
     public ResponseEntity<?> searchNotice(

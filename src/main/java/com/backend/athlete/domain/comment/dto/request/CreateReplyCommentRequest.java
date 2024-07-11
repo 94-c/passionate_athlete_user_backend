@@ -1,7 +1,7 @@
 package com.backend.athlete.domain.comment.dto.request;
 
 import com.backend.athlete.domain.comment.domain.Comment;
-import com.backend.athlete.domain.notice.Notice;
+import com.backend.athlete.domain.notice.domain.Notice;
 import com.backend.athlete.domain.user.domain.User;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

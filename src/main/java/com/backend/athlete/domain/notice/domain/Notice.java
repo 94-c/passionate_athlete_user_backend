@@ -1,15 +1,18 @@
-package com.backend.athlete.domain.notice;
+package com.backend.athlete.domain.notice.domain;
 
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.support.common.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 import java.util.List;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "notices")
 public class Notice extends BaseTimeEntity {
 
@@ -42,11 +45,6 @@ public class Notice extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "notice", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<com.backend.athlete.domain.comment.domain.Comment> comments;
-
-    @OneToMany(mappedBy = "notice", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Like> likes;
-
-    public Notice() {}
 
     public Notice(String title, String content, NoticeType kind, String imagePath, boolean status, User user) {
         this.title = title;

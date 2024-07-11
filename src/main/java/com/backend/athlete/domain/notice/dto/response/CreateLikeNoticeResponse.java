@@ -1,8 +1,7 @@
-package com.backend.athlete.presentation.notice.response;
+package com.backend.athlete.domain.notice.dto.response;
 
-import com.backend.athlete.domain.notice.Like;
+import com.backend.athlete.domain.notice.domain.Like;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class CreateLikeNoticeResponse {

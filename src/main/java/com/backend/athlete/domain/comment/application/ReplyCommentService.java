@@ -2,8 +2,8 @@ package com.backend.athlete.domain.comment.application;
 
 import com.backend.athlete.domain.comment.domain.Comment;
 import com.backend.athlete.domain.comment.domain.CommentRepository;
-import com.backend.athlete.domain.notice.Notice;
-import com.backend.athlete.domain.notice.NoticeRepository;
+import com.backend.athlete.domain.notice.domain.Notice;
+import com.backend.athlete.domain.notice.domain.NoticeRepository;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.comment.dto.request.CreateReplyCommentRequest;
 import com.backend.athlete.domain.comment.dto.request.UpdateCommentRequest;

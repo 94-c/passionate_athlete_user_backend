@@ -1,12 +1,15 @@
-package com.backend.athlete.domain.notice;
+package com.backend.athlete.domain.notice.domain;
 
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.support.common.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "likes")
 public class Like extends BaseTimeEntity {
 
@@ -24,8 +27,6 @@ public class Like extends BaseTimeEntity {
     @JoinColumn(name = "notice_id", nullable = false)
     @Comment("게시판 인덱스")
     private Notice notice;
-
-    protected Like() {}
 
     public Like(User user, Notice notice) {
         this.user = user;

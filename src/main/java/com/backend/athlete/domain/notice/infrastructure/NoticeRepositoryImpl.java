@@ -1,9 +1,9 @@
-package com.backend.athlete.infrastructure;
+package com.backend.athlete.domain.notice.infrastructure;
 
-import com.backend.athlete.domain.notice.Notice;
-import com.backend.athlete.domain.notice.NoticeType;
-import com.backend.athlete.domain.notice.QNotice;
-import com.backend.athlete.domain.notice.QNoticeType;
+import com.backend.athlete.domain.notice.domain.Notice;
+import com.backend.athlete.domain.notice.domain.NoticeType;
+import com.backend.athlete.domain.notice.domain.QNotice;
+import com.backend.athlete.domain.notice.domain.QNoticeType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

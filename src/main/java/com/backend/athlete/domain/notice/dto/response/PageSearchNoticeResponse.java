@@ -1,7 +1,7 @@
-package com.backend.athlete.presentation.notice.response;
+package com.backend.athlete.domain.notice.dto.response;
 
 import com.backend.athlete.domain.comment.domain.Comment;
-import com.backend.athlete.domain.notice.Notice;
+import com.backend.athlete.domain.notice.domain.Notice;
 import lombok.Getter;
 
 import java.util.List;

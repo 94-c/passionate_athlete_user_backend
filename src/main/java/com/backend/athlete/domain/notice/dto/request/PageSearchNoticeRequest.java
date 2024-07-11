@@ -1,4 +1,4 @@
-package com.backend.athlete.presentation.notice.request;
+package com.backend.athlete.domain.notice.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;

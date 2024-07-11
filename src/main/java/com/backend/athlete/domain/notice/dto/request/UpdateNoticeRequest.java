@@ -1,7 +1,7 @@
-package com.backend.athlete.presentation.notice.request;
+package com.backend.athlete.domain.notice.dto.request;
 
-import com.backend.athlete.domain.notice.Notice;
-import com.backend.athlete.domain.notice.NoticeType;
+import com.backend.athlete.domain.notice.domain.Notice;
+import com.backend.athlete.domain.notice.domain.NoticeType;
 import com.backend.athlete.domain.user.domain.User;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

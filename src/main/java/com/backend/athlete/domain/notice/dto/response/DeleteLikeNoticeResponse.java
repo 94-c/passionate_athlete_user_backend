@@ -1,6 +1,6 @@
-package com.backend.athlete.presentation.notice.response;
+package com.backend.athlete.domain.notice.dto.response;
 
-import com.backend.athlete.domain.notice.Notice;
+import com.backend.athlete.domain.notice.domain.Notice;
 import com.backend.athlete.domain.user.domain.User;
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.notice;
+package com.backend.athlete.domain.notice.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,8 +1,8 @@
-package com.backend.athlete.application;
+package com.backend.athlete.domain.notice.application;
 
-import com.backend.athlete.domain.notice.NoticeType;
-import com.backend.athlete.domain.notice.NoticeTypeRepository;
-import com.backend.athlete.presentation.notice.response.GetNoticeTypeResponse;
+import com.backend.athlete.domain.notice.domain.NoticeType;
+import com.backend.athlete.domain.notice.domain.NoticeTypeRepository;
+import com.backend.athlete.domain.notice.dto.response.GetNoticeTypeResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

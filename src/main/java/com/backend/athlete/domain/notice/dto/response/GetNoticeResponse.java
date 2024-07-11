@@ -1,6 +1,6 @@
-package com.backend.athlete.presentation.notice.response;
+package com.backend.athlete.domain.notice.dto.response;
 
-import com.backend.athlete.domain.notice.Notice;
+import com.backend.athlete.domain.notice.domain.Notice;
 import lombok.Getter;
 
 import java.util.List;
@@ -14,20 +14,18 @@ public class GetNoticeResponse {
     private String imagePath;
     private Long userId;
     private String userName;
-    private int likeCount;
     private boolean status;
     private String createdDate;
     private String modifiedDate;
     private List<GetNoticeCommentResponse> comments;
 
-    public GetNoticeResponse(Long id, String title, String content, String imagePath, Long userId, String userName, int likeCount, boolean status, String createdDate, String modifiedDate, List<GetNoticeCommentResponse> comments) {
+    public GetNoticeResponse(Long id, String title, String content, String imagePath, Long userId, String userName, boolean status, String createdDate, String modifiedDate, List<GetNoticeCommentResponse> comments) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.imagePath = imagePath;
         this.userId = userId;
         this.userName = userName;
-        this.likeCount = likeCount;
         this.status = status;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
@@ -46,7 +44,6 @@ public class GetNoticeResponse {
                 notice.getImagePath(),
                 notice.getUser().getId(),
                 notice.getUser().getName(),
-                notice.getLikes().size(),
                 notice.isStatus(),
                 notice.getCreatedDate(),
                 notice.getModifiedDate(),

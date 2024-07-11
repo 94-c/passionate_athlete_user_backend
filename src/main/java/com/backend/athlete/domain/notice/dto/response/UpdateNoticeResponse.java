@@ -1,6 +1,6 @@
-package com.backend.athlete.presentation.notice.response;
+package com.backend.athlete.domain.notice.dto.response;
 
-import com.backend.athlete.domain.notice.Notice;
+import com.backend.athlete.domain.notice.domain.Notice;
 import com.backend.athlete.domain.user.domain.User;
 import lombok.Getter;
 
@@ -14,16 +14,14 @@ public class UpdateNoticeResponse {
     private String content;
     private String imagePath;
     private String userName;
-    private int likeCount;
     private List<GetNoticeCommentResponse> comments;
 
-    public UpdateNoticeResponse(Long id, String title, String content, String imagePath, String userName, int likeCount, List<GetNoticeCommentResponse> comments) {
+    public UpdateNoticeResponse(Long id, String title, String content, String imagePath, String userName, List<GetNoticeCommentResponse> comments) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.imagePath = imagePath;
         this.userName = userName;
-        this.likeCount = likeCount;
         this.comments = comments;
     }
 
@@ -39,7 +37,6 @@ public class UpdateNoticeResponse {
                 notice.getContent(),
                 notice.getImagePath(),
                 findUser.getName(),
-                notice.getLikes().size(),
                 commentResponses
         );
     }

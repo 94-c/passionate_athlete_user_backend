@@ -1,4 +1,4 @@
-package com.backend.athlete.presentation.notice.response;
+package com.backend.athlete.domain.notice.dto.response;
 
 import com.backend.athlete.domain.comment.domain.Comment;
 import lombok.Getter;
