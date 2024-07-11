@@ -1,6 +1,6 @@
-package com.backend.athlete.presentation.physical.request;
+package com.backend.athlete.domain.physical.dto.request;
 
-import com.backend.athlete.domain.physical.Physical;
+import com.backend.athlete.domain.physical.domain.Physical;
 import com.backend.athlete.domain.user.domain.User;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

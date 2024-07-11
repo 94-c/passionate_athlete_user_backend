@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.physical;
+package com.backend.athlete.domain.physical.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

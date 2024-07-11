@@ -1,6 +1,6 @@
-package com.backend.athlete.infrastructure;
+package com.backend.athlete.domain.physical.infrastructure;
 
-import com.backend.athlete.domain.physical.Physical;
+import com.backend.athlete.domain.physical.domain.Physical;
 
 import java.time.LocalDate;
 import java.util.List;

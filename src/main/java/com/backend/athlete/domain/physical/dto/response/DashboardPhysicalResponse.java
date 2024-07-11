@@ -1,69 +1,60 @@
-package com.backend.athlete.presentation.physical.response;
+package com.backend.athlete.domain.physical.dto.response;
 
-import com.backend.athlete.domain.physical.Physical;
-import com.backend.athlete.domain.user.domain.User;
+import com.backend.athlete.domain.physical.domain.Physical;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class GetPhysicalResponse {
+public class DashboardPhysicalResponse {
 
-    private Long id;
-    private String username;
     private Double weight;
     private Double height;
     private Double muscleMass;
     private Double bodyFatMass;
+    private LocalDateTime measureDate;
     private Double bmi;
     private Double bodyFatPercentage;
     private Double visceralFatPercentage;
     private Double bmr;
-    private LocalDateTime measureDate;
     private Double weightChange;
     private Double heightChange;
     private Double muscleMassChange;
     private Double bodyFatMassChange;
 
-    public GetPhysicalResponse(Long id, String username, Double weight, Double height, Double muscleMass, Double bodyFatMass, Double bmi, Double bodyFatPercentage, Double visceralFatPercentage, Double bmr, LocalDateTime measureDate, Double weightChange, Double heightChange, Double muscleMassChange, Double bodyFatMassChange) {
-        this.id = id;
-        this.username = username;
+    public DashboardPhysicalResponse(Double weight, Double height, Double muscleMass, Double bodyFatMass, LocalDateTime measureDate, Double bmi, Double bodyFatPercentage, Double visceralFatPercentage, Double bmr, Double weightChange, Double heightChange, Double muscleMassChange, Double bodyFatMassChange) {
         this.weight = weight;
         this.height = height;
         this.muscleMass = muscleMass;
         this.bodyFatMass = bodyFatMass;
+        this.measureDate = measureDate;
         this.bmi = bmi;
         this.bodyFatPercentage = bodyFatPercentage;
         this.visceralFatPercentage = visceralFatPercentage;
         this.bmr = bmr;
-        this.measureDate = measureDate;
         this.weightChange = weightChange;
         this.heightChange = heightChange;
         this.muscleMassChange = muscleMassChange;
         this.bodyFatMassChange = bodyFatMassChange;
     }
 
-    // Entity -> Dto
-    public static GetPhysicalResponse fromEntity(Physical physical, Physical previousPhysical) {
-        User findUser = physical.getUser();
-
+    // Entity-> Dto
+    public static DashboardPhysicalResponse fromEntity(Physical physical, Physical previousPhysical) {
         Double weightChange = (previousPhysical != null) ? physical.getWeight() - previousPhysical.getWeight() : 0.0;
         Double heightChange = (previousPhysical != null) ? physical.getHeight() - previousPhysical.getHeight() : 0.0;
         Double muscleMassChange = (previousPhysical != null) ? physical.getMuscleMass() - previousPhysical.getMuscleMass() : 0.0;
         Double bodyFatMassChange = (previousPhysical != null) ? physical.getBodyFatMass() - previousPhysical.getBodyFatMass() : 0.0;
 
-        return new GetPhysicalResponse(
-                physical.getId(),
-                findUser.getName(),
+        return new DashboardPhysicalResponse(
                 physical.getWeight(),
                 physical.getHeight(),
                 physical.getMuscleMass(),
                 physical.getBodyFatMass(),
+                physical.getMeasureDate(),
                 physical.getBmi(),
                 physical.getBodyFatPercentage(),
                 physical.getVisceralFatPercentage(),
                 physical.getBmr(),
-                physical.getMeasureDate(),
                 weightChange,
                 heightChange,
                 muscleMassChange,

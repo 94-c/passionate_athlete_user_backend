@@ -1,11 +1,14 @@
-package com.backend.athlete.domain.physical;
+package com.backend.athlete.domain.physical.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "physicals_info")
 public class PhysicalInfo {
 
@@ -18,7 +21,5 @@ public class PhysicalInfo {
 
     @Comment("상세 설명")
     private String description;
-
-    protected PhysicalInfo() {}
 
 }

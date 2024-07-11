@@ -1,9 +1,11 @@
-package com.backend.athlete.domain.physical;
+package com.backend.athlete.domain.physical.domain;
 
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.support.common.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -11,6 +13,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "physicals")
 public class Physical extends BaseTimeEntity {
 
@@ -69,9 +72,6 @@ public class Physical extends BaseTimeEntity {
 
     @Comment("체지방량 변화")
     private Double bodyFatMassChange;
-
-    protected Physical() {}
-
     public Physical(User user, Double weight, Double height, Double muscleMass, Double bodyFatMass, LocalDateTime measureDate, Double bmi, Double bodyFatPercentage, Double visceralFatPercentage, Double bmr, Double weightChange, Double heightChange, Double muscleMassChange, Double bodyFatMassChange) {
         this.user = user;
         this.weight = weight;

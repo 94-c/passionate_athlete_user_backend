@@ -1,6 +1,6 @@
-package com.backend.athlete.presentation.physical.response;
+package com.backend.athlete.domain.physical.dto.response;
 
-import com.backend.athlete.domain.physical.Physical;
+import com.backend.athlete.domain.physical.domain.Physical;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

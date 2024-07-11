@@ -1,7 +1,7 @@
-package com.backend.athlete.domain.physical;
+package com.backend.athlete.domain.physical.domain;
 
 import com.backend.athlete.domain.user.domain.User;
-import com.backend.athlete.infrastructure.PhysicalRepositoryCustom;
+import com.backend.athlete.domain.physical.infrastructure.PhysicalRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

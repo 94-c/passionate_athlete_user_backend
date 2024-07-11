@@ -1,6 +1,6 @@
-package com.backend.athlete.presentation.physicalInfo.response;
+package com.backend.athlete.domain.physical.dto.response;
 
-import com.backend.athlete.domain.physical.PhysicalInfo;
+import com.backend.athlete.domain.physical.domain.PhysicalInfo;
 import lombok.Getter;
 
 @Getter

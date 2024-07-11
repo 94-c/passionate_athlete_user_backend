@@ -1,12 +1,13 @@
-package com.backend.athlete.presentation.physical;
+package com.backend.athlete.domain.physical.controller;
 
-import com.backend.athlete.application.PhysicalService;
-import com.backend.athlete.presentation.physical.request.CreatePhysicalRequest;
-import com.backend.athlete.presentation.physical.response.*;
+import com.backend.athlete.domain.physical.application.PhysicalService;
+import com.backend.athlete.domain.physical.dto.request.CreatePhysicalRequest;
+import com.backend.athlete.domain.physical.dto.response.*;
 import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.constant.PageConstant;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +19,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/physicals")
+@RequiredArgsConstructor
 public class PhysicalController {
-
     private final PhysicalService physicalService;
-
-    public PhysicalController(PhysicalService physicalService) {
-        this.physicalService = physicalService;
-    }
 
     @PostMapping
     public ResponseEntity<CreatePhysicalResponse> savePhysical(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,

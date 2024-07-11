@@ -1,16 +1,17 @@
-package com.backend.athlete.application;
+package com.backend.athlete.domain.physical.application;
 
-import com.backend.athlete.domain.physical.Physical;
-import com.backend.athlete.domain.physical.PhysicalRepository;
+import com.backend.athlete.domain.physical.domain.Physical;
+import com.backend.athlete.domain.physical.domain.PhysicalRepository;
+import com.backend.athlete.domain.physical.dto.response.*;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.UserRepository;
-import com.backend.athlete.presentation.physical.request.CreatePhysicalRequest;
-import com.backend.athlete.presentation.physical.response.*;
+import com.backend.athlete.domain.physical.dto.request.CreatePhysicalRequest;
 import com.backend.athlete.support.exception.NotFoundException;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FindUtils;
 import com.backend.athlete.support.util.MathUtils;
 import com.backend.athlete.support.util.PhysicalUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -31,16 +32,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
+@RequiredArgsConstructor
 public class PhysicalService {
-
     private final PhysicalRepository physicalRepository;
     private final UserRepository userRepository;
 
-    public PhysicalService(PhysicalRepository physicalRepository, UserRepository userRepository) {
-        this.physicalRepository = physicalRepository;
-        this.userRepository = userRepository;
-    }
 
     public CreatePhysicalResponse savePhysical(CustomUserDetailsImpl userPrincipal, CreatePhysicalRequest request) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
