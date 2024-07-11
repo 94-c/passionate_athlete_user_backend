@@ -82,5 +82,6 @@ public class NoticeController {
         List<GetNoticeResponse> response = noticeService.getAllNotices();
         return ResponseEntity.ok(response);
     }
+
 }
 

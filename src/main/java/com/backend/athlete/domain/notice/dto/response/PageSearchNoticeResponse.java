@@ -44,7 +44,6 @@ public class PageSearchNoticeResponse {
                         comment.getCreatedDate()))
                 .collect(Collectors.toList());
 
-        // Notice 엔티티에서 파일 경로 목록을 가져옴
         List<String> imagePaths = notice.getFiles().stream()
                 .map(File::getFilePath)
                 .collect(Collectors.toList());

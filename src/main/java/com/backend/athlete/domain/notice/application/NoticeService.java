@@ -57,7 +57,10 @@ public class NoticeService {
     public List<GetNoticeResponse> getAllNotices() {
         List<Notice> notices = noticeRepository.findAll();
         return notices.stream()
-                .map(GetNoticeResponse::fromEntity)
+                .map(notice -> {
+                    int likeCount = likeRepository.countByNoticeId(notice.getId());
+                    return GetNoticeResponse.fromEntity(notice, likeCount);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -83,7 +86,8 @@ public class NoticeService {
     @Transactional
     public GetNoticeResponse getNotice(Long id) {
         Notice notice = FindUtils.findByNoticeId(id);
-        return GetNoticeResponse.fromEntity(notice);
+        int likeCount = likeRepository.countByNoticeId(notice.getId());
+        return GetNoticeResponse.fromEntity(notice, likeCount);
     }
 
     @Transactional
@@ -112,7 +116,7 @@ public class NoticeService {
         return UpdateNoticeResponse.fromEntity(updatedNotice);
     }
 
-    public void deleteNotice(Long id, CustomUserDetailsImpl userPrincipal) {
+    /*public void deleteNotice(Long id, CustomUserDetailsImpl userPrincipal) {
         Notice notice = FindUtils.findByNoticeId(id);
 
         if (!notice.getUser().getUserId().equals(userPrincipal.getUsername())) {
@@ -134,5 +138,5 @@ public class NoticeService {
         Notice setStatusNotice = noticeRepository.save(notice);
 
         return GetNoticeResponse.fromEntity(setStatusNotice);
-    }
+    }*/
 }
