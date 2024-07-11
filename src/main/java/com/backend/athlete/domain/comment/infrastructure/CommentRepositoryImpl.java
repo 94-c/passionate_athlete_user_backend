@@ -1,7 +1,7 @@
 package com.backend.athlete.domain.comment.infrastructure;
 
 import com.backend.athlete.domain.comment.domain.Comment;
-import com.backend.athlete.domain.comment.QComment;
+import com.backend.athlete.domain.comment.domain.QComment;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
