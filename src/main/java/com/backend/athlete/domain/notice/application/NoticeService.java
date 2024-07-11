@@ -68,21 +68,30 @@ public class NoticeService {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
         NoticeType kind = noticeTypeRepository.findById(noticeRequest.getKindId()).orElseThrow(() -> new NotFoundException("Invalid notice type", HttpStatus.NOT_FOUND));
 
+        Notice notice = new Notice(noticeRequest.getTitle(), noticeRequest.getContent(), kind, noticeRequest.isStatus(), user);
+        Notice savedNotice = noticeRepository.save(notice);
+
+        if (files == null) files = new ArrayList<>();
+
         List<File> savedFiles = new ArrayList<>();
         for (MultipartFile file : files) {
             if (!file.isEmpty()) {
                 String filePath = FileUtils.saveFile(file, rootLocation);
                 File savedFile = new File(file.getOriginalFilename(), filePath, file.getContentType(), file.getSize());
+                savedFile.setNotice(savedNotice);
                 fileRepository.save(savedFile);
                 savedFiles.add(savedFile);
             }
         }
 
-        Notice notice = CreateNoticeRequest.toEntity(noticeRequest, user, kind, savedFiles);
-        Notice savedNotice = noticeRepository.save(notice);
+        savedNotice.getFiles().addAll(savedFiles);
+        noticeRepository.save(savedNotice);
 
         return CreateNoticeResponse.fromEntity(savedNotice);
     }
+
+
+
     @Transactional
     public GetNoticeResponse getNotice(Long id) {
         Notice notice = FindUtils.findByNoticeId(id);

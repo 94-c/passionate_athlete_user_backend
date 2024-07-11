@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -46,8 +47,8 @@ public class NoticeController {
 
     @PostMapping
     public ResponseEntity<CreateNoticeResponse> createNotice(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                             @RequestParam("notice") String noticeJson,
-                                                             @RequestParam(value = "files", required = false) List<MultipartFile> files) {
+                                                             @RequestPart("noticeJson") String noticeJson,
+                                                             @RequestPart(value = "files", required = false) List<MultipartFile> files) {
         try {
             CreateNoticeRequest noticeRequest = new ObjectMapper().readValue(noticeJson, CreateNoticeRequest.class);
             CreateNoticeResponse response = noticeService.saveNotice(userPrincipal, noticeRequest, files);
@@ -56,6 +57,8 @@ public class NoticeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+
 
     @PutMapping("/{id}")
     public ResponseEntity<UpdateNoticeResponse> updateNotice(@PathVariable Long id,
