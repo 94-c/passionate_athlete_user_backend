@@ -1,8 +1,9 @@
-package com.backend.athlete.presentation.report;
+package com.backend.athlete.domain.report.controller;
 
-import com.backend.athlete.application.ReportService;
-import com.backend.athlete.presentation.report.response.GetWeeklyAttendanceResponse;
+import com.backend.athlete.domain.report.application.ReportService;
+import com.backend.athlete.domain.report.dto.response.GetWeeklyAttendanceResponse;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,13 +17,9 @@ import java.time.YearMonth;
 
 @Controller
 @RequestMapping("/api/v1/reports")
+@RequiredArgsConstructor
 public class ReportController {
     private final ReportService reportService;
-
-    public ReportController(ReportService reportService) {
-        this.reportService = reportService;
-    }
-
     @GetMapping("/weekly")
     public ResponseEntity<GetWeeklyAttendanceResponse> getWeeklyAttendance(
             @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,

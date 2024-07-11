@@ -1,4 +1,4 @@
-package com.backend.athlete.application;
+package com.backend.athlete.domain.report.application;
 
 import com.backend.athlete.domain.athlete.domain.Athlete;
 import com.backend.athlete.domain.athlete.domain.AthleteRepository;
@@ -6,9 +6,10 @@ import com.backend.athlete.domain.athlete.domain.type.AthleteSuccessType;
 import com.backend.athlete.domain.attendance.domain.Attendance;
 import com.backend.athlete.domain.attendance.domain.AttendanceRepository;
 import com.backend.athlete.domain.user.domain.User;
-import com.backend.athlete.presentation.report.response.GetWeeklyAttendanceResponse;
+import com.backend.athlete.domain.report.dto.response.GetWeeklyAttendanceResponse;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FindUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,15 +19,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ReportService {
-
     private final AttendanceRepository attendanceRepository;
     private final AthleteRepository athleteRepository;
-
-    public ReportService(AttendanceRepository attendanceRepository, AthleteRepository athleteRepository) {
-        this.attendanceRepository = attendanceRepository;
-        this.athleteRepository = athleteRepository;
-    }
 
     @Transactional
     public GetWeeklyAttendanceResponse getWeeklyAttendance(CustomUserDetailsImpl userPrincipal, LocalDate week) {

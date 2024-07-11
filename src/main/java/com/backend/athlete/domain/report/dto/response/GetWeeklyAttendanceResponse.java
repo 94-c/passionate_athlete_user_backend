@@ -1,7 +1,6 @@
-package com.backend.athlete.presentation.report.response;
+package com.backend.athlete.domain.report.dto.response;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,7 +24,6 @@ public class GetWeeklyAttendanceResponse {
         this.failDays = failDays;
     }
 
-    // Entity -> Dto
     public static GetWeeklyAttendanceResponse fromEntity(int totalDaysPresent, int totalDaysSuccess, int totalDaysFail,
                                                                           List<LocalDate> presentDays, List<LocalDate> successDays, List<LocalDate> failDays) {
         return new GetWeeklyAttendanceResponse(totalDaysPresent, totalDaysSuccess, totalDaysFail, presentDays, successDays, failDays);
