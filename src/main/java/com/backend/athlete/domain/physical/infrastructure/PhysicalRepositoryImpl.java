@@ -2,7 +2,7 @@ package com.backend.athlete.domain.physical.infrastructure;
 
 import com.backend.athlete.domain.branch.domain.QBranch;
 import com.backend.athlete.domain.physical.domain.Physical;
-import com.backend.athlete.domain.physical.QPhysical;
+import com.backend.athlete.domain.physical.domain.QPhysical;
 import com.backend.athlete.domain.user.domain.QUser;
 import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.querydsl.core.BooleanBuilder;
