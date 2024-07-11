@@ -1,6 +1,6 @@
-package com.backend.athlete.presentation.exercise.request;
+package com.backend.athlete.domain.execise.dto.request;
 
-import com.backend.athlete.domain.execise.Exercise;
+import com.backend.athlete.domain.execise.domain.Exercise;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;

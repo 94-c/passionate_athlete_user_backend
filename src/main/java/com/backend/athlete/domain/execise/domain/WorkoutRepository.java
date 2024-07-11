@@ -1,6 +1,6 @@
-package com.backend.athlete.domain.execise;
+package com.backend.athlete.domain.execise.domain;
 
-import com.backend.athlete.infrastructure.WorkoutRepositoryCustom;
+import com.backend.athlete.domain.execise.infrastructure.WorkoutRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

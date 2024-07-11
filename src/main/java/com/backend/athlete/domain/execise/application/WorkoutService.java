@@ -1,10 +1,10 @@
-package com.backend.athlete.application;
+package com.backend.athlete.domain.execise.application;
 
-import com.backend.athlete.domain.execise.*;
-import com.backend.athlete.domain.execise.type.LevelType;
-import com.backend.athlete.presentation.exercise.request.CreateWorkoutInfoRequest;
-import com.backend.athlete.presentation.exercise.request.CreateWorkoutRequest;
-import com.backend.athlete.presentation.exercise.response.GetWorkoutResponse;
+import com.backend.athlete.domain.execise.domain.*;
+import com.backend.athlete.domain.execise.domain.type.LevelType;
+import com.backend.athlete.domain.execise.dto.request.CreateWorkoutInfoRequest;
+import com.backend.athlete.domain.execise.dto.request.CreateWorkoutRequest;
+import com.backend.athlete.domain.execise.dto.response.GetWorkoutResponse;
 import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.exception.NotFoundException;
 import org.springframework.data.domain.Page;

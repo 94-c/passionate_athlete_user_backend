@@ -1,7 +1,7 @@
-package com.backend.athlete.presentation.exercise.response;
+package com.backend.athlete.domain.execise.dto.response;
 
-import com.backend.athlete.domain.execise.WorkoutLevel;
-import com.backend.athlete.domain.execise.type.LevelType;
+import com.backend.athlete.domain.execise.domain.WorkoutLevel;
+import com.backend.athlete.domain.execise.domain.type.LevelType;
 import lombok.Getter;
 
 @Getter

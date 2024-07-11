@@ -1,8 +1,8 @@
-package com.backend.athlete.presentation.exercise;
+package com.backend.athlete.domain.execise.controller;
 
-import com.backend.athlete.application.WorkoutService;
-import com.backend.athlete.presentation.exercise.request.CreateWorkoutRequest;
-import com.backend.athlete.presentation.exercise.response.GetWorkoutResponse;
+import com.backend.athlete.domain.execise.application.WorkoutService;
+import com.backend.athlete.domain.execise.dto.request.CreateWorkoutRequest;
+import com.backend.athlete.domain.execise.dto.response.GetWorkoutResponse;
 import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.constant.PageConstant;
 import org.springframework.http.HttpStatus;

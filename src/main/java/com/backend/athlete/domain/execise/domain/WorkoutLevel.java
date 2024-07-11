@@ -1,6 +1,6 @@
-package com.backend.athlete.domain.execise;
+package com.backend.athlete.domain.execise.domain;
 
-import com.backend.athlete.domain.execise.type.LevelType;
+import com.backend.athlete.domain.execise.domain.type.LevelType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.Comment;

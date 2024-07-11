@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.execise;
+package com.backend.athlete.domain.execise.domain;
 
 import com.backend.athlete.support.common.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -6,7 +6,6 @@ import lombok.Getter;
 import org.hibernate.annotations.Comment;
 
 import java.sql.Time;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

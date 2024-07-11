@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.execise;
+package com.backend.athlete.domain.execise.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

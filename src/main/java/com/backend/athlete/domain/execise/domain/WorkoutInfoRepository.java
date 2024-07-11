@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.execise;
+package com.backend.athlete.domain.execise.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

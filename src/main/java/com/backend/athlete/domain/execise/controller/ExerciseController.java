@@ -1,9 +1,9 @@
-package com.backend.athlete.presentation.exercise;
+package com.backend.athlete.domain.execise.controller;
 
-import com.backend.athlete.application.ExerciseService;
-import com.backend.athlete.presentation.exercise.request.CreateExerciseRequest;
-import com.backend.athlete.presentation.exercise.request.UpdateExerciseRequest;
-import com.backend.athlete.presentation.exercise.response.GetExerciseResponse;
+import com.backend.athlete.domain.execise.application.ExerciseService;
+import com.backend.athlete.domain.execise.dto.request.CreateExerciseRequest;
+import com.backend.athlete.domain.execise.dto.request.UpdateExerciseRequest;
+import com.backend.athlete.domain.execise.dto.response.GetExerciseResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

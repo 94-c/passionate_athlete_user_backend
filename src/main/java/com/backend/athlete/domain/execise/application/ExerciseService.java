@@ -1,10 +1,10 @@
-package com.backend.athlete.application;
+package com.backend.athlete.domain.execise.application;
 
-import com.backend.athlete.domain.execise.Exercise;
-import com.backend.athlete.domain.execise.ExerciseRepository;
-import com.backend.athlete.presentation.exercise.request.CreateExerciseRequest;
-import com.backend.athlete.presentation.exercise.request.UpdateExerciseRequest;
-import com.backend.athlete.presentation.exercise.response.GetExerciseResponse;
+import com.backend.athlete.domain.execise.domain.Exercise;
+import com.backend.athlete.domain.execise.domain.ExerciseRepository;
+import com.backend.athlete.domain.execise.dto.request.CreateExerciseRequest;
+import com.backend.athlete.domain.execise.dto.request.UpdateExerciseRequest;
+import com.backend.athlete.domain.execise.dto.response.GetExerciseResponse;
 import com.backend.athlete.support.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

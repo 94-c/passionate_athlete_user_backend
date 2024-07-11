@@ -1,6 +1,6 @@
-package com.backend.athlete.presentation.exercise.response;
+package com.backend.athlete.domain.execise.dto.response;
 
-import com.backend.athlete.domain.execise.Workout;
+import com.backend.athlete.domain.execise.domain.Workout;
 import lombok.Getter;
 
 import java.util.List;

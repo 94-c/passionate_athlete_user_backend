@@ -1,9 +1,9 @@
-package com.backend.athlete.infrastructure;
+package com.backend.athlete.domain.execise.infrastructure;
 
 import com.backend.athlete.domain.execise.QWorkout;
 import com.backend.athlete.domain.execise.QWorkoutInfo;
 import com.backend.athlete.domain.execise.QWorkoutLevel;
-import com.backend.athlete.domain.execise.Workout;
+import com.backend.athlete.domain.execise.domain.Workout;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
