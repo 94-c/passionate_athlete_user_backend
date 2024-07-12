@@ -5,10 +5,12 @@ import com.backend.athlete.domain.workout.dto.request.CreateScheduledWorkoutRequ
 import com.backend.athlete.domain.workout.dto.request.WorkoutInfoRequest;
 import com.backend.athlete.domain.workout.dto.request.WorkoutRatingRequest;
 import com.backend.athlete.domain.workout.dto.response.CreateScheduledWorkoutResponse;
+import com.backend.athlete.domain.workout.dto.response.GetScheduledWorkoutResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,4 +49,10 @@ public class ScheduledWorkoutService {
         return CreateScheduledWorkoutResponse.fromEntity(savedScheduledWorkout);
     }
 
+    public List<GetScheduledWorkoutResponse> getScheduledWorkoutsByDate(LocalDate date) {
+        List<ScheduledWorkout> scheduledWorkouts = scheduledWorkoutRepository.findByDate(date);
+        return scheduledWorkouts.stream()
+                .map(GetScheduledWorkoutResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
 }

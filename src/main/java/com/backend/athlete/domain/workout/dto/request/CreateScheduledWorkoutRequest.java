@@ -32,16 +32,13 @@ public class CreateScheduledWorkoutRequest {
                 request.getNotes()
         );
 
-        List<WorkoutInfo> workoutInfos = request.getWorkoutInfos().stream()
-                .map(WorkoutInfoRequest::toEntity)
-                .collect(Collectors.toList());
+        for (WorkoutInfoRequest infoRequest : request.getWorkoutInfos()) {
+            scheduledWorkout.addWorkoutInfo(WorkoutInfoRequest.toEntity(infoRequest));
+        }
 
-        List<WorkoutRating> workoutRatings = request.getWorkoutRatings().stream()
-                .map(WorkoutRatingRequest::toEntity)
-                .collect(Collectors.toList());
-
-        scheduledWorkout.setWorkoutInfos(workoutInfos);
-        scheduledWorkout.setWorkoutRatings(workoutRatings);
+        for (WorkoutRatingRequest ratingRequest : request.getWorkoutRatings()) {
+            scheduledWorkout.addWorkoutRating(WorkoutRatingRequest.toEntity(ratingRequest));
+        }
 
         return scheduledWorkout;
     }

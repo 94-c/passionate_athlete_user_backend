@@ -6,19 +6,15 @@ import lombok.Getter;
 
 @Getter
 public class WorkoutRatingResponse {
-    private Long id;
-    private String gender;
     private String rating;
     private String criteria;
 
-    public WorkoutRatingResponse(Long id, String gender, String rating, String criteria) {
-        this.id = id;
-        this.gender = gender;
+    public WorkoutRatingResponse(String rating, String criteria) {
         this.rating = rating;
         this.criteria = criteria;
     }
 
     public static WorkoutRatingResponse fromEntity(WorkoutRating workoutRating) {
-        return new WorkoutRatingResponse(workoutRating.getId(), workoutRating.getGender(), workoutRating.getRating(), workoutRating.getCriteria());
+        return new WorkoutRatingResponse(workoutRating.getRating(), workoutRating.getCriteria());
     }
 }
