@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.notice.domain;
+package com.backend.athlete.domain.file.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
