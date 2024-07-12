@@ -1,7 +1,7 @@
 package com.backend.athlete.domain.notice.dto.response;
 
 import com.backend.athlete.domain.comment.domain.Comment;
-import com.backend.athlete.domain.notice.domain.File;
+import com.backend.athlete.domain.file.domain.File;
 import com.backend.athlete.domain.notice.domain.Notice;
 import lombok.Getter;
 

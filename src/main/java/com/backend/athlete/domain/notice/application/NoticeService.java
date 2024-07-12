@@ -2,6 +2,8 @@ package com.backend.athlete.domain.notice.application;
 
 import com.backend.athlete.domain.comment.domain.Comment;
 import com.backend.athlete.domain.comment.domain.CommentRepository;
+import com.backend.athlete.domain.file.domain.File;
+import com.backend.athlete.domain.file.domain.FileRepository;
 import com.backend.athlete.domain.notice.domain.*;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.notice.dto.request.PageSearchNoticeRequest;
@@ -27,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,22 +64,11 @@ public class NoticeService {
                 })
                 .collect(Collectors.toList());
     }
-
-    public CreateNoticeResponse saveNotice(CustomUserDetailsImpl userPrincipal, CreateNoticeRequest noticeRequest, List<MultipartFile> files) throws IOException {
+    public CreateNoticeResponse saveNotice(CustomUserDetailsImpl userPrincipal, CreateNoticeRequest noticeRequest) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
         NoticeType kind = noticeTypeRepository.findById(noticeRequest.getKindId()).orElseThrow(() -> new NotFoundException("Invalid notice type", HttpStatus.NOT_FOUND));
 
-        List<File> savedFiles = new ArrayList<>();
-        for (MultipartFile file : files) {
-            if (!file.isEmpty()) {
-                String filePath = FileUtils.saveFile(file, rootLocation);
-                File savedFile = new File(file.getOriginalFilename(), filePath, file.getContentType(), file.getSize());
-                fileRepository.save(savedFile);
-                savedFiles.add(savedFile);
-            }
-        }
-
-        Notice notice = CreateNoticeRequest.toEntity(noticeRequest, user, kind, savedFiles);
+        Notice notice = new Notice(noticeRequest.getTitle(), noticeRequest.getContent(), kind, noticeRequest.isStatus(), user);
         Notice savedNotice = noticeRepository.save(notice);
 
         return CreateNoticeResponse.fromEntity(savedNotice);
@@ -91,7 +81,7 @@ public class NoticeService {
     }
 
     @Transactional
-    public UpdateNoticeResponse updateNotice(Long id, CustomUserDetailsImpl userPrincipal, UpdateNoticeRequest noticeRequest, List<MultipartFile> files) throws IOException {
+    public UpdateNoticeResponse updateNotice(Long id, CustomUserDetailsImpl userPrincipal, UpdateNoticeRequest noticeRequest) {
         Notice notice = FindUtils.findByNoticeId(id);
 
         if (!notice.getUser().getUserId().equals(userPrincipal.getUsername())) {
@@ -99,17 +89,6 @@ public class NoticeService {
         }
 
         notice.updateNotice(noticeRequest.getTitle(), noticeRequest.getContent());
-
-        if (files != null && !files.isEmpty()) {
-            for (MultipartFile file : files) {
-                if (!file.isEmpty()) {
-                    String filePath = FileUtils.saveFile(file, rootLocation);
-                    File savedFile = new File(file.getOriginalFilename(), filePath, file.getContentType(), file.getSize());
-                    notice.addFile(savedFile);
-                    fileRepository.save(savedFile);
-                }
-            }
-        }
 
         Notice updatedNotice = noticeRepository.save(notice);
 

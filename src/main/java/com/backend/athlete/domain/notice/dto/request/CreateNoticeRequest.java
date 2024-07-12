@@ -1,6 +1,6 @@
 package com.backend.athlete.domain.notice.dto.request;
 
-import com.backend.athlete.domain.notice.domain.File;
+import com.backend.athlete.domain.file.domain.File;
 import com.backend.athlete.domain.notice.domain.Notice;
 import com.backend.athlete.domain.notice.domain.NoticeType;
 import com.backend.athlete.domain.user.domain.User;
@@ -18,11 +18,7 @@ public class CreateNoticeRequest {
     private Long kindId;
     private boolean status;
 
-    public static Notice toEntity(CreateNoticeRequest request, User user, NoticeType kind, List<File> files) {
-        Notice notice = new Notice(request.getTitle(), request.getContent(), kind, request.isStatus(), user);
-        for (File file : files) {
-            notice.addFile(file);
-        }
-        return notice;
+    public static Notice toEntity(CreateNoticeRequest request, User user, NoticeType kind) {
+        return new Notice(request.getTitle(), request.getContent(), kind, request.isStatus(), user);
     }
 }
