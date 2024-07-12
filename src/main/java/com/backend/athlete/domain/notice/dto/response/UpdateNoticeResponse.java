@@ -1,6 +1,6 @@
 package com.backend.athlete.domain.notice.dto.response;
 
-import com.backend.athlete.domain.notice.domain.File;
+import com.backend.athlete.domain.file.domain.File;
 import com.backend.athlete.domain.notice.domain.Notice;
 import com.backend.athlete.domain.user.domain.User;
 import lombok.Getter;

@@ -10,6 +10,7 @@ import com.backend.athlete.domain.notice.dto.response.CreateNoticeResponse;
 import com.backend.athlete.domain.notice.dto.response.UpdateNoticeResponse;
 import com.backend.athlete.support.constant.PageConstant;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.support.util.FileUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -47,27 +47,23 @@ public class NoticeController {
 
     @PostMapping
     public ResponseEntity<CreateNoticeResponse> createNotice(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                             @RequestPart("noticeJson") String noticeJson,
-                                                             @RequestPart(value = "files", required = false) List<MultipartFile> files) {
+                                                             @RequestPart("noticeJson") String noticeJson) {
         try {
             CreateNoticeRequest noticeRequest = new ObjectMapper().readValue(noticeJson, CreateNoticeRequest.class);
-            CreateNoticeResponse response = noticeService.saveNotice(userPrincipal, noticeRequest, files);
+            CreateNoticeResponse response = noticeService.saveNotice(userPrincipal, noticeRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
-
-
     @PutMapping("/{id}")
     public ResponseEntity<UpdateNoticeResponse> updateNotice(@PathVariable Long id,
                                                              @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                             @RequestParam("notice") String noticeJson,
-                                                             @RequestParam(value = "files", required = false) List<MultipartFile> files) {
+                                                             @RequestPart("noticeJson") String noticeJson) {
         try {
             UpdateNoticeRequest noticeRequest = new ObjectMapper().readValue(noticeJson, UpdateNoticeRequest.class);
-            UpdateNoticeResponse response = noticeService.updateNotice(id, userPrincipal, noticeRequest, files);
+            UpdateNoticeResponse response = noticeService.updateNotice(id, userPrincipal, noticeRequest);
             return ResponseEntity.ok(response);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

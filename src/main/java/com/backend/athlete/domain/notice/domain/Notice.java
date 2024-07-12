@@ -1,5 +1,6 @@
 package com.backend.athlete.domain.notice.domain;
 
+import com.backend.athlete.domain.file.domain.File;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.support.common.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -30,6 +31,7 @@ public class Notice extends BaseTimeEntity {
     @Comment("게시판 제목")
     private String title;
 
+    @Lob
     @Comment("게시판 내용")
     private String content;
 

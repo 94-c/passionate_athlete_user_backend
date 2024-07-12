@@ -1,5 +1,6 @@
-package com.backend.athlete.domain.notice.domain;
+package com.backend.athlete.domain.file.domain;
 
+import com.backend.athlete.domain.notice.domain.Notice;
 import com.backend.athlete.support.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -31,16 +32,16 @@ public class File extends BaseTimeEntity {
     private long fileSize;
 
     @ManyToOne
-    @JoinColumn(name = "notice_id", nullable = false)
+    @JoinColumn(name = "notice_id", nullable = true)
     private Notice notice;
 
-    public File(String fileName, String filePath, String fileType, long fileSize) {
+    public File(String fileName, String filePath, String fileType, long fileSize, Notice notice) {
         this.fileName = fileName;
         this.filePath = filePath;
         this.fileType = fileType;
         this.fileSize = fileSize;
+        this.notice = notice;
     }
-
     public void setNotice(Notice notice) {
         this.notice = notice;
     }
