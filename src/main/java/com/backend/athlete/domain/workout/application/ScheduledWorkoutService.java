@@ -7,6 +7,8 @@ import com.backend.athlete.domain.workout.dto.request.WorkoutRatingRequest;
 import com.backend.athlete.domain.workout.dto.response.CreateScheduledWorkoutResponse;
 import com.backend.athlete.domain.workout.dto.response.GetScheduledWorkoutResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,32 +21,30 @@ import java.util.stream.Collectors;
 @Transactional
 public class ScheduledWorkoutService {
     private final ScheduledWorkoutRepository scheduledWorkoutRepository;
-    private final WorkoutInfoRepository workoutInfoRepository;
-    private final WorkoutRatingRepository workoutRatingRepository;
 
     public CreateScheduledWorkoutResponse saveScheduledWorkout(CreateScheduledWorkoutRequest request) {
         ScheduledWorkout scheduledWorkout = CreateScheduledWorkoutRequest.toEntity(request);
 
-        ScheduledWorkout savedScheduledWorkout = scheduledWorkoutRepository.save(scheduledWorkout);
-
         List<WorkoutInfo> workoutInfos = request.getWorkoutInfos().stream()
                 .map(infoRequest -> {
                     WorkoutInfo info = WorkoutInfoRequest.toEntity(infoRequest);
-                    info.setScheduledWorkout(savedScheduledWorkout);
-                    return workoutInfoRepository.save(info);
+                    info.setScheduledWorkout(scheduledWorkout);
+                    return info;
                 })
                 .collect(Collectors.toList());
 
         List<WorkoutRating> workoutRatings = request.getWorkoutRatings().stream()
                 .map(ratingRequest -> {
                     WorkoutRating rating = WorkoutRatingRequest.toEntity(ratingRequest);
-                    rating.setScheduledWorkout(savedScheduledWorkout);
-                    return workoutRatingRepository.save(rating);
+                    rating.setScheduledWorkout(scheduledWorkout);
+                    return rating;
                 })
                 .collect(Collectors.toList());
 
-        savedScheduledWorkout.setWorkoutInfos(workoutInfos);
-        savedScheduledWorkout.setWorkoutRatings(workoutRatings);
+        scheduledWorkout.setWorkoutInfos(workoutInfos);
+        scheduledWorkout.setWorkoutRatings(workoutRatings);
+
+        ScheduledWorkout savedScheduledWorkout = scheduledWorkoutRepository.save(scheduledWorkout);
 
         return CreateScheduledWorkoutResponse.fromEntity(savedScheduledWorkout);
     }
