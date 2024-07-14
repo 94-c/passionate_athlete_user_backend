@@ -1,6 +1,7 @@
 package com.backend.athlete.domain.workout.dto.response;
 
 import com.backend.athlete.domain.workout.domain.ScheduledWorkout;
+import com.backend.athlete.domain.workout.domain.type.WorkoutType;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -15,10 +16,11 @@ public class CreateScheduledWorkoutResponse {
     private int rounds;
     private String time;
     private String notes;
+    private WorkoutType workoutType;
     private List<WorkoutInfoResponse> workoutInfos;
     private List<WorkoutRatingResponse> workoutRatings;
 
-    public CreateScheduledWorkoutResponse(Long id, String title, LocalDate date, int rounds, String time, String notes,
+    public CreateScheduledWorkoutResponse(Long id, String title, LocalDate date, int rounds, String time, String notes, WorkoutType workoutType,
                                           List<WorkoutInfoResponse> workoutInfos, List<WorkoutRatingResponse> workoutRatings) {
         this.id = id;
         this.title = title;
@@ -26,6 +28,7 @@ public class CreateScheduledWorkoutResponse {
         this.rounds = rounds;
         this.time = time;
         this.notes = notes;
+        this.workoutType = workoutType;
         this.workoutInfos = workoutInfos;
         this.workoutRatings = workoutRatings;
     }
@@ -46,6 +49,7 @@ public class CreateScheduledWorkoutResponse {
                 scheduledWorkout.getRounds(),
                 scheduledWorkout.getTime(),
                 scheduledWorkout.getNotes(),
+                scheduledWorkout.getWorkoutType(),
                 workoutInfos,
                 workoutRatings
         );

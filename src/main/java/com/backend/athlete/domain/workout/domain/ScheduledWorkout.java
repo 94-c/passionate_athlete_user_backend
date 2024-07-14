@@ -1,5 +1,6 @@
 package com.backend.athlete.domain.workout.domain;
 
+import com.backend.athlete.domain.workout.domain.type.WorkoutType;
 import com.backend.athlete.support.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -36,18 +37,23 @@ public class ScheduledWorkout {
     @Comment("비고")
     private String notes;
 
+    @Enumerated(EnumType.STRING)
+    @Comment("운동 형태")
+    private WorkoutType workoutType;
+
     @OneToMany(mappedBy = "scheduledWorkout", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkoutInfo> workoutInfos = new ArrayList<>();
 
     @OneToMany(mappedBy = "scheduledWorkout", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkoutRating> workoutRatings = new ArrayList<>();
 
-    public ScheduledWorkout(String title, LocalDate date, int rounds, String time, String notes) {
+    public ScheduledWorkout(String title, LocalDate date, int rounds, String time, String notes, WorkoutType workoutType) {
         this.title = title;
         this.date = date;
         this.rounds = rounds;
         this.time = time;
         this.notes = notes;
+        this.workoutType = workoutType;
     }
 
     public void addWorkoutInfo(WorkoutInfo workoutInfo) {
