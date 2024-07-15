@@ -51,9 +51,14 @@ public class WorkoutRecord extends BaseTimeEntity {
     @Comment("성공 여부")
     private Boolean success;
 
+    @Lob
+    @Comment("운동 내용")
+    @Column(name = "record_content")
+    private String recordContent;
+
     public WorkoutRecord(User user, WorkoutRecordType exerciseType, ScheduledWorkout scheduledWorkout,
                          String exerciseName, Integer repetitions, Double weight, String duration,
-                         String rating, Boolean success) {
+                         String rating, Boolean success, String recordContent) {
         this.user = user;
         this.exerciseType = exerciseType;
         this.scheduledWorkout = scheduledWorkout;
@@ -63,5 +68,6 @@ public class WorkoutRecord extends BaseTimeEntity {
         this.duration = duration;
         this.rating = rating;
         this.success = success;
+        this.recordContent = recordContent;
     }
 }

@@ -21,6 +21,7 @@ public class CreateWorkoutRecordRequest {
     private String duration;
     private String rating;
     private Boolean success;
+    private String recordContent;
 
     public CreateWorkoutRecordRequest(WorkoutRecordType exerciseType, Long scheduledWorkoutId, String exerciseName, Integer repetitions, Double weight, String duration, String rating, Boolean success) {
         this.exerciseType = exerciseType;
@@ -43,7 +44,8 @@ public class CreateWorkoutRecordRequest {
                 request.getWeight(),
                 request.getDuration(),
                 request.getRating(),
-                request.getSuccess()
+                request.getSuccess(),
+                request.getRecordContent()
         );
     }
 }

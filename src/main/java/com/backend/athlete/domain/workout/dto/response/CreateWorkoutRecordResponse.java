@@ -16,11 +16,12 @@ public class CreateWorkoutRecordResponse {
     private String duration;
     private String rating;
     private Boolean success;
+    private String recordContent;
     private String createdDate;
 
     public CreateWorkoutRecordResponse(Long id, String userName, WorkoutRecordType exerciseType,
                                        String scheduledWorkoutTitle, String exerciseName, Integer repetitions,
-                                       Double weight, String duration, String rating, Boolean success, String createdDate) {
+                                       Double weight, String duration, String rating, Boolean success, String recordContent, String createdDate) {
         this.id = id;
         this.userName = userName;
         this.exerciseType = exerciseType;
@@ -31,6 +32,7 @@ public class CreateWorkoutRecordResponse {
         this.duration = duration;
         this.rating = rating;
         this.success = success;
+        this.recordContent = recordContent;
         this.createdDate = createdDate;
     }
 
@@ -50,6 +52,7 @@ public class CreateWorkoutRecordResponse {
                 workoutRecord.getDuration(),
                 workoutRecord.getRating(),
                 workoutRecord.getSuccess(),
+                workoutRecord.getRecordContent(),
                 workoutRecord.getCreatedDate()
         );
     }
