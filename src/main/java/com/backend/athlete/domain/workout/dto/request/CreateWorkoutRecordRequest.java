@@ -17,18 +17,16 @@ public class CreateWorkoutRecordRequest {
     private Long scheduledWorkoutId;
     private String exerciseName;
     private Integer repetitions;
-    private Double weight;
     private String duration;
     private String rating;
     private Boolean success;
     private String recordContent;
 
-    public CreateWorkoutRecordRequest(WorkoutRecordType exerciseType, Long scheduledWorkoutId, String exerciseName, Integer repetitions, Double weight, String duration, String rating, Boolean success) {
+    public CreateWorkoutRecordRequest(WorkoutRecordType exerciseType, Long scheduledWorkoutId, String exerciseName, Integer repetitions, String duration, String rating, Boolean success) {
         this.exerciseType = exerciseType;
         this.scheduledWorkoutId = scheduledWorkoutId;
         this.exerciseName = exerciseName;
         this.repetitions = repetitions;
-        this.weight = weight;
         this.duration = duration;
         this.rating = rating;
         this.success = success;
@@ -41,7 +39,6 @@ public class CreateWorkoutRecordRequest {
                 scheduledWorkout,
                 request.getExerciseName(),
                 request.getRepetitions(),
-                request.getWeight(),
                 request.getDuration(),
                 request.getRating(),
                 request.getSuccess(),

@@ -36,11 +36,8 @@ public class WorkoutRecord extends BaseTimeEntity {
     @Comment("운동 이름")
     private String exerciseName;
 
-    @Comment("횟수")
+    @Comment("라운드")
     private Integer repetitions;
-
-    @Comment("무게")
-    private Double weight;
 
     @Comment("시간")
     private String duration;
@@ -57,14 +54,13 @@ public class WorkoutRecord extends BaseTimeEntity {
     private String recordContent;
 
     public WorkoutRecord(User user, WorkoutRecordType exerciseType, ScheduledWorkout scheduledWorkout,
-                         String exerciseName, Integer repetitions, Double weight, String duration,
+                         String exerciseName, Integer repetitions, String duration,
                          String rating, Boolean success, String recordContent) {
         this.user = user;
         this.exerciseType = exerciseType;
         this.scheduledWorkout = scheduledWorkout;
         this.exerciseName = exerciseName;
         this.repetitions = repetitions;
-        this.weight = weight;
         this.duration = duration;
         this.rating = rating;
         this.success = success;
