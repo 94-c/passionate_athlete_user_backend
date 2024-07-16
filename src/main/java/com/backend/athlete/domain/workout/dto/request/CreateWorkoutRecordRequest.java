@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
+import java.util.Date;
+
 @Getter @Setter
 public class CreateWorkoutRecordRequest {
     @NotNull(message = "운동 타입을 입력 해주세요.")

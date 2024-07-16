@@ -4,6 +4,9 @@ import com.backend.athlete.domain.workout.domain.WorkoutRecord;
 import com.backend.athlete.domain.workout.domain.type.WorkoutRecordType;
 import lombok.Getter;
 
+import java.sql.Time;
+import java.util.Date;
+
 @Getter
 public class CreateWorkoutRecordResponse {
     private Long id;
