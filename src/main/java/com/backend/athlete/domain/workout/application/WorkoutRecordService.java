@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -41,28 +42,19 @@ public class WorkoutRecordService {
         return CreateWorkoutRecordResponse.fromEntity(savedWorkoutRecord);
     }
 
-    public List<WorkoutRecordStatisticsResponse> getMainWorkoutRecordsByDateRangeAndGender() {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime startDate = now.withHour(17).withMinute(0).withSecond(0).withNano(0);
-        LocalDateTime endDate = now.plusDays(1).withHour(13).withMinute(0).withSecond(0).withNano(0);
+    public List<WorkoutRecordStatisticsResponse> getMainWorkoutRecordsByDateRangeAndGender(LocalDate date, UserGenderType gender) {
+        LocalDateTime startDate = date.atTime(16, 0, 0);
+        LocalDateTime endDate = date.plusDays(1).atTime(13, 0, 0);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String startDateTime = startDate.format(formatter);
         String endDateTime = endDate.format(formatter);
 
-        List<WorkoutRecord> maleRecords = workoutRecordRepository.findMainWorkoutRecordsByDateRangeAndGender(startDateTime, endDateTime, UserGenderType.MALE);
-        List<WorkoutRecord> femaleRecords = workoutRecordRepository.findMainWorkoutRecordsByDateRangeAndGender(startDateTime, endDateTime, UserGenderType.FEMALE);
+        List<WorkoutRecord> records = workoutRecordRepository.findMainWorkoutRecordsByDateRangeAndGender(startDateTime, endDateTime, gender, 10);
 
-        List<WorkoutRecordStatisticsResponse> maleResponses = maleRecords.stream()
+        return records.stream()
                 .map(WorkoutRecordStatisticsResponse::fromEntity)
                 .collect(Collectors.toList());
-
-        List<WorkoutRecordStatisticsResponse> femaleResponses = femaleRecords.stream()
-                .map(WorkoutRecordStatisticsResponse::fromEntity)
-                .collect(Collectors.toList());
-
-        maleResponses.addAll(femaleResponses);
-        return maleResponses;
     }
 
 }

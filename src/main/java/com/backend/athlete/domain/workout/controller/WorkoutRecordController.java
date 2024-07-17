@@ -1,17 +1,20 @@
 package com.backend.athlete.domain.workout.controller;
 
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.backend.athlete.domain.workout.application.WorkoutRecordService;
 import com.backend.athlete.domain.workout.dto.request.CreateWorkoutRecordRequest;
 import com.backend.athlete.domain.workout.dto.response.CreateWorkoutRecordResponse;
 import com.backend.athlete.domain.workout.dto.response.WorkoutRecordStatisticsResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -27,7 +30,11 @@ public class WorkoutRecordController {
     }
 
     @GetMapping("/statistics")
-    public List<WorkoutRecordStatisticsResponse> getMainWorkoutRecordsByDateRangeAndGender() {
-        return workoutRecordService.getMainWorkoutRecordsByDateRangeAndGender();
+    public ResponseEntity<List<WorkoutRecordStatisticsResponse>> getMainWorkoutRecordsByDateRangeAndGender(
+                                                @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+                                                @RequestParam("gender") UserGenderType gender) {
+        List<WorkoutRecordStatisticsResponse> response = workoutRecordService.getMainWorkoutRecordsByDateRangeAndGender(date, gender);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
 }
