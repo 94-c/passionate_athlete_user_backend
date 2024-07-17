@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,9 +36,6 @@ public class WorkoutRecord extends BaseTimeEntity {
     @Comment("오늘의 운동")
     private ScheduledWorkout scheduledWorkout;
 
-    @Comment("운동 이름")
-    private String exerciseName;
-
     @Comment("라운드")
     private Integer repetitions;
 
@@ -53,17 +53,25 @@ public class WorkoutRecord extends BaseTimeEntity {
     @Column(name = "record_content")
     private String recordContent;
 
+    @OneToMany(mappedBy = "workoutRecord", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WorkoutRecordHistory> workoutHistories = new ArrayList<>();
+
     public WorkoutRecord(User user, WorkoutRecordType exerciseType, ScheduledWorkout scheduledWorkout,
-                         String exerciseName, Integer repetitions, String duration,
+                         Integer repetitions, String duration,
                          String rating, Boolean success, String recordContent) {
         this.user = user;
         this.exerciseType = exerciseType;
         this.scheduledWorkout = scheduledWorkout;
-        this.exerciseName = exerciseName;
         this.repetitions = repetitions;
         this.duration = duration;
         this.rating = rating;
         this.success = success;
         this.recordContent = recordContent;
     }
+
+    public void addWorkoutHistory(WorkoutRecordHistory history) {
+        workoutHistories.add(history);
+        history.setWorkoutRecord(this);
+    }
 }
+

@@ -1,13 +1,13 @@
 package com.backend.athlete.domain.workout.application;
 
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.domain.execise.domain.Exercise;
+import com.backend.athlete.domain.execise.domain.ExerciseRepository;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.type.UserGenderType;
-import com.backend.athlete.domain.workout.domain.ScheduledWorkout;
-import com.backend.athlete.domain.workout.domain.ScheduledWorkoutRepository;
-import com.backend.athlete.domain.workout.domain.WorkoutRecord;
-import com.backend.athlete.domain.workout.domain.WorkoutRecordRepository;
+import com.backend.athlete.domain.workout.domain.*;
 import com.backend.athlete.domain.workout.dto.request.CreateWorkoutRecordRequest;
+import com.backend.athlete.domain.workout.dto.request.WorkoutHistoryRequest;
 import com.backend.athlete.domain.workout.dto.response.CreateWorkoutRecordResponse;
 import com.backend.athlete.domain.workout.dto.response.WorkoutRecordStatisticsResponse;
 import com.backend.athlete.support.exception.NotFoundException;
@@ -31,6 +31,8 @@ import java.util.stream.Collectors;
 public class WorkoutRecordService {
     private final WorkoutRecordRepository workoutRecordRepository;
     private final ScheduledWorkoutRepository scheduledWorkoutRepository;
+    private final WorkoutRecordHistoryRepository workoutRecordHistoryRepository;
+    private final ExerciseRepository exerciseRepository;
 
     public CreateWorkoutRecordResponse saveWorkoutRecord(CreateWorkoutRecordRequest request, CustomUserDetailsImpl userPrincipal) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
@@ -38,10 +40,19 @@ public class WorkoutRecordService {
         ScheduledWorkout scheduledWorkout = null;
         if (request.getScheduledWorkoutId() != null) {
             scheduledWorkout = scheduledWorkoutRepository.findById(request.getScheduledWorkoutId())
-                    .orElseThrow(() -> new NotFoundException("오늘의 운동을 찾을 수가 없습니다." , HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new NotFoundException("오늘의 운동을 찾을 수가 없습니다.", HttpStatus.NOT_FOUND));
         }
 
-        WorkoutRecord savedWorkoutRecord = workoutRecordRepository.save(CreateWorkoutRecordRequest.toEntity(request, user, scheduledWorkout));
+        WorkoutRecord workoutRecord = CreateWorkoutRecordRequest.toEntity(request, user, scheduledWorkout);
+        WorkoutRecord savedWorkoutRecord = workoutRecordRepository.save(workoutRecord);
+
+        for (WorkoutHistoryRequest historyRequest : request.getWorkoutHistories()) {
+            Exercise exercise = exerciseRepository.findById(historyRequest.getExerciseId())
+                    .orElseThrow(() -> new NotFoundException("운동을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+            WorkoutRecordHistory history = WorkoutHistoryRequest.toEntity(historyRequest, user, exercise);
+            history.setWorkoutRecord(savedWorkoutRecord);
+            workoutRecordHistoryRepository.save(history);
+        }
 
         return CreateWorkoutRecordResponse.fromEntity(savedWorkoutRecord);
     }

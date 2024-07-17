@@ -4,8 +4,9 @@ import com.backend.athlete.domain.workout.domain.WorkoutRecord;
 import com.backend.athlete.domain.workout.domain.type.WorkoutRecordType;
 import lombok.Getter;
 
-import java.sql.Time;
-import java.util.Date;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class CreateWorkoutRecordResponse {
@@ -20,10 +21,12 @@ public class CreateWorkoutRecordResponse {
     private Boolean success;
     private String recordContent;
     private String createdDate;
+    private List<WorkoutRecordHistoryResponse> workoutHistories;
 
     public CreateWorkoutRecordResponse(Long id, String userName, WorkoutRecordType exerciseType,
                                        String scheduledWorkoutTitle, String exerciseName, Integer repetitions,
-                                       String duration, String rating, Boolean success, String recordContent, String createdDate) {
+                                       String duration, String rating, Boolean success, String recordContent,
+                                       String createdDate, List<WorkoutRecordHistoryResponse> workoutHistories) {
         this.id = id;
         this.userName = userName;
         this.exerciseType = exerciseType;
@@ -35,6 +38,7 @@ public class CreateWorkoutRecordResponse {
         this.success = success;
         this.recordContent = recordContent;
         this.createdDate = createdDate;
+        this.workoutHistories = workoutHistories;
     }
 
     public static CreateWorkoutRecordResponse fromEntity(WorkoutRecord workoutRecord) {
@@ -42,18 +46,24 @@ public class CreateWorkoutRecordResponse {
                 ? workoutRecord.getScheduledWorkout().getTitle()
                 : null;
 
+        List<WorkoutRecordHistoryResponse> workoutHistories = workoutRecord.getWorkoutHistories().stream()
+                .map(WorkoutRecordHistoryResponse::fromEntity)
+                .collect(Collectors.toList());
+
         return new CreateWorkoutRecordResponse(
                 workoutRecord.getId(),
                 workoutRecord.getUser().getName(),
                 workoutRecord.getExerciseType(),
                 scheduledWorkoutTitle,
-                workoutRecord.getExerciseName(),
+                workoutRecord.getScheduledWorkout().toString(),
                 workoutRecord.getRepetitions(),
                 workoutRecord.getDuration(),
                 workoutRecord.getRating(),
                 workoutRecord.getSuccess(),
                 workoutRecord.getRecordContent(),
-                workoutRecord.getCreatedDate()
+                workoutRecord.getCreatedDate().toString(),
+                workoutHistories
         );
     }
 }
+
