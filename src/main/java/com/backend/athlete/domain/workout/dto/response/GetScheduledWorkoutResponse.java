@@ -18,11 +18,11 @@ public class GetScheduledWorkoutResponse {
     private int rounds;
     private String time;
     private String notes;
-    private List<String> workoutInfos;
+    private List<WorkoutInfoResponse> workoutInfos;
     private Map<String, List<WorkoutRatingResponse>> workoutRatings;
 
     public GetScheduledWorkoutResponse(Long id, String title, LocalDate date, int rounds, String time, String notes,
-                                       List<String> workoutInfos, Map<String, List<WorkoutRatingResponse>> workoutRatings) {
+                                       List<WorkoutInfoResponse> workoutInfos, Map<String, List<WorkoutRatingResponse>> workoutRatings) {
         this.id = id;
         this.title = title;
         this.date = date;
@@ -34,8 +34,8 @@ public class GetScheduledWorkoutResponse {
     }
 
     public static GetScheduledWorkoutResponse fromEntity(ScheduledWorkout scheduledWorkout) {
-        List<String> workoutInfos = scheduledWorkout.getWorkoutInfos().stream()
-                .map(WorkoutInfo::getInfo)
+        List<WorkoutInfoResponse> workoutInfos = scheduledWorkout.getWorkoutInfos().stream()
+                .map(WorkoutInfoResponse::fromEntity)
                 .collect(Collectors.toList());
 
         Map<String, List<WorkoutRatingResponse>> workoutRatings = scheduledWorkout.getWorkoutRatings().stream()

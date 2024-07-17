@@ -26,7 +26,7 @@ public class CreateScheduledWorkoutRequest {
     private List<WorkoutRatingRequest> workoutRatings;
 
     public static ScheduledWorkout toEntity(CreateScheduledWorkoutRequest request) {
-        ScheduledWorkout scheduledWorkout = new ScheduledWorkout(
+        return new ScheduledWorkout(
                 request.getTitle(),
                 request.getDate(),
                 request.getRounds(),
@@ -34,15 +34,7 @@ public class CreateScheduledWorkoutRequest {
                 request.getNotes(),
                 request.getWorkoutType()
         );
-
-        for (WorkoutInfoRequest infoRequest : request.getWorkoutInfos()) {
-            scheduledWorkout.addWorkoutInfo(WorkoutInfoRequest.toEntity(infoRequest));
-        }
-
-        for (WorkoutRatingRequest ratingRequest : request.getWorkoutRatings()) {
-            scheduledWorkout.addWorkoutRating(WorkoutRatingRequest.toEntity(ratingRequest));
-        }
-
-        return scheduledWorkout;
     }
 }
+
+

@@ -1,5 +1,9 @@
 package com.backend.athlete.domain.workout.application;
 
+import com.backend.athlete.domain.execise.domain.Exercise;
+import com.backend.athlete.domain.execise.domain.ExerciseRepository;
+import com.backend.athlete.domain.execise.domain.ExerciseType;
+import com.backend.athlete.domain.execise.dto.request.CreateExerciseRequest;
 import com.backend.athlete.domain.workout.domain.*;
 import com.backend.athlete.domain.workout.dto.request.CreateScheduledWorkoutRequest;
 import com.backend.athlete.domain.workout.dto.request.WorkoutInfoRequest;
@@ -21,13 +25,28 @@ import java.util.stream.Collectors;
 @Transactional
 public class ScheduledWorkoutService {
     private final ScheduledWorkoutRepository scheduledWorkoutRepository;
-
+    private final ExerciseRepository exerciseRepository;
+    @Transactional
     public CreateScheduledWorkoutResponse saveScheduledWorkout(CreateScheduledWorkoutRequest request) {
         ScheduledWorkout scheduledWorkout = CreateScheduledWorkoutRequest.toEntity(request);
 
         List<WorkoutInfo> workoutInfos = request.getWorkoutInfos().stream()
                 .map(infoRequest -> {
-                    WorkoutInfo info = WorkoutInfoRequest.toEntity(infoRequest);
+                    Exercise exercise = exerciseRepository.findByName(infoRequest.getExerciseName())
+                            .orElseGet(() -> {
+                                CreateExerciseRequest createExerciseRequest = new CreateExerciseRequest(
+                                        infoRequest.getExerciseName(),
+                                        infoRequest.getType()
+                                );
+                                Exercise newExercise = new Exercise(
+                                        createExerciseRequest.getName(),
+                                        "",
+                                        "",
+                                        createExerciseRequest.getType()
+                                );
+                                return exerciseRepository.save(newExercise);
+                            });
+                    WorkoutInfo info = WorkoutInfoRequest.toEntity(infoRequest, exercise);
                     info.setScheduledWorkout(scheduledWorkout);
                     return info;
                 })
