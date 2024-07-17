@@ -2,10 +2,9 @@ package com.backend.athlete.domain.workout.infrastructure;
 
 import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.backend.athlete.domain.workout.domain.WorkoutRecord;
-
-import java.time.LocalDate;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface WorkoutRecordRepositoryCustom {
-    List<WorkoutRecord> findMainWorkoutRecordsByDateRangeAndGender(String startDateTime, String endDateTime, UserGenderType gender, int limit);
+    Page<WorkoutRecord> findMainWorkoutRecordsByDateRangeAndGenderAndRating(String startDateTime, String endDateTime, UserGenderType gender, String rating, Pageable pageable);
 }

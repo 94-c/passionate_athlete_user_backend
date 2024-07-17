@@ -13,6 +13,10 @@ import com.backend.athlete.domain.workout.dto.response.WorkoutRecordStatisticsRe
 import com.backend.athlete.support.exception.NotFoundException;
 import com.backend.athlete.support.util.FindUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +46,9 @@ public class WorkoutRecordService {
         return CreateWorkoutRecordResponse.fromEntity(savedWorkoutRecord);
     }
 
-    public List<WorkoutRecordStatisticsResponse> getMainWorkoutRecordsByDateRangeAndGender(LocalDate date, UserGenderType gender) {
+    public Page<WorkoutRecordStatisticsResponse> getMainWorkoutRecordsByDateRangeAndGender(LocalDate date, UserGenderType gender, String rating, int page, int perPage) {
+        Pageable pageable = PageRequest.of(page, perPage, Sort.by(Sort.Direction.ASC, "duration"));
+
         LocalDateTime startDate = date.atTime(16, 0, 0);
         LocalDateTime endDate = date.plusDays(1).atTime(13, 0, 0);
 
@@ -50,11 +56,9 @@ public class WorkoutRecordService {
         String startDateTime = startDate.format(formatter);
         String endDateTime = endDate.format(formatter);
 
-        List<WorkoutRecord> records = workoutRecordRepository.findMainWorkoutRecordsByDateRangeAndGender(startDateTime, endDateTime, gender, 10);
+        Page<WorkoutRecord> records = workoutRecordRepository.findMainWorkoutRecordsByDateRangeAndGenderAndRating(startDateTime, endDateTime, gender, rating, pageable);
 
-        return records.stream()
-                .map(WorkoutRecordStatisticsResponse::fromEntity)
-                .collect(Collectors.toList());
+        return records.map(WorkoutRecordStatisticsResponse::fromEntity);
     }
 
 }
