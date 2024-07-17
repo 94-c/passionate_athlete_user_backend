@@ -26,4 +26,15 @@ public class Exercise {
     @Comment("운동 영상")
     private String link;
 
+    @Enumerated(EnumType.STRING)
+    @Comment("운동 타입")
+    private ExerciseType type;
+
+    public Exercise(String name, String description, String link, ExerciseType type) {
+        this.name = name;
+        this.description = description;
+        this.link = link;
+        this.type = type;
+    }
 }
+
