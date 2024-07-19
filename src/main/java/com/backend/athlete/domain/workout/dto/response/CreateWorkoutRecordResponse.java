@@ -5,6 +5,7 @@ import com.backend.athlete.domain.workout.domain.type.WorkoutRecordType;
 import lombok.Getter;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,7 +16,7 @@ public class CreateWorkoutRecordResponse {
     private WorkoutRecordType exerciseType;
     private String scheduledWorkoutTitle;
     private String exerciseName;
-    private Integer repetitions;
+    private Integer rounds;
     private String duration;
     private String rating;
     private Boolean success;
@@ -24,7 +25,7 @@ public class CreateWorkoutRecordResponse {
     private List<WorkoutRecordHistoryResponse> workoutHistories;
 
     public CreateWorkoutRecordResponse(Long id, String userName, WorkoutRecordType exerciseType,
-                                       String scheduledWorkoutTitle, String exerciseName, Integer repetitions,
+                                       String scheduledWorkoutTitle, String exerciseName, Integer rounds,
                                        String duration, String rating, Boolean success, String recordContent,
                                        String createdDate, List<WorkoutRecordHistoryResponse> workoutHistories) {
         this.id = id;
@@ -32,7 +33,7 @@ public class CreateWorkoutRecordResponse {
         this.exerciseType = exerciseType;
         this.scheduledWorkoutTitle = scheduledWorkoutTitle;
         this.exerciseName = exerciseName;
-        this.repetitions = repetitions;
+        this.rounds = rounds;
         this.duration = duration;
         this.rating = rating;
         this.success = success;
@@ -46,9 +47,11 @@ public class CreateWorkoutRecordResponse {
                 ? workoutRecord.getScheduledWorkout().getTitle()
                 : null;
 
-        List<WorkoutRecordHistoryResponse> workoutHistories = workoutRecord.getWorkoutHistories().stream()
+        List<WorkoutRecordHistoryResponse> workoutHistories = workoutRecord.getWorkoutHistories() != null
+                ? workoutRecord.getWorkoutHistories().stream()
                 .map(WorkoutRecordHistoryResponse::fromEntity)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList())
+                : new ArrayList<>();
 
         return new CreateWorkoutRecordResponse(
                 workoutRecord.getId(),
@@ -56,7 +59,7 @@ public class CreateWorkoutRecordResponse {
                 workoutRecord.getExerciseType(),
                 scheduledWorkoutTitle,
                 workoutRecord.getScheduledWorkout().toString(),
-                workoutRecord.getRepetitions(),
+                workoutRecord.getRounds(),
                 workoutRecord.getDuration(),
                 workoutRecord.getRating(),
                 workoutRecord.getSuccess(),

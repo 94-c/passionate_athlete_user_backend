@@ -37,17 +37,17 @@ public class WorkoutRecordHistory extends BaseTimeEntity {
     @Comment("무게")
     private String weight;
 
-    @Comment("반복 횟수")
-    private Integer repetitions;
+    @Comment("라운드")
+    private Integer rounds;
 
     @Comment("등급")
     private String rating;
 
-    public WorkoutRecordHistory(User user, Exercise exercise, String weight, Integer repetitions, String rating) {
+    public WorkoutRecordHistory(User user, Exercise exercise, String weight, Integer rounds, String rating) {
         this.user = user;
         this.exercise = exercise;
         this.weight = weight;
-        this.repetitions = repetitions;
+        this.rounds = rounds;
         this.rating = rating;
     }
 

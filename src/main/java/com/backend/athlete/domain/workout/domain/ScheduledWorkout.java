@@ -32,6 +32,7 @@ public class ScheduledWorkout {
     private String time;
 
     @Comment("날짜")
+    @Column(unique = true)
     private LocalDate date;
 
     @Comment("비고")

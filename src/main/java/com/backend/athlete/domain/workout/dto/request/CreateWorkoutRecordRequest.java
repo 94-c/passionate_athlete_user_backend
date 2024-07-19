@@ -20,26 +20,23 @@ public class CreateWorkoutRecordRequest {
     private WorkoutRecordType exerciseType;
 
     private Long scheduledWorkoutId;
-    private Integer repetitions;
+    private Integer rounds;
     private String duration;
     private String rating;
     private Boolean success;
     private String recordContent;
-    private List<WorkoutHistoryRequest> workoutHistories;
+    private List<WorkoutHistoryRequest> workoutDetails;
 
     public static WorkoutRecord toEntity(CreateWorkoutRecordRequest request, User user, ScheduledWorkout scheduledWorkout) {
-        WorkoutRecord workoutRecord = new WorkoutRecord(
+        return new WorkoutRecord(
                 user,
                 request.getExerciseType(),
                 scheduledWorkout,
-                request.getRepetitions(),
+                request.getRounds(),
                 request.getDuration(),
                 request.getRating(),
                 request.getSuccess(),
                 request.getRecordContent()
         );
-
-        return workoutRecord;
     }
 }
-

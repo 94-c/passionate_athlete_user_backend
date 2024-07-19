@@ -12,15 +12,15 @@ public class WorkoutHistoryRequest {
     private Long exerciseId;
     private String exerciseName;
     private String weight;
-    private Integer repetitions;
+    private Integer rounds;
     private String rating;
 
-    public WorkoutHistoryRequest(Long userId, Long exerciseId, String exerciseName, String weight, Integer repetitions, String rating) {
+    public WorkoutHistoryRequest(Long userId, Long exerciseId, String exerciseName, String weight, Integer rounds, String rating) {
         this.userId = userId;
         this.exerciseId = exerciseId;
         this.exerciseName = exerciseName;
         this.weight = weight;
-        this.repetitions = repetitions;
+        this.rounds = rounds;
         this.rating = rating;
     }
 
@@ -29,7 +29,7 @@ public class WorkoutHistoryRequest {
                 user,
                 exercise,
                 request.getWeight(),
-                request.getRepetitions(),
+                request.getRounds(),
                 request.getRating()
         );
     }
