@@ -1,9 +1,8 @@
 package com.backend.athlete.domain.workout.application;
 
-import com.backend.athlete.domain.execise.domain.Exercise;
-import com.backend.athlete.domain.execise.domain.ExerciseRepository;
-import com.backend.athlete.domain.execise.domain.ExerciseType;
-import com.backend.athlete.domain.execise.dto.request.CreateExerciseRequest;
+import com.backend.athlete.domain.exercise.domain.Exercise;
+import com.backend.athlete.domain.exercise.domain.ExerciseRepository;
+import com.backend.athlete.domain.exercise.dto.request.CreateExerciseRequest;
 import com.backend.athlete.domain.workout.domain.*;
 import com.backend.athlete.domain.workout.dto.request.CreateScheduledWorkoutRequest;
 import com.backend.athlete.domain.workout.dto.request.WorkoutInfoRequest;
@@ -11,8 +10,6 @@ import com.backend.athlete.domain.workout.dto.request.WorkoutRatingRequest;
 import com.backend.athlete.domain.workout.dto.response.CreateScheduledWorkoutResponse;
 import com.backend.athlete.domain.workout.dto.response.GetScheduledWorkoutResponse;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

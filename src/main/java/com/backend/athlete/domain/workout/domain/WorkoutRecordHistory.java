@@ -1,6 +1,6 @@
 package com.backend.athlete.domain.workout.domain;
 
-import com.backend.athlete.domain.execise.domain.Exercise;
+import com.backend.athlete.domain.exercise.domain.Exercise;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.support.common.BaseTimeEntity;
 import jakarta.persistence.*;

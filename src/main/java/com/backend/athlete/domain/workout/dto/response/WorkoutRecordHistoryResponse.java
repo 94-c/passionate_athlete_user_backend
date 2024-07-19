@@ -21,7 +21,7 @@ public class WorkoutRecordHistoryResponse {
         return new WorkoutRecordHistoryResponse(
                 workoutRecordHistory.getExercise().getName(),
                 workoutRecordHistory.getWeight(),
-                workoutRecordHistory.getRepetitions(),
+                workoutRecordHistory.getRounds(),
                 workoutRecordHistory.getRating()
         );
     }

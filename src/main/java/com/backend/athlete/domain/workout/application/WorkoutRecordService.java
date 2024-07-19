@@ -1,8 +1,8 @@
 package com.backend.athlete.domain.workout.application;
 
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
-import com.backend.athlete.domain.execise.domain.Exercise;
-import com.backend.athlete.domain.execise.domain.ExerciseRepository;
+import com.backend.athlete.domain.exercise.domain.Exercise;
+import com.backend.athlete.domain.exercise.domain.ExerciseRepository;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.backend.athlete.domain.workout.domain.*;
@@ -24,8 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

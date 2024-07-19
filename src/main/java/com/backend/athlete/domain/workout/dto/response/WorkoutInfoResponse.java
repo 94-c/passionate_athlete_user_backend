@@ -1,6 +1,6 @@
 package com.backend.athlete.domain.workout.dto.response;
 
-import com.backend.athlete.domain.execise.dto.response.GetExerciseResponse;
+import com.backend.athlete.domain.exercise.dto.response.GetExerciseResponse;
 import com.backend.athlete.domain.workout.domain.WorkoutInfo;
 import lombok.Getter;
 

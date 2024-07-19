@@ -1,5 +1,6 @@
-package com.backend.athlete.domain.execise.domain;
+package com.backend.athlete.domain.exercise.domain;
 
+import com.backend.athlete.domain.exercise.domain.type.ExerciseType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -1,7 +1,7 @@
-package com.backend.athlete.domain.execise.dto.request;
+package com.backend.athlete.domain.exercise.dto.request;
 
-import com.backend.athlete.domain.execise.domain.Exercise;
-import com.backend.athlete.domain.execise.domain.ExerciseType;
+import com.backend.athlete.domain.exercise.domain.Exercise;
+import com.backend.athlete.domain.exercise.domain.type.ExerciseType;
 import lombok.Getter;
 import lombok.Setter;
 

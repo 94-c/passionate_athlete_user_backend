@@ -1,6 +1,6 @@
-package com.backend.athlete.domain.execise.dto.response;
+package com.backend.athlete.domain.exercise.dto.response;
 
-import com.backend.athlete.domain.execise.domain.Exercise;
+import com.backend.athlete.domain.exercise.domain.Exercise;
 import lombok.Getter;
 
 @Getter
