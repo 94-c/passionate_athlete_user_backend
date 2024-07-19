@@ -38,9 +38,11 @@ public class WorkoutRecordService {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
         ScheduledWorkout scheduledWorkout = null;
-        if (request.getScheduledWorkoutId() != null) {
+        if (!"MAIN".equals(request.getExerciseType())) {
             scheduledWorkout = scheduledWorkoutRepository.findById(request.getScheduledWorkoutId())
                     .orElseThrow(() -> new NotFoundException("오늘의 운동을 찾을 수가 없습니다.", HttpStatus.NOT_FOUND));
+        } else {
+            request.setScheduledWorkoutId(0L); // MAIN이 아닌 경우 ID를 0으로 설정
         }
 
         WorkoutRecord workoutRecord = CreateWorkoutRecordRequest.toEntity(request, user, scheduledWorkout);
