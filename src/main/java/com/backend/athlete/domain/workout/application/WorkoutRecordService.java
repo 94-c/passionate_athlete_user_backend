@@ -6,6 +6,7 @@ import com.backend.athlete.domain.exercise.domain.ExerciseRepository;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.backend.athlete.domain.workout.domain.*;
+import com.backend.athlete.domain.workout.domain.type.WorkoutRecordType;
 import com.backend.athlete.domain.workout.dto.request.CreateWorkoutRecordRequest;
 import com.backend.athlete.domain.workout.dto.request.WorkoutHistoryRequest;
 import com.backend.athlete.domain.workout.dto.response.CreateWorkoutRecordResponse;
@@ -30,7 +31,6 @@ import java.time.format.DateTimeFormatter;
 public class WorkoutRecordService {
     private final WorkoutRecordRepository workoutRecordRepository;
     private final ScheduledWorkoutRepository scheduledWorkoutRepository;
-    private final WorkoutRecordHistoryRepository workoutRecordHistoryRepository;
     private final ExerciseRepository exerciseRepository;
 
     @Transactional
@@ -38,11 +38,20 @@ public class WorkoutRecordService {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
         ScheduledWorkout scheduledWorkout = null;
-        if (!"MAIN".equals(request.getExerciseType())) {
+        WorkoutRecordType exerciseType = request.getExerciseType();
+
+        if (exerciseType == WorkoutRecordType.MAIN) {
+            // MAIN인 경우 스케줄이 필수
+            if (request.getScheduledWorkoutId() == null) {
+                throw new IllegalArgumentException("본운동의 경우 스케줄 ID가 필수입니다.");
+            }
             scheduledWorkout = scheduledWorkoutRepository.findById(request.getScheduledWorkoutId())
                     .orElseThrow(() -> new NotFoundException("오늘의 운동을 찾을 수가 없습니다.", HttpStatus.NOT_FOUND));
         } else {
-            request.setScheduledWorkoutId(0L); // MAIN이 아닌 경우 ID를 0으로 설정
+            // MODIFIED 또는 ADDITIONAL인 경우 스케줄이 없어야 함
+            if (request.getScheduledWorkoutId() != null) {
+                throw new IllegalArgumentException("변형 또는 추가 운동의 경우 스케줄 ID가 없어야 합니다.");
+            }
         }
 
         WorkoutRecord workoutRecord = CreateWorkoutRecordRequest.toEntity(request, user, scheduledWorkout);
