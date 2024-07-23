@@ -1,8 +1,7 @@
 package com.backend.athlete.domain.workout.dto.response;
 
 import com.backend.athlete.domain.workout.domain.ScheduledWorkout;
-import com.backend.athlete.domain.workout.domain.WorkoutInfo;
-import com.backend.athlete.domain.workout.domain.WorkoutRating;
+import com.backend.athlete.domain.workout.domain.ScheduledWorkoutRating;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -34,13 +33,13 @@ public class GetScheduledWorkoutResponse {
     }
 
     public static GetScheduledWorkoutResponse fromEntity(ScheduledWorkout scheduledWorkout) {
-        List<WorkoutInfoResponse> workoutInfos = scheduledWorkout.getWorkoutInfos().stream()
+        List<WorkoutInfoResponse> workoutInfos = scheduledWorkout.getScheduledWorkoutInfos().stream()
                 .map(WorkoutInfoResponse::fromEntity)
                 .collect(Collectors.toList());
 
-        Map<String, List<WorkoutRatingResponse>> workoutRatings = scheduledWorkout.getWorkoutRatings().stream()
+        Map<String, List<WorkoutRatingResponse>> workoutRatings = scheduledWorkout.getScheduledWorkoutRatings().stream()
                 .collect(Collectors.groupingBy(
-                        WorkoutRating::getGender,
+                        ScheduledWorkoutRating::getGender,
                         Collectors.mapping(WorkoutRatingResponse::fromEntity, Collectors.toList())
                 ));
 

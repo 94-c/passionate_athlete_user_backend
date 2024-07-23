@@ -1,7 +1,6 @@
 package com.backend.athlete.domain.workout.dto.request;
 
-import com.backend.athlete.domain.workout.domain.WorkoutRating;
-import jakarta.validation.constraints.NotNull;
+import com.backend.athlete.domain.workout.domain.ScheduledWorkoutRating;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +11,7 @@ public class WorkoutRatingRequest {
     private String rating;
     private String criteria;
 
-    public static WorkoutRating toEntity(WorkoutRatingRequest request) {
-        return new WorkoutRating(request.getGender(), request.getRating(), request.getCriteria());
+    public static ScheduledWorkoutRating toEntity(WorkoutRatingRequest request) {
+        return new ScheduledWorkoutRating(request.getGender(), request.getRating(), request.getCriteria());
     }
 }

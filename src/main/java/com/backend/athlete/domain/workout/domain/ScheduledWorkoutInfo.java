@@ -10,8 +10,8 @@ import org.hibernate.annotations.Comment;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "workout_info")
-public class WorkoutInfo {
+@Table(name = "schedule_workout_info")
+public class ScheduledWorkoutInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +28,7 @@ public class WorkoutInfo {
     @JoinColumn(name = "scheduled_workout_id", nullable = false)
     private ScheduledWorkout scheduledWorkout;
 
-    public WorkoutInfo(Exercise exercise, String info) {
+    public ScheduledWorkoutInfo(Exercise exercise, String info) {
         this.exercise = exercise;
         this.info = info;
     }

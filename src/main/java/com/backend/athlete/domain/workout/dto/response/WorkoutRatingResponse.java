@@ -1,7 +1,7 @@
 package com.backend.athlete.domain.workout.dto.response;
 
 
-import com.backend.athlete.domain.workout.domain.WorkoutRating;
+import com.backend.athlete.domain.workout.domain.ScheduledWorkoutRating;
 import lombok.Getter;
 
 @Getter
@@ -14,7 +14,7 @@ public class WorkoutRatingResponse {
         this.criteria = criteria;
     }
 
-    public static WorkoutRatingResponse fromEntity(WorkoutRating workoutRating) {
-        return new WorkoutRatingResponse(workoutRating.getRating(), workoutRating.getCriteria());
+    public static WorkoutRatingResponse fromEntity(ScheduledWorkoutRating scheduledWorkoutRating) {
+        return new WorkoutRatingResponse(scheduledWorkoutRating.getRating(), scheduledWorkoutRating.getCriteria());
     }
 }

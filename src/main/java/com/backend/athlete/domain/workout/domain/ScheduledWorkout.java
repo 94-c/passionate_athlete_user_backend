@@ -1,7 +1,6 @@
 package com.backend.athlete.domain.workout.domain;
 
 import com.backend.athlete.domain.workout.domain.type.WorkoutType;
-import com.backend.athlete.support.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -43,10 +42,10 @@ public class ScheduledWorkout {
     private WorkoutType workoutType;
 
     @OneToMany(mappedBy = "scheduledWorkout", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WorkoutInfo> workoutInfos = new ArrayList<>();
+    private List<ScheduledWorkoutInfo> scheduledWorkoutInfos = new ArrayList<>();
 
     @OneToMany(mappedBy = "scheduledWorkout", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WorkoutRating> workoutRatings = new ArrayList<>();
+    private List<ScheduledWorkoutRating> scheduledWorkoutRatings = new ArrayList<>();
 
     public ScheduledWorkout(String title, LocalDate date, int rounds, String time, String notes, WorkoutType workoutType) {
         this.title = title;
@@ -57,24 +56,24 @@ public class ScheduledWorkout {
         this.workoutType = workoutType;
     }
 
-    public void addWorkoutInfo(WorkoutInfo workoutInfo) {
-        workoutInfos.add(workoutInfo);
-        workoutInfo.setScheduledWorkout(this);
+    public void addWorkoutInfo(ScheduledWorkoutInfo scheduledWorkoutInfo) {
+        scheduledWorkoutInfos.add(scheduledWorkoutInfo);
+        scheduledWorkoutInfo.setScheduledWorkout(this);
     }
 
-    public void addWorkoutRating(WorkoutRating workoutRating) {
-        workoutRatings.add(workoutRating);
-        workoutRating.setScheduledWorkout(this);
+    public void addWorkoutRating(ScheduledWorkoutRating scheduledWorkoutRating) {
+        scheduledWorkoutRatings.add(scheduledWorkoutRating);
+        scheduledWorkoutRating.setScheduledWorkout(this);
     }
 
-    public void setWorkoutInfos(List<WorkoutInfo> workoutInfos) {
-        this.workoutInfos = workoutInfos;
-        workoutInfos.forEach(info -> info.setScheduledWorkout(this));
+    public void setScheduledWorkoutInfos(List<ScheduledWorkoutInfo> scheduledWorkoutInfos) {
+        this.scheduledWorkoutInfos = scheduledWorkoutInfos;
+        scheduledWorkoutInfos.forEach(info -> info.setScheduledWorkout(this));
     }
 
-    public void setWorkoutRatings(List<WorkoutRating> workoutRatings) {
-        this.workoutRatings = workoutRatings;
-        workoutRatings.forEach(rating -> rating.setScheduledWorkout(this));
+    public void setScheduledWorkoutRatings(List<ScheduledWorkoutRating> scheduledWorkoutRatings) {
+        this.scheduledWorkoutRatings = scheduledWorkoutRatings;
+        scheduledWorkoutRatings.forEach(rating -> rating.setScheduledWorkout(this));
     }
 }
 

@@ -34,11 +34,11 @@ public class CreateScheduledWorkoutResponse {
     }
 
     public static CreateScheduledWorkoutResponse fromEntity(ScheduledWorkout scheduledWorkout) {
-        List<WorkoutInfoResponse> workoutInfos = scheduledWorkout.getWorkoutInfos().stream()
+        List<WorkoutInfoResponse> workoutInfos = scheduledWorkout.getScheduledWorkoutInfos().stream()
                 .map(WorkoutInfoResponse::fromEntity)
                 .collect(Collectors.toList());
 
-        List<WorkoutRatingResponse> workoutRatings = scheduledWorkout.getWorkoutRatings().stream()
+        List<WorkoutRatingResponse> workoutRatings = scheduledWorkout.getScheduledWorkoutRatings().stream()
                 .map(WorkoutRatingResponse::fromEntity)
                 .collect(Collectors.toList());
 

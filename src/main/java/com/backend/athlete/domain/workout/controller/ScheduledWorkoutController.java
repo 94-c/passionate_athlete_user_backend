@@ -1,9 +1,6 @@
 package com.backend.athlete.domain.workout.controller;
 
 import com.backend.athlete.domain.workout.application.ScheduledWorkoutService;
-import com.backend.athlete.domain.workout.domain.ScheduledWorkout;
-import com.backend.athlete.domain.workout.domain.WorkoutInfo;
-import com.backend.athlete.domain.workout.domain.WorkoutRating;
 import com.backend.athlete.domain.workout.dto.request.CreateScheduledWorkoutRequest;
 import com.backend.athlete.domain.workout.dto.response.CreateScheduledWorkoutResponse;
 import com.backend.athlete.domain.workout.dto.response.GetScheduledWorkoutResponse;

@@ -1,17 +1,12 @@
 package com.backend.athlete.domain.workout.dto.request;
 
 import com.backend.athlete.domain.workout.domain.ScheduledWorkout;
-import com.backend.athlete.domain.workout.domain.WorkoutInfo;
-import com.backend.athlete.domain.workout.domain.WorkoutRating;
 import com.backend.athlete.domain.workout.domain.type.WorkoutType;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter

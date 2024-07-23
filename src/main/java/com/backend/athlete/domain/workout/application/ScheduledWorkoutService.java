@@ -27,7 +27,7 @@ public class ScheduledWorkoutService {
     public CreateScheduledWorkoutResponse saveScheduledWorkout(CreateScheduledWorkoutRequest request) {
         ScheduledWorkout scheduledWorkout = CreateScheduledWorkoutRequest.toEntity(request);
 
-        List<WorkoutInfo> workoutInfos = request.getWorkoutInfos().stream()
+        List<ScheduledWorkoutInfo> scheduledWorkoutInfos = request.getWorkoutInfos().stream()
                 .map(infoRequest -> {
                     Exercise exercise = exerciseRepository.findByName(infoRequest.getExerciseName())
                             .orElseGet(() -> {
@@ -43,22 +43,22 @@ public class ScheduledWorkoutService {
                                 );
                                 return exerciseRepository.save(newExercise);
                             });
-                    WorkoutInfo info = WorkoutInfoRequest.toEntity(infoRequest, exercise);
+                    ScheduledWorkoutInfo info = WorkoutInfoRequest.toEntity(infoRequest, exercise);
                     info.setScheduledWorkout(scheduledWorkout);
                     return info;
                 })
                 .collect(Collectors.toList());
 
-        List<WorkoutRating> workoutRatings = request.getWorkoutRatings().stream()
+        List<ScheduledWorkoutRating> scheduledWorkoutRatings = request.getWorkoutRatings().stream()
                 .map(ratingRequest -> {
-                    WorkoutRating rating = WorkoutRatingRequest.toEntity(ratingRequest);
+                    ScheduledWorkoutRating rating = WorkoutRatingRequest.toEntity(ratingRequest);
                     rating.setScheduledWorkout(scheduledWorkout);
                     return rating;
                 })
                 .collect(Collectors.toList());
 
-        scheduledWorkout.setWorkoutInfos(workoutInfos);
-        scheduledWorkout.setWorkoutRatings(workoutRatings);
+        scheduledWorkout.setScheduledWorkoutInfos(scheduledWorkoutInfos);
+        scheduledWorkout.setScheduledWorkoutRatings(scheduledWorkoutRatings);
 
         ScheduledWorkout savedScheduledWorkout = scheduledWorkoutRepository.save(scheduledWorkout);
 
