@@ -10,7 +10,7 @@ import org.hibernate.annotations.Comment;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "schedule_workout_info")
+@Table(name = "scheduled_workout_info")
 public class ScheduledWorkoutInfo {
 
     @Id
