@@ -36,27 +36,38 @@ public class WorkoutRecordService {
     @Transactional
     public CreateWorkoutRecordResponse saveWorkoutRecord(CreateWorkoutRecordRequest request, CustomUserDetailsImpl userPrincipal) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
-
-        ScheduledWorkout scheduledWorkout = null;
         WorkoutRecordType exerciseType = request.getExerciseType();
 
+        ScheduledWorkout scheduledWorkout = validateScheduledWorkout(exerciseType, request.getScheduledWorkoutId());
+
+        WorkoutRecord savedWorkoutRecord = saveWorkoutRecordEntity(request, user, scheduledWorkout);
+
+        saveWorkoutHistory(request, user, savedWorkoutRecord);
+
+        return CreateWorkoutRecordResponse.fromEntity(savedWorkoutRecord);
+    }
+
+    private ScheduledWorkout validateScheduledWorkout(WorkoutRecordType exerciseType, Long scheduledWorkoutId) {
         if (exerciseType == WorkoutRecordType.MAIN) {
-            // MAIN인 경우 스케줄이 필수
-            if (request.getScheduledWorkoutId() == null) {
+            if (scheduledWorkoutId == null) {
                 throw new IllegalArgumentException("본운동의 경우 스케줄 ID가 필수입니다.");
             }
-            scheduledWorkout = scheduledWorkoutRepository.findById(request.getScheduledWorkoutId())
+            return scheduledWorkoutRepository.findById(scheduledWorkoutId)
                     .orElseThrow(() -> new NotFoundException("오늘의 운동을 찾을 수가 없습니다.", HttpStatus.NOT_FOUND));
         } else {
-            // MODIFIED 또는 ADDITIONAL인 경우 스케줄이 없어야 함
-            if (request.getScheduledWorkoutId() != null) {
+            if (scheduledWorkoutId != null) {
                 throw new IllegalArgumentException("변형 또는 추가 운동의 경우 스케줄 ID가 없어야 합니다.");
             }
+            return null;
         }
+    }
 
+    private WorkoutRecord saveWorkoutRecordEntity(CreateWorkoutRecordRequest request, User user, ScheduledWorkout scheduledWorkout) {
         WorkoutRecord workoutRecord = CreateWorkoutRecordRequest.toEntity(request, user, scheduledWorkout);
-        WorkoutRecord savedWorkoutRecord = workoutRecordRepository.save(workoutRecord);
+        return workoutRecordRepository.save(workoutRecord);
+    }
 
+    private void saveWorkoutHistory(CreateWorkoutRecordRequest request, User user, WorkoutRecord workoutRecord) {
         if (request.getWorkoutDetails() != null) {
             for (WorkoutHistoryRequest historyRequest : request.getWorkoutDetails()) {
                 Exercise exercise = exerciseRepository.findByName(historyRequest.getExerciseName())
@@ -65,10 +76,7 @@ public class WorkoutRecordService {
                 workoutRecord.addWorkoutHistory(history);
             }
         }
-
-        return CreateWorkoutRecordResponse.fromEntity(savedWorkoutRecord);
     }
-
 
     @Transactional
     public Page<WorkoutRecordStatisticsResponse> getMainWorkoutRecordsByDateRangeAndGender(LocalDate date, UserGenderType gender, String rating, int page, int perPage) {
