@@ -10,7 +10,10 @@ import com.backend.athlete.domain.workout.domain.type.WorkoutRecordType;
 import com.backend.athlete.domain.workout.dto.request.CreateWorkoutRecordRequest;
 import com.backend.athlete.domain.workout.dto.request.WorkoutHistoryRequest;
 import com.backend.athlete.domain.workout.dto.response.CreateWorkoutRecordResponse;
+import com.backend.athlete.domain.workout.dto.response.DailyWorkoutCountResponse;
+import com.backend.athlete.domain.workout.dto.response.MonthlyWorkoutRecordResponse;
 import com.backend.athlete.domain.workout.dto.response.WorkoutRecordStatisticsResponse;
+import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.exception.NotFoundException;
 import com.backend.athlete.support.util.FindUtils;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -94,4 +100,11 @@ public class WorkoutRecordService {
         return records.map(WorkoutRecordStatisticsResponse::fromEntity);
     }
 
+    public List<DailyWorkoutCountResponse> getMonthlyWorkoutCounts(LocalDate month, CustomUserDetailsImpl userPrincipal) {
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
+        int year = month.getYear();
+        int monthValue = month.getMonthValue();
+
+        return workoutRecordRepository.countWorkoutsByUserAndMonth(user, year, monthValue);
+    }
 }

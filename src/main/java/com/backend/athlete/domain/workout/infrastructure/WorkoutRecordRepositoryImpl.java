@@ -1,12 +1,15 @@
 package com.backend.athlete.domain.workout.infrastructure;
 
 import com.backend.athlete.domain.user.domain.QUser;
+import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.backend.athlete.domain.workout.domain.QWorkoutRecord;
 import com.backend.athlete.domain.workout.domain.WorkoutRecord;
 import com.backend.athlete.domain.workout.domain.type.WorkoutRecordType;
+import com.backend.athlete.domain.workout.dto.response.DailyWorkoutCountResponse;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +18,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Repository
 @Transactional(readOnly = true)
@@ -63,6 +68,22 @@ public class WorkoutRecordRepositoryImpl implements WorkoutRecordRepositoryCusto
 
         return new PageImpl<>(results.getResults(), pageable, results.getTotal());
     }
+
+    @Override
+    public List<DailyWorkoutCountResponse> countWorkoutsByUserAndMonth(User user, int year, int month) {
+        QWorkoutRecord workoutRecord = QWorkoutRecord.workoutRecord;
+
+        return factory.select(Projections.constructor(DailyWorkoutCountResponse.class,
+                        workoutRecord.createdAt.yearMonthDay(),
+                        workoutRecord.count()))
+                .from(workoutRecord)
+                .where(workoutRecord.user.eq(user)
+                        .and(workoutRecord.createdAt.year().eq(year))
+                        .and(workoutRecord.createdAt.month().eq(month)))
+                .groupBy(workoutRecord.createdAt.yearMonthDay())
+                .fetch();
+    }
+
 }
 
 

@@ -5,6 +5,8 @@ import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.backend.athlete.domain.workout.application.WorkoutRecordService;
 import com.backend.athlete.domain.workout.dto.request.CreateWorkoutRecordRequest;
 import com.backend.athlete.domain.workout.dto.response.CreateWorkoutRecordResponse;
+import com.backend.athlete.domain.workout.dto.response.DailyWorkoutCountResponse;
+import com.backend.athlete.domain.workout.dto.response.MonthlyWorkoutRecordResponse;
 import com.backend.athlete.domain.workout.dto.response.WorkoutRecordStatisticsResponse;
 import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.constant.PageConstant;
@@ -42,6 +44,15 @@ public class WorkoutRecordController {
         Page<WorkoutRecordStatisticsResponse> response = workoutRecordService.getMainWorkoutRecordsByDateRangeAndGender(date, gender, rating, page, perPage);
         PagedResponse<WorkoutRecordStatisticsResponse> pagedResponse = PagedResponse.fromPage(response);
         return ResponseEntity.status(HttpStatus.OK).body(pagedResponse);
+    }
+
+    @GetMapping("/monthly")
+    public ResponseEntity<List<DailyWorkoutCountResponse>> getMonthlyWorkoutCounts(
+            @RequestParam("month") @DateTimeFormat(pattern = "yyyy-MM") LocalDate month,
+            @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
+
+        List<DailyWorkoutCountResponse> response = workoutRecordService.getMonthlyWorkoutCounts(month, userPrincipal);
+        return ResponseEntity.ok(response);
     }
 
 }
