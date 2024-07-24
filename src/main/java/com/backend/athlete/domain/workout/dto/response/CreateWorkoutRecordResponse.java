@@ -43,10 +43,6 @@ public class CreateWorkoutRecordResponse {
     }
 
     public static CreateWorkoutRecordResponse fromEntity(WorkoutRecord workoutRecord) {
-        String scheduledWorkoutTitle = workoutRecord.getScheduledWorkout() != null
-                ? workoutRecord.getScheduledWorkout().getTitle()
-                : null;
-
         List<WorkoutRecordHistoryResponse> workoutHistories = workoutRecord.getWorkoutHistories() != null
                 ? workoutRecord.getWorkoutHistories().stream()
                 .map(WorkoutRecordHistoryResponse::fromEntity)
@@ -57,8 +53,8 @@ public class CreateWorkoutRecordResponse {
                 workoutRecord.getId(),
                 workoutRecord.getUser().getName(),
                 workoutRecord.getExerciseType(),
-                scheduledWorkoutTitle,
-                workoutRecord.getScheduledWorkout().toString(),
+                workoutRecord.getScheduledWorkoutTitle(), // 수정된 부분: getScheduledWorkoutTitle() 메서드 사용
+                workoutRecord.getExerciseType() != null ? workoutRecord.getExerciseType().name() : null, // 예시: 운동 타입을 이름으로 설정
                 workoutRecord.getRounds(),
                 workoutRecord.getDuration(),
                 workoutRecord.getRating(),
@@ -69,4 +65,5 @@ public class CreateWorkoutRecordResponse {
         );
     }
 }
+
 

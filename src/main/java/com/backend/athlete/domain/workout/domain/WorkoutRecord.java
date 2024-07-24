@@ -73,5 +73,9 @@ public class WorkoutRecord extends BaseTimeEntity {
         workoutHistories.add(history);
         history.setWorkoutRecord(this);
     }
+
+    public String getScheduledWorkoutTitle() {
+        return scheduledWorkout != null ? scheduledWorkout.getTitle() : null;
+    }
 }
 
