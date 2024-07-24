@@ -8,10 +8,14 @@ import lombok.Setter;
 @Getter @Setter
 public class CreateExerciseRequest {
     private String name;
+    private String description;
+    private String link;
     private ExerciseType type;
 
-    public CreateExerciseRequest(String name, ExerciseType type) {
+    public CreateExerciseRequest(String name, String description, String link, ExerciseType type) {
         this.name = name;
+        this.description = description;
+        this.link = link;
         this.type = type;
     }
 

@@ -33,8 +33,10 @@ public class ScheduledWorkoutService {
                             .orElseGet(() -> {
                                 CreateExerciseRequest createExerciseRequest = new CreateExerciseRequest(
                                         infoRequest.getExerciseName(),
+                                        "",
+                                        "",
                                         infoRequest.getType()
-                                );
+                                        );
                                 Exercise newExercise = new Exercise(
                                         createExerciseRequest.getName(),
                                         "",
