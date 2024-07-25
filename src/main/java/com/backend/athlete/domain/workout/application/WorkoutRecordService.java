@@ -6,14 +6,11 @@ import com.backend.athlete.domain.exercise.domain.ExerciseRepository;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.backend.athlete.domain.workout.domain.*;
+import com.backend.athlete.domain.workout.domain.data.WorkoutRecordData;
 import com.backend.athlete.domain.workout.domain.type.WorkoutRecordType;
 import com.backend.athlete.domain.workout.dto.request.CreateWorkoutRecordRequest;
 import com.backend.athlete.domain.workout.dto.request.WorkoutHistoryRequest;
-import com.backend.athlete.domain.workout.dto.response.CreateWorkoutRecordResponse;
-import com.backend.athlete.domain.workout.dto.response.DailyWorkoutCountResponse;
-import com.backend.athlete.domain.workout.dto.response.MonthlyWorkoutRecordResponse;
-import com.backend.athlete.domain.workout.dto.response.WorkoutRecordStatisticsResponse;
-import com.backend.athlete.support.common.response.PagedResponse;
+import com.backend.athlete.domain.workout.dto.response.*;
 import com.backend.athlete.support.exception.NotFoundException;
 import com.backend.athlete.support.util.FindUtils;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -100,11 +98,33 @@ public class WorkoutRecordService {
         return records.map(WorkoutRecordStatisticsResponse::fromEntity);
     }
 
-    public List<DailyWorkoutCountResponse> getMonthlyWorkoutCounts(LocalDate month, CustomUserDetailsImpl userPrincipal) {
+    @Transactional
+    public GetMonthlyWorkoutResponse getMonthlyWorkoutCounts(YearMonth month, CustomUserDetailsImpl userPrincipal) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
-        int year = month.getYear();
-        int monthValue = month.getMonthValue();
+        LocalDateTime startDate = month.atDay(1).atStartOfDay();
+        LocalDateTime endDate = month.atEndOfMonth().atTime(LocalTime.MAX);
 
-        return workoutRecordRepository.countWorkoutsByUserAndMonth(user, year, monthValue);
+        List<WorkoutRecord> workoutRecords = workoutRecordRepository.findByUserAndCreatedAtBetween(user, startDate, endDate);
+
+        List<LocalDate> presentDays = workoutRecords.stream()
+                .map(record -> record.getCreatedAt().toLocalDate())
+                .distinct()
+                .collect(Collectors.toList());
+
+        return new GetMonthlyWorkoutResponse(presentDays.size(), presentDays);
     }
+
+    @Transactional
+    public GetDailyWorkoutRecordResponse getDailyWorkoutRecord(LocalDate date, CustomUserDetailsImpl userPrincipal) {
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
+        List<WorkoutRecord> records = workoutRecordRepository.findByUserAndCreatedAtBetween(
+                user, date.atStartOfDay(), date.plusDays(1).atStartOfDay());
+
+        List<WorkoutRecordData> recordDTOs = records.stream()
+                .map(WorkoutRecordData::new)
+                .toList();
+
+        return new GetDailyWorkoutRecordResponse(recordDTOs);
+    }
+
 }

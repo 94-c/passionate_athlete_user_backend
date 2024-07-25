@@ -4,10 +4,7 @@ import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.backend.athlete.domain.workout.application.WorkoutRecordService;
 import com.backend.athlete.domain.workout.dto.request.CreateWorkoutRecordRequest;
-import com.backend.athlete.domain.workout.dto.response.CreateWorkoutRecordResponse;
-import com.backend.athlete.domain.workout.dto.response.DailyWorkoutCountResponse;
-import com.backend.athlete.domain.workout.dto.response.MonthlyWorkoutRecordResponse;
-import com.backend.athlete.domain.workout.dto.response.WorkoutRecordStatisticsResponse;
+import com.backend.athlete.domain.workout.dto.response.*;
 import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.constant.PageConstant;
 import jakarta.validation.Valid;
@@ -20,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 @RestController
@@ -47,11 +45,20 @@ public class WorkoutRecordController {
     }
 
     @GetMapping("/monthly")
-    public ResponseEntity<List<DailyWorkoutCountResponse>> getMonthlyWorkoutCounts(
-            @RequestParam("month") @DateTimeFormat(pattern = "yyyy-MM") LocalDate month,
+    public ResponseEntity<GetMonthlyWorkoutResponse> getMonthlyWorkoutCounts(
+            @RequestParam("month") @DateTimeFormat(pattern = "yyyy-MM") YearMonth month,
             @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
 
-        List<DailyWorkoutCountResponse> response = workoutRecordService.getMonthlyWorkoutCounts(month, userPrincipal);
+        GetMonthlyWorkoutResponse response = workoutRecordService.getMonthlyWorkoutCounts(month, userPrincipal);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/daily")
+    public ResponseEntity<GetDailyWorkoutRecordResponse> getDailyWorkoutRecord(
+            @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+            @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
+
+        GetDailyWorkoutRecordResponse response = workoutRecordService.getDailyWorkoutRecord(date, userPrincipal);
         return ResponseEntity.ok(response);
     }
 

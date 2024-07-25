@@ -6,10 +6,8 @@ import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.backend.athlete.domain.workout.domain.QWorkoutRecord;
 import com.backend.athlete.domain.workout.domain.WorkoutRecord;
 import com.backend.athlete.domain.workout.domain.type.WorkoutRecordType;
-import com.backend.athlete.domain.workout.dto.response.DailyWorkoutCountResponse;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -70,19 +69,15 @@ public class WorkoutRecordRepositoryImpl implements WorkoutRecordRepositoryCusto
     }
 
     @Override
-    public List<DailyWorkoutCountResponse> countWorkoutsByUserAndMonth(User user, int year, int month) {
+    public List<WorkoutRecord> findByUserAndCreatedAtBetween(User user, LocalDateTime startDate, LocalDateTime endDate) {
         QWorkoutRecord workoutRecord = QWorkoutRecord.workoutRecord;
 
-        return factory.select(Projections.constructor(DailyWorkoutCountResponse.class,
-                        workoutRecord.createdAt.yearMonthDay(),
-                        workoutRecord.count()))
-                .from(workoutRecord)
+        return factory.selectFrom(workoutRecord)
                 .where(workoutRecord.user.eq(user)
-                        .and(workoutRecord.createdAt.year().eq(year))
-                        .and(workoutRecord.createdAt.month().eq(month)))
-                .groupBy(workoutRecord.createdAt.yearMonthDay())
+                        .and(workoutRecord.createdAt.between(startDate, endDate)))
                 .fetch();
     }
+
 
 }
 
