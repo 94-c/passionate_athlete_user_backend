@@ -16,6 +16,7 @@ public class WorkoutRecordData {
     private Boolean success;
     private String recordContent;
     private LocalDateTime createdAt;
+    private String scheduledWorkoutTitle;
 
     public WorkoutRecordData(WorkoutRecord workoutRecord) {
         this.id = workoutRecord.getId();
@@ -26,5 +27,6 @@ public class WorkoutRecordData {
         this.success = workoutRecord.getSuccess();
         this.recordContent = workoutRecord.getRecordContent();
         this.createdAt = workoutRecord.getCreatedAt();
+        this.scheduledWorkoutTitle = workoutRecord.getScheduledWorkout() != null ? workoutRecord.getScheduledWorkout().getTitle() : null;
     }
 }
