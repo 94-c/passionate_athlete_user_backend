@@ -2,15 +2,22 @@ package com.backend.athlete.domain.workout.application;
 
 import com.backend.athlete.domain.attendance.domain.AttendanceRepository;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
+import com.backend.athlete.domain.exercise.domain.type.ExerciseType;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.workout.domain.WorkoutRecord;
+import com.backend.athlete.domain.workout.domain.WorkoutRecordHistory;
+import com.backend.athlete.domain.workout.domain.WorkoutRecordHistoryRepository;
 import com.backend.athlete.domain.workout.domain.WorkoutRecordRepository;
+import com.backend.athlete.domain.workout.dto.response.GetExerciseTypeLastWeightResponse;
 import com.backend.athlete.domain.workout.dto.response.GetWorkoutStatisticsResponse;
 import com.backend.athlete.support.util.FindUtils;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,7 +27,7 @@ import java.util.stream.Collectors;
 public class WorkoutStaticsService {
     private final WorkoutRecordRepository workoutRecordRepository;
     private final AttendanceRepository attendanceRepository;
-
+    private final WorkoutRecordHistoryRepository workoutRecordHistoryRepository;
     public GetWorkoutStatisticsResponse getWorkoutStatistics(CustomUserDetailsImpl userPrincipal) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
         long totalDuration = getTotalWorkoutDuration(user);
@@ -42,6 +49,11 @@ public class WorkoutStaticsService {
                 weeklyAttendanceRate,
                 monthlyAttendanceRate
         );
+    }
+
+    public List<GetExerciseTypeLastWeightResponse> getLastWeightsByExerciseType(CustomUserDetailsImpl userPrincipal, ExerciseType exerciseType) {
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
+        return workoutRecordHistoryRepository.findLastWeightsByExerciseType(user.getId(), exerciseType);
     }
 
     private long getTotalWorkoutDuration(User user) {
