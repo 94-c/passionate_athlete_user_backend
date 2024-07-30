@@ -1,5 +1,6 @@
-package com.backend.athlete.domain.execise.domain;
+package com.backend.athlete.domain.exercise.domain;
 
+import com.backend.athlete.domain.exercise.domain.type.ExerciseType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,4 +27,15 @@ public class Exercise {
     @Comment("운동 영상")
     private String link;
 
+    @Enumerated(EnumType.STRING)
+    @Comment("운동 타입")
+    private ExerciseType type;
+
+    public Exercise(String name, String description, String link, ExerciseType type) {
+        this.name = name;
+        this.description = description;
+        this.link = link;
+        this.type = type;
+    }
 }
+

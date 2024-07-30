@@ -39,9 +39,6 @@ public class NoticeService {
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
     private final NoticeTypeRepository noticeTypeRepository;
-    private final FileRepository fileRepository;
-    private final Path rootLocation = Paths.get("notice-images");
-
     @Transactional(readOnly = true)
     public Page<PageSearchNoticeResponse> searchNotices(PageSearchNoticeRequest request, int page, int perPage, Long kindId, boolean status) {
         Pageable pageable = PageRequest.of(page, perPage);
