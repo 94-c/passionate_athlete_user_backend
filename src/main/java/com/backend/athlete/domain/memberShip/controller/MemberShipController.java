@@ -33,6 +33,13 @@ public class MemberShipController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    // 현재 활성화된 회원권 정보 조회
+    @GetMapping("/current")
+    public ResponseEntity<GetMemberShipResponse> getCurrentMembership(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
+        GetMemberShipResponse response = memberShipService.getCurrentMembership(userPrincipal);
+        return ResponseEntity.ok(response);
+    }
+
     // 회원이 회원권 갱신 요청
     @PostMapping("/renew")
     public ResponseEntity<CreateMemberShipResponse> renewMembership(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,

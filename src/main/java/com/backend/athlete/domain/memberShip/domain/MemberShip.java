@@ -28,6 +28,9 @@ public class MemberShip extends BaseTimeEntity {
     @Comment("회원 아이디")
     private User user;
 
+    @Comment("회원권 시작 날짜")
+    private LocalDate startDate;
+
     @Comment("회원권 만료 날짜")
     private LocalDate expiryDate;
 
@@ -40,8 +43,9 @@ public class MemberShip extends BaseTimeEntity {
     @Comment("정지 일수")
     private int pausedDays;
 
-    public MemberShip(User user, LocalDate expiryDate, boolean status) {
+    public MemberShip(User user, LocalDate startDate, LocalDate expiryDate, boolean status) {
         this.user = user;
+        this.startDate = startDate;
         this.expiryDate = expiryDate;
         this.status = status;
         this.pausedDays = 0;

@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface MemberShipRepository extends JpaRepository<MemberShip, Long> {
     Optional<MemberShip> findByUserId(Long userId);
-
+    Optional<MemberShip> findByUserIdAndStatusTrue(Long userId);
 }

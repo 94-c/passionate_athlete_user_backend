@@ -31,6 +31,14 @@ public class MemberShipService {
     private final MemberShipHistoryRepository memberShipHistoryRepository;
     private final MemberShipPauseRepository memberShipPauseRepository;
 
+    public GetMemberShipResponse getCurrentMembership(CustomUserDetailsImpl userPrincipal) {
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
+        MemberShip memberShip = memberShipRepository.findByUserIdAndStatusTrue(user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("No active membership found for user"));
+
+        return GetMemberShipResponse.fromEntity(memberShip);
+    }
+
     @Transactional
     public CreateMemberShipResponse createMembership(CreateMemberShipRequest request) {
         User user = userRepository.findById(request.getUserId())

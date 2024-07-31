@@ -9,11 +9,13 @@ import java.time.LocalDate;
 public class CreateMemberShipResponse {
     private Long id;
     private String username;
+    private LocalDate startDate;
     private LocalDate expiryDate;
 
     public CreateMemberShipResponse(MemberShip memberShip) {
         this.id = memberShip.getId();
         this.username = memberShip.getUser().getName();
+        this.startDate = memberShip.getStartDate();
         this.expiryDate = memberShip.getExpiryDate();
     }
 

@@ -19,7 +19,8 @@ public class CreateMemberShipRequest {
     private PeriodType periodType;
 
     public static MemberShip toEntity(CreateMemberShipRequest request, User user) {
-        LocalDate expiryDate = LocalDate.now().plusMonths(request.getPeriodType().getMonths());
-        return new MemberShip(user, expiryDate, true);
+        LocalDate startDate = LocalDate.now();
+        LocalDate expiryDate = startDate.plusMonths(request.getPeriodType().getMonths());
+        return new MemberShip(user, startDate, expiryDate, true);
     }
 }
