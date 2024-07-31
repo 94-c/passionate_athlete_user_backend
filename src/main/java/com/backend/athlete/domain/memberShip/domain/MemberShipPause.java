@@ -12,12 +12,12 @@ import java.time.LocalDate;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "member_ship_histories")
-public class MemberShipHistory extends BaseTimeEntity {
+@Table(name = "member_ship_pauses_history")
+public class MemberShipPause extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Comment("회원권 갱신 히스토리 인덱스")
+    @Comment("회원권 정지 히스토리 인덱스")
     private Long id;
 
     @ManyToOne
@@ -25,16 +25,15 @@ public class MemberShipHistory extends BaseTimeEntity {
     @Comment("회원권 아이디")
     private MemberShip memberShip;
 
-    @Comment("이전 만료 날짜")
-    private LocalDate oldExpiryDate;
+    @Comment("정지 시작 날짜")
+    private LocalDate pauseStartDate;
 
-    @Comment("새로운 만료 날짜")
-    private LocalDate newExpiryDate;
+    @Comment("정지 종료 날짜")
+    private LocalDate pauseEndDate;
 
-    public MemberShipHistory(MemberShip memberShip, LocalDate oldExpiryDate, LocalDate newExpiryDate) {
+    public MemberShipPause(MemberShip memberShip, LocalDate pauseStartDate, LocalDate pauseEndDate) {
         this.memberShip = memberShip;
-        this.oldExpiryDate = oldExpiryDate;
-        this.newExpiryDate = newExpiryDate;
+        this.pauseStartDate = pauseStartDate;
+        this.pauseEndDate = pauseEndDate;
     }
-
 }

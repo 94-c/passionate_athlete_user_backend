@@ -3,9 +3,11 @@ package com.backend.athlete.domain.memberShip.controller;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.domain.memberShip.application.MemberShipService;
 import com.backend.athlete.domain.memberShip.dto.request.CreateMemberShipRequest;
+import com.backend.athlete.domain.memberShip.dto.request.PauseMemberShipRequest;
 import com.backend.athlete.domain.memberShip.dto.request.RenewMemberShipRequest;
 import com.backend.athlete.domain.memberShip.dto.response.CreateMemberShipResponse;
 import com.backend.athlete.domain.memberShip.dto.response.GetMemberShipHistoryResponse;
+import com.backend.athlete.domain.memberShip.dto.response.GetMemberShipPauseResponse;
 import com.backend.athlete.domain.memberShip.dto.response.GetMemberShipResponse;
 import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.constant.PageConstant;
@@ -44,6 +46,21 @@ public class MemberShipController {
     public ResponseEntity<List<GetMemberShipHistoryResponse>> getMembershipHistory(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
         List<GetMemberShipHistoryResponse> history = memberShipService.getMembershipHistory(userPrincipal);
         return ResponseEntity.ok(history);
+    }
+
+    // 회원의 회원권 정지 요청
+    @PostMapping("/pause")
+    public ResponseEntity<Void> pauseMembership(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
+                                                @RequestBody PauseMemberShipRequest request) {
+        memberShipService.pauseMembership(userPrincipal, request.getPauseStartDate(), request.getPauseDays());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    // 회원의 회원권 정지 히스토리 조회
+    @GetMapping("/pause/history")
+    public ResponseEntity<List<GetMemberShipPauseResponse>> getMembershipPauseHistory(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
+        List<GetMemberShipPauseResponse> pauseHistory = memberShipService.getMembershipPauseHistory(userPrincipal);
+        return ResponseEntity.ok(pauseHistory);
     }
 
 }
