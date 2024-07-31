@@ -97,7 +97,7 @@ public class MemberShipService {
     public List<GetMemberShipHistoryResponse> getMembershipHistory(CustomUserDetailsImpl userPrincipal) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
-        List<MemberShipHistory> historyList = memberShipHistoryRepository.findByMemberShip_User_Id(user.getId());
+        List<MemberShipHistory> historyList = memberShipHistoryRepository.findByMemberShip_User_IdOrderByCreatedAtDesc(user.getId());
         return historyList.stream()
                 .map(GetMemberShipHistoryResponse::fromEntity)
                 .collect(Collectors.toList());
