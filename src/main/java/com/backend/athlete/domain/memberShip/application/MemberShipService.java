@@ -103,11 +103,11 @@ public class MemberShipService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<GetMemberShipPauseResponse> getMembershipPauseHistory(CustomUserDetailsImpl userPrincipal) {
-        User user = FindUtils.findByUserId(userPrincipal.getUsername());
-
-        List<MemberShipPause> pauseList = memberShipPauseRepository.findByMemberShip_User_Id(user.getId());
-        return pauseList.stream()
+        MemberShip memberShip = memberShipRepository.findByUserId(userPrincipal.getId())
+                .orElseThrow(() -> new IllegalArgumentException("회원권을 찾을 수 없습니다."));
+        return memberShipPauseRepository.findByMemberShipId(memberShip.getId()).stream()
                 .map(GetMemberShipPauseResponse::fromEntity)
                 .collect(Collectors.toList());
     }

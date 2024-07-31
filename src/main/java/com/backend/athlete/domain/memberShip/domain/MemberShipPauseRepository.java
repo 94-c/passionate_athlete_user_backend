@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface MemberShipPauseRepository extends JpaRepository<MemberShipPause, Long> {
     List<MemberShipPause> findByMemberShipAndPauseStartDateBetween(MemberShip memberShip, LocalDate localDate, LocalDate localDate1);
-    List<MemberShipPause> findByMemberShip_User_Id(Long userId);
+    List<MemberShipPause> findByMemberShipId(Long memberShipId);
 }

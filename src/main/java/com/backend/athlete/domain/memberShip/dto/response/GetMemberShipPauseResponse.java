@@ -11,17 +11,14 @@ public class GetMemberShipPauseResponse {
     private LocalDate pauseStartDate;
     private LocalDate pauseEndDate;
 
-    public GetMemberShipPauseResponse(Long id, LocalDate pauseStartDate, LocalDate pauseEndDate) {
-        this.id = id;
-        this.pauseStartDate = pauseStartDate;
-        this.pauseEndDate = pauseEndDate;
+    public GetMemberShipPauseResponse(MemberShipPause history) {
+        this.id = history.getId();
+        this.pauseStartDate = history.getPauseStartDate();
+        this.pauseEndDate = history.getPauseEndDate();
     }
 
-    public static GetMemberShipPauseResponse fromEntity(MemberShipPause memberShipPause) {
-        return new GetMemberShipPauseResponse(
-                memberShipPause.getId(),
-                memberShipPause.getPauseStartDate(),
-                memberShipPause.getPauseEndDate()
-        );
+    public static GetMemberShipPauseResponse fromEntity(MemberShipPause history) {
+        return new GetMemberShipPauseResponse(history);
     }
+
 }
