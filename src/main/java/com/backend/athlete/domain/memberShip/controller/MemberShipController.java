@@ -64,10 +64,11 @@ public class MemberShipController {
     }
 
     // 회원의 회원권 정지 히스토리 조회
-    @GetMapping("/pause/history")
-    public ResponseEntity<List<GetMemberShipPauseResponse>> getMembershipPauseHistory(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
-        List<GetMemberShipPauseResponse> pauseHistory = memberShipService.getMembershipPauseHistory(userPrincipal);
+    @GetMapping("/{memberShipId}/pause/history")
+    public ResponseEntity<List<GetMemberShipPauseResponse>> getMembershipPauseHistory(@PathVariable Long memberShipId) {
+        List<GetMemberShipPauseResponse> pauseHistory = memberShipService.getMembershipPauseHistory(memberShipId);
         return ResponseEntity.ok(pauseHistory);
     }
+
 
 }

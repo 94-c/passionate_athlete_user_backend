@@ -8,11 +8,13 @@ import java.time.LocalDate;
 @Getter
 public class GetMemberShipPauseResponse {
     private Long id;
+    private Long memberShipId;
     private LocalDate pauseStartDate;
     private LocalDate pauseEndDate;
 
     public GetMemberShipPauseResponse(MemberShipPause history) {
         this.id = history.getId();
+        this.memberShipId = history.getMemberShip().getId();
         this.pauseStartDate = history.getPauseStartDate();
         this.pauseEndDate = history.getPauseEndDate();
     }

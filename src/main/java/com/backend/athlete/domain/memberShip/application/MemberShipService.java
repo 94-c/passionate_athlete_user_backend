@@ -54,16 +54,28 @@ public class MemberShipService {
         MemberShip memberShip = memberShipRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("No active membership found for user"));
 
+        // 어드민 승인 요청 주석 처리
+        // if (!adminApprovalService.isApproved(user.getId())) {
+        //    throw new IllegalStateException("Membership renewal not approved by admin");
+        // }
+
+        LocalDate today = LocalDate.now();
+        if (!memberShip.getExpiryDate().isBefore(today.plusDays(5))) {
+            throw new IllegalStateException("Membership can only be renewed within 5 days of expiry.");
+        }
+
         LocalDate oldExpiryDate = memberShip.getExpiryDate();
         LocalDate newExpiryDate = oldExpiryDate.plusMonths(periodType.getMonths());
 
         MemberShipHistory memberShipHistory = new MemberShipHistory(memberShip, oldExpiryDate, newExpiryDate);
         memberShipHistoryRepository.save(memberShipHistory);
 
-        memberShip.renewMembership(newExpiryDate);
-        memberShipRepository.save(memberShip);
+        MemberShip newMemberShip = new MemberShip(user, today, newExpiryDate, true);
+        memberShipRepository.save(newMemberShip);
 
-        return CreateMemberShipResponse.fromEntity(memberShip);
+        memberShipRepository.delete(memberShip);
+
+        return CreateMemberShipResponse.fromEntity(newMemberShip);
     }
 
     @Transactional
@@ -103,12 +115,10 @@ public class MemberShipService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
-    public List<GetMemberShipPauseResponse> getMembershipPauseHistory(CustomUserDetailsImpl userPrincipal) {
-        MemberShip memberShip = memberShipRepository.findByUserId(userPrincipal.getId())
-                .orElseThrow(() -> new IllegalArgumentException("회원권을 찾을 수 없습니다."));
-        return memberShipPauseRepository.findByMemberShipId(memberShip.getId()).stream()
-                .map(GetMemberShipPauseResponse::fromEntity)
+    public List<GetMemberShipPauseResponse> getMembershipPauseHistory(Long memberShipId) {
+        List<MemberShipPause> pauses = memberShipPauseRepository.findByMemberShipId(memberShipId);
+        return pauses.stream()
+                .map(GetMemberShipPauseResponse::new)
                 .collect(Collectors.toList());
     }
 
