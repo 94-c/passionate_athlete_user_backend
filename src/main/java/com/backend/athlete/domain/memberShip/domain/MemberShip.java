@@ -34,9 +34,6 @@ public class MemberShip extends BaseTimeEntity {
     @Comment("회원권 만료 날짜")
     private LocalDate expiryDate;
 
-    @OneToMany(mappedBy = "memberShip", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MemberShipHistory> histories = new ArrayList<>();
-
     @Comment("회원권 활성화")
     private boolean status;
 
@@ -52,20 +49,12 @@ public class MemberShip extends BaseTimeEntity {
     }
 
     public void renewMembership(LocalDate newExpiryDate) {
-        MemberShipHistory history = new MemberShipHistory(this, this.expiryDate, newExpiryDate);
-        histories.add(history);
+        MemberShipHistory history = new MemberShipHistory(user, this.id, this.expiryDate, newExpiryDate);
         this.expiryDate = newExpiryDate;
     }
 
     public void setStatus(boolean status) {
         this.status = status;
-    }
-
-    public void pauseMembership(int days) {
-        if (days > 5) {
-            throw new IllegalArgumentException("최대 5일까지만 정지할 수 있습니다.");
-        }
-        this.pausedDays += days;
     }
 
 }

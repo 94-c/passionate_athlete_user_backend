@@ -54,28 +54,26 @@ public class MemberShipService {
         MemberShip memberShip = memberShipRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("No active membership found for user"));
 
-        // 어드민 승인 요청 주석 처리
-        // if (!adminApprovalService.isApproved(user.getId())) {
-        //    throw new IllegalStateException("Membership renewal not approved by admin");
-        // }
-
         LocalDate today = LocalDate.now();
         if (!memberShip.getExpiryDate().isBefore(today.plusDays(5))) {
             throw new IllegalStateException("Membership can only be renewed within 5 days of expiry.");
         }
 
-        LocalDate oldExpiryDate = memberShip.getExpiryDate();
-        LocalDate newExpiryDate = oldExpiryDate.plusMonths(periodType.getMonths());
+        LocalDate newExpiryDate = memberShip.getExpiryDate().plusMonths(periodType.getMonths());
 
-        MemberShipHistory memberShipHistory = new MemberShipHistory(memberShip, oldExpiryDate, newExpiryDate);
+        MemberShipHistory memberShipHistory = new MemberShipHistory(user, memberShip.getId(), memberShip.getExpiryDate(), newExpiryDate);
         memberShipHistoryRepository.save(memberShipHistory);
 
-        MemberShip newMemberShip = new MemberShip(user, today, newExpiryDate, true);
-        memberShipRepository.save(newMemberShip);
+        List<MemberShipPause> pauses = memberShipPauseRepository.findByMemberShipId(memberShip.getId());
+        for (MemberShipPause pause : pauses) {
+            pause.setMemberShipHistoryId(memberShipHistory.getId());
+            memberShipPauseRepository.save(pause);
+        }
 
-        memberShipRepository.delete(memberShip);
+        memberShip.renewMembership(newExpiryDate);
+        memberShipRepository.save(memberShip);
 
-        return CreateMemberShipResponse.fromEntity(newMemberShip);
+        return CreateMemberShipResponse.fromEntity(memberShip);
     }
 
     @Transactional
@@ -88,19 +86,20 @@ public class MemberShipService {
         MemberShip memberShip = memberShipRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("No active membership found for user"));
 
-        List<MemberShipPause> pauses = memberShipPauseRepository.findByMemberShipAndPauseStartDateBetween(
-                memberShip, pauseStartDate.withDayOfMonth(1), pauseStartDate.withDayOfMonth(pauseStartDate.lengthOfMonth()));
+        LocalDate firstDayOfMonth = pauseStartDate.withDayOfMonth(1);
+        LocalDate lastDayOfMonth = pauseStartDate.withDayOfMonth(pauseStartDate.lengthOfMonth());
+
+        List<MemberShipPause> pauses = memberShipPauseRepository.findByMemberShipIdAndPauseStartDateBetween(
+                memberShip.getId(), firstDayOfMonth, lastDayOfMonth);
 
         if (!pauses.isEmpty()) {
             throw new IllegalArgumentException("Membership can only be paused once per month");
         }
 
         LocalDate pauseEndDate = pauseStartDate.plusDays(pauseDays - 1);
-
-        MemberShipPause memberShipPause = new MemberShipPause(memberShip, pauseStartDate, pauseEndDate);
+        MemberShipPause memberShipPause = new MemberShipPause(memberShip.getId(), pauseStartDate, pauseEndDate);
         memberShipPauseRepository.save(memberShipPause);
 
-        // Adjust the expiry date
         LocalDate newExpiryDate = memberShip.getExpiryDate().plusDays(pauseDays);
         memberShip.renewMembership(newExpiryDate);
         memberShipRepository.save(memberShip);
@@ -109,7 +108,7 @@ public class MemberShipService {
     public List<GetMemberShipHistoryResponse> getMembershipHistory(CustomUserDetailsImpl userPrincipal) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
-        List<MemberShipHistory> historyList = memberShipHistoryRepository.findByMemberShip_User_IdOrderByCreatedAtDesc(user.getId());
+        List<MemberShipHistory> historyList = memberShipHistoryRepository.findByUserIdOrderByCreatedAtDesc(user.getId());
         return historyList.stream()
                 .map(GetMemberShipHistoryResponse::fromEntity)
                 .collect(Collectors.toList());

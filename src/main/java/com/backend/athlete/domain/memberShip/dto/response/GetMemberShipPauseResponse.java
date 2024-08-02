@@ -14,7 +14,7 @@ public class GetMemberShipPauseResponse {
 
     public GetMemberShipPauseResponse(MemberShipPause history) {
         this.id = history.getId();
-        this.memberShipId = history.getMemberShip().getId();
+        this.memberShipId = history.getId();
         this.pauseStartDate = history.getPauseStartDate();
         this.pauseEndDate = history.getPauseEndDate();
     }

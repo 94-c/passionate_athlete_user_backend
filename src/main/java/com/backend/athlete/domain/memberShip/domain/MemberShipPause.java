@@ -20,10 +20,9 @@ public class MemberShipPause extends BaseTimeEntity {
     @Comment("회원권 정지 히스토리 인덱스")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "member_ship_id", nullable = false)
+    @Column(name = "member_ship_id", nullable = false)
     @Comment("회원권 아이디")
-    private MemberShip memberShip;
+    private Long memberShipId;
 
     @Comment("정지 시작 날짜")
     private LocalDate pauseStartDate;
@@ -31,9 +30,13 @@ public class MemberShipPause extends BaseTimeEntity {
     @Comment("정지 종료 날짜")
     private LocalDate pauseEndDate;
 
-    public MemberShipPause(MemberShip memberShip, LocalDate pauseStartDate, LocalDate pauseEndDate) {
-        this.memberShip = memberShip;
+    public MemberShipPause(Long memberShipId, LocalDate pauseStartDate, LocalDate pauseEndDate) {
+        this.memberShipId = memberShipId;
         this.pauseStartDate = pauseStartDate;
         this.pauseEndDate = pauseEndDate;
+    }
+
+    public void setMemberShipHistoryId(Long memberShipId) {
+        this.memberShipId = memberShipId;
     }
 }
