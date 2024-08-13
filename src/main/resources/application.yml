@@ -40,5 +40,6 @@ jwt:
   secret: ${JWT_SECRET}
   expiration_time: 18000000
 
-
+file:
+  upload-dir: ${user.home}/study-project/image
 
