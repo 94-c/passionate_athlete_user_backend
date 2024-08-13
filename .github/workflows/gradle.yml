@@ -10,28 +10,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
-    - name: Log in to Docker registry
-      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login http://58.79.16.12:5000 --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+      - name: Log in to Docker registry using HTTP
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin http://58.79.16.12:5000
 
-    - name: Build Docker image
-      run: |
-        docker build --build-arg DB_URL=${{ secrets.DB_URL }} \
-                     --build-arg DB_USERNAME=${{ secrets.DB_USERNAME }} \
-                     --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-                     --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} \
-                     -t 58.79.16.12:5000/athlete_user:${{ github.sha }} .
+      - name: Build Docker image
+        run: |
+          docker build --build-arg DB_URL=${{ secrets.DB_URL }} \
+                       --build-arg DB_USERNAME=${{ secrets.DB_USERNAME }} \
+                       --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+                       --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} \
+                       -t 58.79.16.12:5000/athlete_user:${{ github.sha }} .
 
-    - name: Push Docker image to registry
-      run: |
-        docker push 58.79.16.12:5000/athlete_user:${{ github.sha }}
+      - name: Push Docker image to registry
+        run: |
+          docker push 58.79.16.12:5000/athlete_user:${{ github.sha }}
 
-    - name: Add additional tag and push
-      run: |
-        docker tag 58.79.16.12:5000/athlete_user:${{ github.sha }} 58.79.16.12:5000/athlete_user:latest
-        docker push 58.79.16.12:5000/athlete_user:latest
+      - name: Add additional tag and push
+        run: |
+          docker tag 58.79.16.12:5000/athlete_user:${{ github.sha }} 58.79.16.12:5000/athlete_user:latest
+          docker push 58.79.16.12:5000/athlete_user:latest
