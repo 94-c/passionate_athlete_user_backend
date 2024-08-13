@@ -13,12 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Log in to Docker registry using HTTP without TLS
+      - name: Configure Docker daemon for insecure registry
         run: |
-          DOCKER_CLI_EXPERIMENTAL=enabled docker login --tls=false --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }} http://58.79.16.12:5000
+          echo '{"insecure-registries":["58.79.16.12:5000"]}' | sudo tee /etc/docker/daemon.json > /dev/null
+          sudo systemctl restart docker
+
+      - name: Log in to Docker registry using HTTP
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login http://58.79.16.12:5000 --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
       - name: Build Docker image
         run: |
