@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AdminController {
 
+    /**
+     * TODO : 어드민 프로젝트로 이관 예정
+     */
     private final AdminService adminService;
 
     @PutMapping("/users/{userId}/status")
