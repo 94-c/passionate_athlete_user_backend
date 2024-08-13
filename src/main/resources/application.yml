@@ -21,7 +21,7 @@ spring:
       properties:
         hibernate:
           format_sql: true
-          dialect: org.hibernate.dialect.MySQL57Dialect  # MySQL ??? ?? Dialect? ??
+          dialect: org.hibernate.dialect.MySQL57Dialect
   sql.init.mode: always
   data.rest:
     base-path: /api
@@ -35,12 +35,10 @@ server:
       max-request-size: 10MB
 
 jwt:
-  header: ${JWT_HEADER}
-  prefix: ${JWT_PREFIX}
+  header: "Authorization"
+  prefix: "Bearer "
   secret: ${JWT_SECRET}
-  expiration_time: ${JWT_EXPIRATION_TIME}
+  expiration_time: 18000000
 
-file:
-  upload-dir: ${user.home}/study-project/image
 
 
