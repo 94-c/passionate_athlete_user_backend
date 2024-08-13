@@ -65,7 +65,7 @@ public class RegisterRequest {
                 request.getGender(),
                 request.getWeight(),
                 request.getHeight(),
-                UserStatusType.WAIT,
+                UserStatusType.ING,
                 request.getRoleIds(),
                 branch,
                 request.getBirthDate(),
