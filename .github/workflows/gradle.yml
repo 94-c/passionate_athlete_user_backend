@@ -21,6 +21,13 @@ jobs:
       - name: Log in to Docker registry using HTTP
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login http://58.79.16.12:5000 --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
+      - name: Debug Environment Variables
+        run: |
+          echo "DB_URL=${{ secrets.DB_URL }}"
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}"
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}"
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}"
+
       - name: Build Docker image
         run: |
           docker build --build-arg DB_URL=${{ secrets.DB_URL }} \

@@ -20,7 +20,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # 빌드된 JAR 파일 복사
-COPY --from=build /app/build/libs/*.jar app.jar
+COPY --from=build /app/build/libs/*.jar /app/app.jar
 
 # 런타임 환경 변수 설정
 ENV DB_URL=$DB_URL
@@ -29,4 +29,4 @@ ENV DB_PASSWORD=$DB_PASSWORD
 ENV JWT_SECRET=$JWT_SECRET
 
 # 애플리케이션 실행
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
