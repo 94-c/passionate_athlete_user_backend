@@ -4,6 +4,7 @@ import com.backend.athlete.domain.auth.jwt.JwtAuthenticationEntryPoint;
 import com.backend.athlete.domain.auth.jwt.JwtAuthenticationFilter;
 import com.backend.athlete.domain.auth.jwt.JwtTokenProvider;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +26,9 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailService userDetailsService;
+
+    @Value("${front_end_url}")
+    private String front_end_url;
 
     public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
                           JwtTokenProvider jwtTokenProvider,
@@ -55,7 +59,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:3000"); // 프론트엔드 URL
+        configuration.addAllowedOrigin(front_end_url); // 프론트엔드 URL
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true); // 이 부분을 꼭 추가합니다
