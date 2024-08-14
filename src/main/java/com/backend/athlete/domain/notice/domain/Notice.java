@@ -32,6 +32,7 @@ public class Notice extends BaseTimeEntity {
     private String title;
 
     @Lob
+    @Column(columnDefinition = "LONGTEXT")
     @Comment("게시판 내용")
     private String content;
 

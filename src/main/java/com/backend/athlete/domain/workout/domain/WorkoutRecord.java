@@ -50,7 +50,7 @@ public class WorkoutRecord extends BaseTimeEntity {
 
     @Lob
     @Comment("운동 내용")
-    @Column(name = "record_content")
+    @Column(name = "record_content", columnDefinition = "LONGTEXT")
     private String recordContent;
 
     @OneToMany(mappedBy = "workoutRecord", cascade = CascadeType.ALL, orphanRemoval = true)
