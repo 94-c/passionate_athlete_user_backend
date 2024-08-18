@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -92,17 +93,18 @@ public class NoticeService {
         return UpdateNoticeResponse.fromEntity(updatedNotice);
     }
 
-    /*public void deleteNotice(Long id, CustomUserDetailsImpl userPrincipal) {
+    public void deleteNotice(Long id, CustomUserDetailsImpl userPrincipal) {
         Notice notice = FindUtils.findByNoticeId(id);
 
         if (!notice.getUser().getUserId().equals(userPrincipal.getUsername())) {
             throw new NotFoundException("이 게시물를 삭제할 권한이 없습니다.", HttpStatus.NOT_FOUND);
         }
 
-        noticeRepository.delete(notice);
+        notice.deletedNotice(LocalDateTime.now());
+        noticeRepository.save(notice);
     }
 
-    public GetNoticeResponse setStatus(Long id, CustomUserDetailsImpl userPrincipal) {
+    /*public GetNoticeResponse setStatus(Long id, CustomUserDetailsImpl userPrincipal) {
         Notice notice = FindUtils.findByNoticeId(id);
 
         if (!notice.getUser().getUserId().equals(userPrincipal.getUsername())) {

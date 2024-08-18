@@ -82,5 +82,11 @@ public class NoticeController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteNotice(@PathVariable Long id,
+                                             @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
+        noticeService.deleteNotice(id, userPrincipal);
+        return ResponseEntity.noContent().build();
+    }
 }
 

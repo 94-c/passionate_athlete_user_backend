@@ -19,7 +19,6 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
-
     private final JPAQueryFactory factory;
 
     private BooleanBuilder toBooleanBuilder(String name, String title, Long kindId) {
@@ -41,13 +40,16 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
         return booleanBuilder;
     }
 
-
     @Override
     public Page<Notice> findAllByUserAndTitleAndKindAndStatus(String name, String title, Pageable pageable, Long kindId, boolean status) {
         BooleanBuilder booleanBuilder = toBooleanBuilder(name, title, kindId);
 
+        // 삭제되지 않은 항목만 필터링
+        booleanBuilder.and(QNotice.notice.status.eq(status));
+        booleanBuilder.and(QNotice.notice.deletedAt.isNull());
+
         List<Notice> content = factory.selectFrom(QNotice.notice)
-                .where(booleanBuilder.and(QNotice.notice.status.eq(status)))
+                .where(booleanBuilder)
                 .orderBy(QNotice.notice.createdDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -55,7 +57,7 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
 
         long count = factory.select(QNotice.notice.count())
                 .from(QNotice.notice)
-                .where(booleanBuilder.and(QNotice.notice.status.eq(status)))
+                .where(booleanBuilder)
                 .fetchOne();
 
         return PageableExecutionUtils.getPage(content, pageable, () -> count);

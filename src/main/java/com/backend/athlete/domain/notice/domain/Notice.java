@@ -8,7 +8,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +52,10 @@ public class Notice extends BaseTimeEntity {
     @OneToMany(mappedBy = "notice", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<com.backend.athlete.domain.comment.domain.Comment> comments = new ArrayList<>();
 
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     public Notice(String title, String content, NoticeType kind, boolean status, User user) {
         this.title = title;
         this.content = content;
@@ -76,6 +82,11 @@ public class Notice extends BaseTimeEntity {
         files.remove(file);
         file.setNotice(null);
     }
+
+    public void deletedNotice(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
 }
 
 
