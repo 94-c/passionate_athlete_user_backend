@@ -29,6 +29,7 @@ public class WorkoutRecordRepositoryImpl implements WorkoutRecordRepositoryCusto
     private BooleanBuilder toBooleanBuilder(String startDateTime, String endDateTime, UserGenderType gender, String rating) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QWorkoutRecord workoutRecord = QWorkoutRecord.workoutRecord;
+        QUser user = QUser.user;
 
         if (startDateTime != null) {
             booleanBuilder.and(workoutRecord.createdDate.goe(startDateTime));
@@ -37,7 +38,7 @@ public class WorkoutRecordRepositoryImpl implements WorkoutRecordRepositoryCusto
             booleanBuilder.and(workoutRecord.createdDate.loe(endDateTime));
         }
         if (gender != null) {
-            booleanBuilder.and(workoutRecord.user.gender.eq(gender));
+            booleanBuilder.and(user.gender.eq(gender));
         }
         if (rating != null && !rating.isEmpty()) {
             booleanBuilder.and(workoutRecord.rating.eq(rating));
@@ -50,7 +51,13 @@ public class WorkoutRecordRepositoryImpl implements WorkoutRecordRepositoryCusto
     }
 
     @Override
-    public Page<WorkoutRecord> findMainWorkoutRecordsByDateRangeAndGenderAndRating(String startDateTime, String endDateTime, UserGenderType gender, String rating, Pageable pageable) {
+    public Page<WorkoutRecord> findMainWorkoutRecordsByDateRangeAndGenderAndRating(
+            String startDateTime,
+            String endDateTime,
+            UserGenderType gender,
+            String rating,
+            Pageable pageable) {
+
         QWorkoutRecord workoutRecord = QWorkoutRecord.workoutRecord;
         QUser user = QUser.user;
 
@@ -59,7 +66,7 @@ public class WorkoutRecordRepositoryImpl implements WorkoutRecordRepositoryCusto
         QueryResults<WorkoutRecord> results = factory.selectFrom(workoutRecord)
                 .join(workoutRecord.user, user)
                 .where(booleanBuilder)
-                .orderBy(workoutRecord.rating.desc(),
+                .orderBy(
                         Expressions.stringTemplate("FUNCTION('STR_TO_DATE', {0}, '%i:%s')", workoutRecord.duration).asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

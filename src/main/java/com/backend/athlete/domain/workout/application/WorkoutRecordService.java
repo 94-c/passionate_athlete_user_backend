@@ -87,7 +87,7 @@ public class WorkoutRecordService {
         Pageable pageable = PageRequest.of(page, perPage, Sort.by(Sort.Direction.ASC, "duration"));
 
         LocalDateTime startDate = date.atTime(16, 0, 0);
-        LocalDateTime endDate = date.plusDays(1).atTime(13, 0, 0);
+        LocalDateTime endDate = date.plusDays(1).atTime(15, 59, 59);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String startDateTime = startDate.format(formatter);
@@ -97,7 +97,6 @@ public class WorkoutRecordService {
 
         return records.map(WorkoutRecordStatisticsResponse::fromEntity);
     }
-
     @Transactional
     public GetMonthlyWorkoutResponse getMonthlyWorkoutCounts(YearMonth month, CustomUserDetailsImpl userPrincipal) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
