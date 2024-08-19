@@ -88,5 +88,19 @@ public class Physical extends BaseTimeEntity {
         this.muscleMassChange = muscleMassChange;
         this.bodyFatMassChange = bodyFatMassChange;
     }
+
+    public void updateWithNewValues(Double newWeight, Double newMuscleMass, Double newBodyFatMass, Physical previousPhysical) {
+        this.weightChange = previousPhysical != null ? newWeight - previousPhysical.getWeight() : null;
+        this.muscleMassChange = previousPhysical != null ? newMuscleMass - previousPhysical.getMuscleMass() : null;
+        this.bodyFatMassChange = previousPhysical != null ? newBodyFatMass - previousPhysical.getBodyFatMass() : null;
+
+        this.weight = newWeight;
+        this.muscleMass = newMuscleMass;
+        this.bodyFatMass = newBodyFatMass;
+
+        this.bmi = newWeight / ((this.height / 100) * (this.height / 100));
+        this.bodyFatPercentage = newBodyFatMass / newWeight * 100;
+    }
+
 }
 

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class PagePhysicalResponse {
-
+    private Long id;
     private Double weight;
     private Double height;
     private Double muscleMass;
@@ -22,7 +22,8 @@ public class PagePhysicalResponse {
     private Double muscleMassChange;
     private Double bodyFatMassChange;
 
-    public PagePhysicalResponse(Double weight, Double height, Double muscleMass, Double bodyFatMass, LocalDateTime measureDate, Double bmi, Double bodyFatPercentage, Double visceralFatPercentage, Double bmr, Double weightChange, Double heightChange, Double muscleMassChange, Double bodyFatMassChange) {
+    public PagePhysicalResponse(Long id, Double weight, Double height, Double muscleMass, Double bodyFatMass, LocalDateTime measureDate, Double bmi, Double bodyFatPercentage, Double visceralFatPercentage, Double bmr, Double weightChange, Double heightChange, Double muscleMassChange, Double bodyFatMassChange) {
+        this.id = id;
         this.weight = weight;
         this.height = height;
         this.muscleMass = muscleMass;
@@ -41,6 +42,7 @@ public class PagePhysicalResponse {
     // Entity-> Dto
     public static PagePhysicalResponse fromEntity(Physical physical) {
         return new PagePhysicalResponse(
+                physical.getId(),
                 physical.getWeight(),
                 physical.getHeight(),
                 physical.getMuscleMass(),

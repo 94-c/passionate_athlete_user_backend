@@ -2,6 +2,7 @@ package com.backend.athlete.domain.physical.controller;
 
 import com.backend.athlete.domain.physical.application.PhysicalService;
 import com.backend.athlete.domain.physical.dto.request.CreatePhysicalRequest;
+import com.backend.athlete.domain.physical.dto.request.UpdatePhysicalRequest;
 import com.backend.athlete.domain.physical.dto.response.*;
 import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.constant.PageConstant;
@@ -49,6 +50,13 @@ public class PhysicalController {
         Page<PagePhysicalResponse> response = physicalService.getPhysicalData(userPrincipal, page, perPage);
         PagedResponse<PagePhysicalResponse> pagedResponse = PagedResponse.fromPage(response);
         return ResponseEntity.ok(pagedResponse);
+    }
+
+    @PutMapping("/{physicalId}")
+    public ResponseEntity<Void> updatePhysicalData(@PathVariable Long physicalId,
+                                                   @RequestBody UpdatePhysicalRequest request) {
+        physicalService.updatePhysical(physicalId, request);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/rankings")

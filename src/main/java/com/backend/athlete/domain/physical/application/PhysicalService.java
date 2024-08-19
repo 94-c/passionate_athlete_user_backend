@@ -2,6 +2,7 @@ package com.backend.athlete.domain.physical.application;
 
 import com.backend.athlete.domain.physical.domain.Physical;
 import com.backend.athlete.domain.physical.domain.PhysicalRepository;
+import com.backend.athlete.domain.physical.dto.request.UpdatePhysicalRequest;
 import com.backend.athlete.domain.physical.dto.response.*;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.UserRepository;
@@ -115,6 +116,19 @@ public class PhysicalService {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(responses, pageable, physicalPage.getTotalElements());
+    }
+
+    @Transactional
+    public void updatePhysical(Long physicalId, UpdatePhysicalRequest updateRequest) {
+        Physical physical = physicalRepository.findById(physicalId)
+                .orElseThrow(() -> new NotFoundException("Physical data not found", HttpStatus.NOT_FOUND));
+
+        Physical previousPhysical = physicalRepository.findTopByUserAndMeasureDateBeforeOrderByMeasureDateDesc(
+                physical.getUser(), physical.getMeasureDate());
+
+        updateRequest.fromEntity(physical, previousPhysical);
+
+        physicalRepository.save(physical);
     }
 
     public LastGetPhysicalResponse findLastPhysical() {
