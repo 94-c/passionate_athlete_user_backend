@@ -22,14 +22,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -157,24 +155,19 @@ public class PhysicalService {
                 .collect(Collectors.toList());
     }
 
-    public MonthlyFatChangeResponse calculateMonthlyFatChange(Long userId) {
-        LocalDate now = LocalDate.now();
-        LocalDate oneMonthAgo = now.minusMonths(1);
+    public MonthlyFatChangeResponse calculateMonthlyFatChange(CustomUserDetailsImpl userPrincipal, int year, int month) {
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
-        List<Physical> physicals = physicalRepository.findByUserIdAndMeasureDateBetween(userId, oneMonthAgo.atStartOfDay(), now.atTime(LocalTime.MAX));
+        LocalDateTime startDateTime = LocalDateTime.of(year, month, 1, 0, 0, 0);
+        LocalDateTime endDateTime = startDateTime.withDayOfMonth(startDateTime.toLocalDate().lengthOfMonth()).withHour(23).withMinute(59).withSecond(59);
 
-        double initialFatMass = physicals.stream()
-                .min(Comparator.comparing(Physical::getMeasureDate))
-                .map(Physical::getBodyFatMass)
-                .orElse(0.0);
+        Physical fatChange = physicalRepository.findPhysicalByBodyFatMassChangeInDateRange(user.getId(), startDateTime, endDateTime);
 
-        double finalFatMass = physicals.stream()
-                .max(Comparator.comparing(Physical::getMeasureDate))
-                .map(Physical::getBodyFatMass)
-                .orElse(0.0);
-
-        double fatChange = initialFatMass - finalFatMass;
+        if (fatChange == null) {
+            return new MonthlyFatChangeResponse(0.0);
+        }
 
         return MonthlyFatChangeResponse.fromEntity(fatChange);
     }
+
 }

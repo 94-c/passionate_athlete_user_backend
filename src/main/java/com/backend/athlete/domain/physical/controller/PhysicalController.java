@@ -69,8 +69,12 @@ public class PhysicalController {
     }
 
     @GetMapping("/monthly-fat-change")
-    public ResponseEntity<MonthlyFatChangeResponse> getMonthlyFatChange(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
-        MonthlyFatChangeResponse response = physicalService.calculateMonthlyFatChange(userPrincipal.getId());
+    public ResponseEntity<MonthlyFatChangeResponse> getMonthlyFatChange(
+            @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
+            @RequestParam("year") int year,
+            @RequestParam("month") int month) {
+
+        MonthlyFatChangeResponse response = physicalService.calculateMonthlyFatChange(userPrincipal, year, month);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

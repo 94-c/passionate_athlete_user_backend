@@ -1,5 +1,6 @@
 package com.backend.athlete.domain.physical.dto.response;
 
+import com.backend.athlete.domain.physical.domain.Physical;
 import lombok.Getter;
 
 @Getter
@@ -10,9 +11,7 @@ public class MonthlyFatChangeResponse {
         this.fatChange = fatChange;
     }
 
-    public static MonthlyFatChangeResponse fromEntity(double fatChange) {
-        return new MonthlyFatChangeResponse(
-                fatChange
-        );
+    public static MonthlyFatChangeResponse fromEntity(Physical physical) {
+        return new MonthlyFatChangeResponse(physical.getBodyFatMassChange());
     }
 }

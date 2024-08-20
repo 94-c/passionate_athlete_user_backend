@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface PhysicalRepository extends JpaRepository<Physical, Long>, PhysicalRepositoryCustom {
     @Query("SELECT COUNT(p) > 0 FROM Physical p WHERE p.user = :user AND FUNCTION('DATE', p.measureDate) = :date")
@@ -21,5 +22,8 @@ public interface PhysicalRepository extends JpaRepository<Physical, Long>, Physi
     Page<Physical> findByUserIdOrderByMeasureDateDesc(Long id, Pageable pageable);
     List<Physical> findPhysicalsByUserIdAndMeasureDate(Long userId, LocalDate measureDate);
     Physical findTopByOrderByMeasureDateDesc();
-    List<Physical> findByUserIdAndMeasureDateBetween(Long userId, LocalDateTime startDate, LocalDateTime endDate);
+
+    @Query("SELECT p FROM Physical p WHERE p.user.id = :userId AND p.measureDate BETWEEN :startDate AND :endDate ORDER BY p.measureDate DESC LIMIT 1")
+    Physical findPhysicalByBodyFatMassChangeInDateRange(@Param("userId") Long userId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
 }

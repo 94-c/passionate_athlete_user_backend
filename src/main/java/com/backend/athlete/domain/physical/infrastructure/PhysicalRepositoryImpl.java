@@ -6,6 +6,8 @@ import com.backend.athlete.domain.physical.domain.QPhysical;
 import com.backend.athlete.domain.user.domain.QUser;
 import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -18,6 +20,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PhysicalRepositoryImpl implements PhysicalRepositoryCustom {
+
     private final JPAQueryFactory factory;
 
     private BooleanBuilder toBooleanBuilder(LocalDate startDate, LocalDate endDate, String gender) {
@@ -45,12 +48,22 @@ public class PhysicalRepositoryImpl implements PhysicalRepositoryCustom {
 
         BooleanBuilder booleanBuilder = toBooleanBuilder(startDate, endDate, gender);
 
+        QPhysical subPhysical = new QPhysical("subPhysical");
+
+        JPQLQuery<Long> subquery = JPAExpressions
+                .select(subPhysical.id.max())
+                .from(subPhysical)
+                .where(subPhysical.user.id.eq(physical.user.id)
+                        .and(subPhysical.measureDate.between(startDate.atStartOfDay(), endDate.atTime(23, 59, 59))));
+
         return factory.selectFrom(physical)
                 .join(physical.user, user)
                 .join(user.branch, branch)
                 .where(booleanBuilder)
-                .orderBy(physical.weightChange.desc())
-                .limit(limit) // Limit to top n
+                .where(physical.id.in(subquery))
+                .orderBy(physical.bodyFatMassChange.asc())
+                .limit(limit)
                 .fetch();
     }
 }
+
