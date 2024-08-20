@@ -20,8 +20,9 @@ public class GetNoticeResponse {
     private String createdDate;
     private String modifiedDate;
     private List<GetNoticeCommentResponse> comments;
+    private String kind; // 게시판 종류 추가
 
-    public GetNoticeResponse(Long id, String title, String content, List<String> imagePaths, Long userId, String userName, int likeCount, boolean status, String createdDate, String modifiedDate, List<GetNoticeCommentResponse> comments) {
+    public GetNoticeResponse(Long id, String title, String content, List<String> imagePaths, Long userId, String userName, int likeCount, boolean status, String createdDate, String modifiedDate, List<GetNoticeCommentResponse> comments, String kind) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -33,6 +34,7 @@ public class GetNoticeResponse {
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.comments = comments;
+        this.kind = kind;
     }
 
     public static GetNoticeResponse fromEntity(Notice notice, int likeCount) {
@@ -55,7 +57,9 @@ public class GetNoticeResponse {
                 notice.isStatus(),
                 notice.getCreatedDate(),
                 notice.getModifiedDate(),
-                commentResponses
+                commentResponses,
+                notice.getKind().getType()
         );
     }
 }
+

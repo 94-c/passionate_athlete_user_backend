@@ -47,28 +47,19 @@ public class NoticeController {
 
     @PostMapping
     public ResponseEntity<CreateNoticeResponse> createNotice(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                             @RequestPart("noticeJson") String noticeJson) {
-        try {
-            CreateNoticeRequest noticeRequest = new ObjectMapper().readValue(noticeJson, CreateNoticeRequest.class);
-            CreateNoticeResponse response = noticeService.saveNotice(userPrincipal, noticeRequest);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
+                                                             @RequestBody CreateNoticeRequest request) {
+        CreateNoticeResponse response = noticeService.saveNotice(userPrincipal, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UpdateNoticeResponse> updateNotice(@PathVariable Long id,
                                                              @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                             @RequestPart("noticeJson") String noticeJson) {
-        try {
-            UpdateNoticeRequest noticeRequest = new ObjectMapper().readValue(noticeJson, UpdateNoticeRequest.class);
-            UpdateNoticeResponse response = noticeService.updateNotice(id, userPrincipal, noticeRequest);
-            return ResponseEntity.ok(response);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
+                                                             @RequestBody UpdateNoticeRequest request) {
+        UpdateNoticeResponse response = noticeService.updateNotice(id, userPrincipal, request);
+        return ResponseEntity.ok(response);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<GetNoticeResponse> getNotice(@PathVariable Long id) {
