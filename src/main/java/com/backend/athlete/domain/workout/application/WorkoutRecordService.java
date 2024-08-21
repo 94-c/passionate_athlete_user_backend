@@ -74,7 +74,7 @@ public class WorkoutRecordService {
     private void saveWorkoutHistory(CreateWorkoutRecordRequest request, User user, WorkoutRecord workoutRecord) {
         if (request.getWorkoutDetails() != null) {
             for (WorkoutHistoryRequest historyRequest : request.getWorkoutDetails()) {
-                Exercise exercise = exerciseRepository.findByName(historyRequest.getExerciseName())
+                Exercise exercise = exerciseRepository.findById(historyRequest.getExerciseId())
                         .orElseThrow(() -> new NotFoundException("운동을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
                 WorkoutRecordHistory history = WorkoutHistoryRequest.toEntity(historyRequest, user, exercise);
                 workoutRecord.addWorkoutHistory(history);
