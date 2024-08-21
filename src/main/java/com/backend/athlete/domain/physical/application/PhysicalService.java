@@ -7,6 +7,7 @@ import com.backend.athlete.domain.physical.dto.response.*;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.UserRepository;
 import com.backend.athlete.domain.physical.dto.request.CreatePhysicalRequest;
+import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.backend.athlete.support.exception.NotFoundException;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FindUtils;
@@ -170,4 +171,16 @@ public class PhysicalService {
         return MonthlyFatChangeResponse.fromEntity(fatChange);
     }
 
+    public GetMonthlyFatChangeResponse getMonthlyFatChangeRanking(int year, int month, Long branchId, UserGenderType gender, int limit) {
+        LocalDateTime startDateTime = LocalDateTime.of(year, month, 1, 0, 0, 0);
+        LocalDateTime endDateTime = startDateTime.withDayOfMonth(startDateTime.toLocalDate().lengthOfMonth()).withHour(23).withMinute(59).withSecond(59);
+
+        List<Physical> physicals;
+        if (branchId == null || branchId.equals(0L)) {
+            physicals = physicalRepository.findTopRankingsByDateRange(gender, startDateTime, endDateTime, PageRequest.of(0, limit));
+        } else {
+            physicals = physicalRepository.findTopRankingsByBranchAndDateRange(branchId, gender, startDateTime, endDateTime, PageRequest.of(0, limit));
+        }
+        return GetMonthlyFatChangeResponse.fromEntityList(physicals);
+    }
 }

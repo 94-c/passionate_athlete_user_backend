@@ -1,9 +1,11 @@
 package com.backend.athlete.domain.physical.controller;
 
 import com.backend.athlete.domain.physical.application.PhysicalService;
+import com.backend.athlete.domain.physical.domain.Physical;
 import com.backend.athlete.domain.physical.dto.request.CreatePhysicalRequest;
 import com.backend.athlete.domain.physical.dto.request.UpdatePhysicalRequest;
 import com.backend.athlete.domain.physical.dto.response.*;
+import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.constant.PageConstant;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
@@ -75,6 +77,18 @@ public class PhysicalController {
             @RequestParam("month") int month) {
 
         MonthlyFatChangeResponse response = physicalService.calculateMonthlyFatChange(userPrincipal, year, month);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/find/monthly-fat-change")
+    public ResponseEntity<GetMonthlyFatChangeResponse> getMonthlyFatChangeRanking(
+            @RequestParam("year") int year,
+            @RequestParam("month") int month,
+            @RequestParam(value = "branchId", required = false) Long branchId,
+            @RequestParam(value = "gender", required = false) UserGenderType gender,
+            @RequestParam(value = "limit", defaultValue = "10") int limit) {
+
+        GetMonthlyFatChangeResponse response = physicalService.getMonthlyFatChangeRanking(year, month, branchId, gender, limit);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
