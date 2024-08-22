@@ -18,7 +18,7 @@ public interface WorkoutRecordRepository extends JpaRepository<WorkoutRecord, Lo
     List<WorkoutRecord> findByUserIdAndCreatedAtBetween(Long userId, LocalDateTime start, LocalDateTime end);
     int countByUserId(Long userId);
 
-    @Query("SELECT wr FROM WorkoutRecord wr WHERE wr.scheduledWorkout.scheduledDateTime BETWEEN :startDate AND :endDate AND wr.user.gender = :gender AND wr.success = true AND (:rating IS NULL OR wr.rating = :rating) ORDER BY wr.rounds DESC")
+    @Query("SELECT wr FROM WorkoutRecord wr WHERE wr.createdAt BETWEEN :startDate AND :endDate AND wr.user.gender = :gender AND wr.success = true AND (:rating IS NULL OR wr.rating = :rating) ORDER BY wr.rounds DESC")
     Page<WorkoutRecord> findSuccessfulRecordsSortedByRounds(
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
@@ -27,7 +27,7 @@ public interface WorkoutRecordRepository extends JpaRepository<WorkoutRecord, Lo
             Pageable pageable
     );
 
-    @Query("SELECT wr FROM WorkoutRecord wr WHERE wr.scheduledWorkout.scheduledDateTime BETWEEN :startDate AND :endDate AND wr.user.gender = :gender AND wr.success = true ORDER BY wr.rounds DESC")
+    @Query("SELECT wr FROM WorkoutRecord wr WHERE wr.createdAt BETWEEN :startDate AND :endDate AND wr.user.gender = :gender AND wr.success = true ORDER BY wr.rounds DESC")
     Page<WorkoutRecord> findSuccessfulRecordsSortedByRoundsWithoutRating(
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
@@ -35,7 +35,7 @@ public interface WorkoutRecordRepository extends JpaRepository<WorkoutRecord, Lo
             Pageable pageable
     );
 
-    @Query("SELECT wr FROM WorkoutRecord wr WHERE wr.scheduledWorkout.scheduledDateTime BETWEEN :startDate AND :endDate AND wr.user.gender = :gender AND wr.success = true AND (:rating IS NULL OR wr.rating = :rating) ORDER BY wr.duration ASC")
+    @Query("SELECT wr FROM WorkoutRecord wr WHERE wr.createdAt BETWEEN :startDate AND :endDate AND wr.user.gender = :gender AND wr.success = true AND (:rating IS NULL OR wr.rating = :rating) ORDER BY wr.duration ASC")
     Page<WorkoutRecord> findSuccessfulRecordsSortedByDuration(
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
@@ -44,7 +44,7 @@ public interface WorkoutRecordRepository extends JpaRepository<WorkoutRecord, Lo
             Pageable pageable
     );
 
-    @Query("SELECT wr FROM WorkoutRecord wr WHERE wr.scheduledWorkout.scheduledDateTime BETWEEN :startDate AND :endDate AND wr.user.gender = :gender AND wr.success = true ORDER BY wr.duration ASC")
+    @Query("SELECT wr FROM WorkoutRecord wr WHERE wr.createdAt BETWEEN :startDate AND :endDate AND wr.user.gender = :gender AND wr.success = true ORDER BY wr.duration ASC")
     Page<WorkoutRecord> findSuccessfulRecordsSortedByDurationWithoutRating(
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,

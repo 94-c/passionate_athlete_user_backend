@@ -117,6 +117,21 @@ public class WorkoutRecordService {
         return records.map(WorkoutRecordStatisticsResponse::fromEntity);
     }
 
+    @Transactional
+    public Page<WorkoutRecordStatisticsResponse> getWorkoutRankingsByDate(LocalDateTime startDate, LocalDateTime endDate, UserGenderType gender, String rating, int page, int perPage) {
+        Pageable pageable = PageRequest.of(page, perPage);
+
+        Page<WorkoutRecord> records;
+        if (rating == null || rating.isEmpty()) {
+            records = workoutRecordRepository.findSuccessfulRecordsSortedByRoundsWithoutRating(startDate, endDate, gender, pageable);
+        } else {
+            records = workoutRecordRepository.findSuccessfulRecordsSortedByDuration(startDate, endDate, gender, rating, pageable);
+        }
+
+        return records.map(WorkoutRecordStatisticsResponse::fromEntity);
+    }
+
+
 
     @Transactional
     public GetMonthlyWorkoutResponse getMonthlyWorkoutCounts(YearMonth month, CustomUserDetailsImpl userPrincipal) {

@@ -17,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 
@@ -40,6 +41,20 @@ public class WorkoutRecordController {
                                                 @RequestParam(defaultValue = PageConstant.DEFAULT_PAGE, required = false) int page,
                                                 @RequestParam(defaultValue = PageConstant.DEFAULT_PER_PAGE, required = false) int perPage) {
         Page<WorkoutRecordStatisticsResponse> response = workoutRecordService.getMainWorkoutRecordsByDateRangeAndGender(date, gender, rating, page, perPage);
+        PagedResponse<WorkoutRecordStatisticsResponse> pagedResponse = PagedResponse.fromPage(response);
+        return ResponseEntity.status(HttpStatus.OK).body(pagedResponse);
+    }
+
+    @GetMapping("/rankings/by-date")
+    public ResponseEntity<PagedResponse<WorkoutRecordStatisticsResponse>> getWorkoutRankingsByDate(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+            @RequestParam("gender") UserGenderType gender,
+            @RequestParam("rating") String rating,
+            @RequestParam(defaultValue = PageConstant.DEFAULT_PAGE, required = false) int page,
+            @RequestParam(defaultValue = PageConstant.DEFAULT_PER_PAGE, required = false) int perPage) {
+
+        Page<WorkoutRecordStatisticsResponse> response = workoutRecordService.getWorkoutRankingsByDate(startDate, endDate, gender, rating, page, perPage);
         PagedResponse<WorkoutRecordStatisticsResponse> pagedResponse = PagedResponse.fromPage(response);
         return ResponseEntity.status(HttpStatus.OK).body(pagedResponse);
     }
