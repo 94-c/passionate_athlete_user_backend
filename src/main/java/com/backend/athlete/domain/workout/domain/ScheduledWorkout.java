@@ -27,10 +27,10 @@ public class ScheduledWorkout {
     private String title;
 
     @Comment("운동 날짜 및 시작 시간")
-    private LocalDateTime date;  // 운동 날짜와 시작 시간
+    private LocalDateTime scheduledDateTime;
 
     @Comment("총 운동 시간")
-    private String time;  // 총 운동 시간 (예: "28:00")
+    private String time;
 
     @Comment("비고")
     private String notes;
@@ -49,9 +49,9 @@ public class ScheduledWorkout {
     @OneToMany(mappedBy = "scheduledWorkout", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ScheduledWorkoutRating> scheduledWorkoutRatings = new ArrayList<>();
 
-    public ScheduledWorkout(String title, LocalDateTime date, String time, String notes, WorkoutType workoutType, WorkoutMode workoutMode) {
+    public ScheduledWorkout(String title, LocalDateTime scheduledDateTime, String time, String notes, WorkoutType workoutType, WorkoutMode workoutMode) {
         this.title = title;
-        this.date = date;
+        this.scheduledDateTime = scheduledDateTime;
         this.time = time;
         this.notes = notes;
         this.workoutType = workoutType;

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,7 +63,10 @@ public class ScheduledWorkoutService {
     }
 
     public List<GetScheduledWorkoutResponse> getScheduledWorkoutsByDate(LocalDate date) {
-        List<ScheduledWorkout> scheduledWorkouts = scheduledWorkoutRepository.findByDate(date);
+        LocalDateTime start = date.atTime(15, 0);
+        LocalDateTime end = date.plusDays(1).atTime(14, 59, 59);
+
+        List<ScheduledWorkout> scheduledWorkouts = scheduledWorkoutRepository.findByScheduledDateTimeBetween(start, end);
         return scheduledWorkouts.stream()
                 .map(GetScheduledWorkoutResponse::fromEntity)
                 .collect(Collectors.toList());

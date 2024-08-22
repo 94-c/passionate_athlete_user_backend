@@ -47,7 +47,7 @@ public class CreateScheduledWorkoutResponse {
         return new CreateScheduledWorkoutResponse(
                 scheduledWorkout.getId(),
                 scheduledWorkout.getTitle(),
-                scheduledWorkout.getDate(),
+                scheduledWorkout.getScheduledDateTime(),
                 scheduledWorkout.getTime(),
                 scheduledWorkout.getNotes(),
                 scheduledWorkout.getWorkoutType(),

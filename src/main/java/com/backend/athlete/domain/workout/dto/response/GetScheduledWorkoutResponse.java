@@ -53,7 +53,7 @@ public class GetScheduledWorkoutResponse {
         return new GetScheduledWorkoutResponse(
                 scheduledWorkout.getId(),
                 scheduledWorkout.getTitle(),
-                scheduledWorkout.getDate(),
+                scheduledWorkout.getScheduledDateTime(),
                 scheduledWorkout.getTime(),
                 scheduledWorkout.getNotes(),
                 scheduledWorkout.getWorkoutType(),

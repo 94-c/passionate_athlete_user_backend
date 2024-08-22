@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -29,7 +30,9 @@ public class ScheduledWorkoutController {
     }
 
     @GetMapping("/date")
-    public ResponseEntity<List<GetScheduledWorkoutResponse>> getScheduledWorkoutsByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public ResponseEntity<List<GetScheduledWorkoutResponse>> getScheduledWorkoutsByDate(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
         List<GetScheduledWorkoutResponse> response = scheduledWorkoutService.getScheduledWorkoutsByDate(date);
         return ResponseEntity.ok(response);
     }
