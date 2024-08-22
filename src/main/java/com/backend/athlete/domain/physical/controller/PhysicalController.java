@@ -81,17 +81,25 @@ public class PhysicalController {
     }
 
     @GetMapping("/find/monthly-fat-change")
-    public ResponseEntity<GetMonthlyFatChangeResponse> getMonthlyFatChangeRanking(
-            @RequestParam("year") int year,
-            @RequestParam("month") int month,
-            @RequestParam(value = "branchId", required = false) Long branchId,
-            @RequestParam(value = "gender", required = false) UserGenderType gender,
-            @RequestParam(value = "limit", defaultValue = "10") int limit) {
-
+    public ResponseEntity<GetMonthlyFatChangeResponse> getMonthlyFatChangeRanking(@RequestParam("year") int year,
+                                                                                  @RequestParam("month") int month,
+                                                                                  @RequestParam(value = "branchId", required = false) Long branchId,
+                                                                                  @RequestParam(value = "gender", required = false) UserGenderType gender,
+                                                                                  @RequestParam(value = "limit", defaultValue = "10") int limit) {
         GetMonthlyFatChangeResponse response = physicalService.getMonthlyFatChangeRanking(year, month, branchId, gender, limit);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @GetMapping("/history/{type}")
+    public ResponseEntity<Page<GetPhysicalHistoryResponse>> getPhysicalHistory(
+            @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
+            @PathVariable("type") String type,
+            @RequestParam(defaultValue = PageConstant.DEFAULT_PAGE, required = false) int page,
+            @RequestParam(defaultValue = PageConstant.DEFAULT_PER_PAGE, required = false) int perPage) {
+
+        Page<GetPhysicalHistoryResponse> response = physicalService.getPhysicalHistoryByType(userPrincipal, type, page, perPage);
+        return ResponseEntity.ok(response);
+    }
 
 
 }

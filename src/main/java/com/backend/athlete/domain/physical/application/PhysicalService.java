@@ -15,10 +15,7 @@ import com.backend.athlete.support.util.MathUtils;
 import com.backend.athlete.support.util.PhysicalUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -182,5 +179,13 @@ public class PhysicalService {
             physicals = physicalRepository.findTopRankingsByBranchAndDateRange(branchId, gender, startDateTime, endDateTime, PageRequest.of(0, limit));
         }
         return GetMonthlyFatChangeResponse.fromEntityList(physicals);
+    }
+
+    public Page<GetPhysicalHistoryResponse> getPhysicalHistoryByType(CustomUserDetailsImpl userPrincipal, String type, int page, int size) {
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "measureDate"));
+
+        return physicalRepository.findByUserId(user.getId(), pageable)
+                .map(physical -> GetPhysicalHistoryResponse.fromEntity(physical, type));
     }
 }
