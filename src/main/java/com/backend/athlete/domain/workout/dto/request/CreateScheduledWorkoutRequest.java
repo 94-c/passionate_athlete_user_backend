@@ -1,22 +1,23 @@
 package com.backend.athlete.domain.workout.dto.request;
 
 import com.backend.athlete.domain.workout.domain.ScheduledWorkout;
+import com.backend.athlete.domain.workout.domain.type.WorkoutMode;
 import com.backend.athlete.domain.workout.domain.type.WorkoutType;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
+@Getter @Setter
 public class CreateScheduledWorkoutRequest {
     private String title;
-    private LocalDate date;
-    private int rounds;
+    private LocalDateTime date;
     private String time;
     private String notes;
     private WorkoutType workoutType;
+    private WorkoutMode workoutMode;
     private List<WorkoutInfoRequest> workoutInfos;
     private List<WorkoutRatingRequest> workoutRatings;
 
@@ -24,10 +25,10 @@ public class CreateScheduledWorkoutRequest {
         return new ScheduledWorkout(
                 request.getTitle(),
                 request.getDate(),
-                request.getRounds(),
                 request.getTime(),
                 request.getNotes(),
-                request.getWorkoutType()
+                request.getWorkoutType(),
+                request.getWorkoutMode()
         );
     }
 }

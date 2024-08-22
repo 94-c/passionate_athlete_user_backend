@@ -31,17 +31,11 @@ public class ScheduledWorkoutService {
                 .map(infoRequest -> {
                     Exercise exercise = exerciseRepository.findByName(infoRequest.getExerciseName())
                             .orElseGet(() -> {
-                                CreateExerciseRequest createExerciseRequest = new CreateExerciseRequest(
+                                Exercise newExercise = new Exercise(
                                         infoRequest.getExerciseName(),
                                         "",
                                         "",
                                         infoRequest.getType()
-                                        );
-                                Exercise newExercise = new Exercise(
-                                        createExerciseRequest.getName(),
-                                        "",
-                                        "",
-                                        createExerciseRequest.getType()
                                 );
                                 return exerciseRepository.save(newExercise);
                             });

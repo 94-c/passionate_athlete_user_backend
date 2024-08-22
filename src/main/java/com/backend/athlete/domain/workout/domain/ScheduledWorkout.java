@@ -1,5 +1,6 @@
 package com.backend.athlete.domain.workout.domain;
 
+import com.backend.athlete.domain.workout.domain.type.WorkoutMode;
 import com.backend.athlete.domain.workout.domain.type.WorkoutType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,15 +26,11 @@ public class ScheduledWorkout {
     @Comment("제목")
     private String title;
 
-    @Comment("라운드")
-    private int rounds;
+    @Comment("운동 날짜 및 시작 시간")
+    private LocalDateTime date;  // 운동 날짜와 시작 시간
 
-    @Comment("시간")
-    private String time;
-
-    @Comment("날짜")
-    @Column(unique = true)
-    private LocalDate date;
+    @Comment("총 운동 시간")
+    private String time;  // 총 운동 시간 (예: "28:00")
 
     @Comment("비고")
     private String notes;
@@ -41,19 +39,23 @@ public class ScheduledWorkout {
     @Comment("운동 형태")
     private WorkoutType workoutType;
 
+    @Enumerated(EnumType.STRING)
+    @Comment("운동 방식")
+    private WorkoutMode workoutMode;
+
     @OneToMany(mappedBy = "scheduledWorkout", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ScheduledWorkoutInfo> scheduledWorkoutInfos = new ArrayList<>();
 
     @OneToMany(mappedBy = "scheduledWorkout", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ScheduledWorkoutRating> scheduledWorkoutRatings = new ArrayList<>();
 
-    public ScheduledWorkout(String title, LocalDate date, int rounds, String time, String notes, WorkoutType workoutType) {
+    public ScheduledWorkout(String title, LocalDateTime date, String time, String notes, WorkoutType workoutType, WorkoutMode workoutMode) {
         this.title = title;
         this.date = date;
-        this.rounds = rounds;
         this.time = time;
         this.notes = notes;
         this.workoutType = workoutType;
+        this.workoutMode = workoutMode;
     }
 
     public void addWorkoutInfo(ScheduledWorkoutInfo scheduledWorkoutInfo) {

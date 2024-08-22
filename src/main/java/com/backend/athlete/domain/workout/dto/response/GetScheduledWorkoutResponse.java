@@ -2,9 +2,12 @@ package com.backend.athlete.domain.workout.dto.response;
 
 import com.backend.athlete.domain.workout.domain.ScheduledWorkout;
 import com.backend.athlete.domain.workout.domain.ScheduledWorkoutRating;
+import com.backend.athlete.domain.workout.domain.type.WorkoutMode;
+import com.backend.athlete.domain.workout.domain.type.WorkoutType;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -13,21 +16,25 @@ import java.util.stream.Collectors;
 public class GetScheduledWorkoutResponse {
     private Long id;
     private String title;
-    private LocalDate date;
-    private int rounds;
+    private LocalDateTime date;
     private String time;
     private String notes;
+    private WorkoutType workoutType;
+    private WorkoutMode workoutMode;
     private List<WorkoutInfoResponse> workoutInfos;
     private Map<String, List<WorkoutRatingResponse>> workoutRatings;
 
-    public GetScheduledWorkoutResponse(Long id, String title, LocalDate date, int rounds, String time, String notes,
-                                       List<WorkoutInfoResponse> workoutInfos, Map<String, List<WorkoutRatingResponse>> workoutRatings) {
+    public GetScheduledWorkoutResponse(Long id, String title, LocalDateTime date, String time, String notes,
+                                       WorkoutType workoutType, WorkoutMode workoutMode,
+                                       List<WorkoutInfoResponse> workoutInfos,
+                                       Map<String, List<WorkoutRatingResponse>> workoutRatings) {
         this.id = id;
         this.title = title;
         this.date = date;
-        this.rounds = rounds;
         this.time = time;
         this.notes = notes;
+        this.workoutType = workoutType;
+        this.workoutMode = workoutMode;
         this.workoutInfos = workoutInfos;
         this.workoutRatings = workoutRatings;
     }
@@ -47,9 +54,10 @@ public class GetScheduledWorkoutResponse {
                 scheduledWorkout.getId(),
                 scheduledWorkout.getTitle(),
                 scheduledWorkout.getDate(),
-                scheduledWorkout.getRounds(),
                 scheduledWorkout.getTime(),
                 scheduledWorkout.getNotes(),
+                scheduledWorkout.getWorkoutType(),
+                scheduledWorkout.getWorkoutMode(),
                 workoutInfos,
                 workoutRatings
         );
