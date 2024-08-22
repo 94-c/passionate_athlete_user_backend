@@ -7,6 +7,7 @@ import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.backend.athlete.domain.workout.domain.*;
 import com.backend.athlete.domain.workout.domain.data.WorkoutRecordData;
+import com.backend.athlete.domain.workout.domain.type.WorkoutMode;
 import com.backend.athlete.domain.workout.domain.type.WorkoutRecordType;
 import com.backend.athlete.domain.workout.dto.request.CreateWorkoutRecordRequest;
 import com.backend.athlete.domain.workout.dto.request.WorkoutHistoryRequest;
@@ -28,6 +29,7 @@ import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -84,19 +86,38 @@ public class WorkoutRecordService {
 
     @Transactional
     public Page<WorkoutRecordStatisticsResponse> getMainWorkoutRecordsByDateRangeAndGender(LocalDate date, UserGenderType gender, String rating, int page, int perPage) {
-        Pageable pageable = PageRequest.of(page, perPage, Sort.by(Sort.Direction.ASC, "duration"));
-
-        LocalDateTime startDate = date.atTime(16, 0, 0);
+        Pageable pageable = PageRequest.of(page, perPage);
+        LocalDateTime startDate = date.atTime(15, 0, 0);
         LocalDateTime endDate = date.plusDays(1).atTime(15, 59, 59);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String startDateTime = startDate.format(formatter);
-        String endDateTime = endDate.format(formatter);
+        List<ScheduledWorkout> workouts = scheduledWorkoutRepository.findByScheduledDateTimeBetween(startDate, endDate);
 
-        Page<WorkoutRecord> records = workoutRecordRepository.findMainWorkoutRecordsByDateRangeAndGenderAndRating(startDateTime, endDateTime, gender, rating, pageable);
+        if (workouts.isEmpty()) {
+            throw new IllegalArgumentException("해당 날짜에 운동 스케줄이 없습니다.");
+        }
+
+        ScheduledWorkout workout = workouts.get(0);  // 적절히 선택된 운동
+        WorkoutMode workoutMode = workout.getWorkoutMode();
+
+        Page<WorkoutRecord> records;
+        if (workoutMode == WorkoutMode.ROUND_RANKING) {
+            if (rating == null || rating.isEmpty()) {
+                records = workoutRecordRepository.findSuccessfulRecordsSortedByRoundsWithoutRating(startDate, endDate, gender, pageable);
+            } else {
+                records = workoutRecordRepository.findSuccessfulRecordsSortedByRounds(startDate, endDate, gender, rating, pageable);
+            }
+        } else {
+            if (rating == null || rating.isEmpty()) {
+                records = workoutRecordRepository.findSuccessfulRecordsSortedByDurationWithoutRating(startDate, endDate, gender, pageable);
+            } else {
+                records = workoutRecordRepository.findSuccessfulRecordsSortedByDuration(startDate, endDate, gender, rating, pageable);
+            }
+        }
 
         return records.map(WorkoutRecordStatisticsResponse::fromEntity);
     }
+
+
     @Transactional
     public GetMonthlyWorkoutResponse getMonthlyWorkoutCounts(YearMonth month, CustomUserDetailsImpl userPrincipal) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
