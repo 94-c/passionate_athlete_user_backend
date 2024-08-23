@@ -22,7 +22,7 @@ public class GetPhysicalHistoryResponse {
             case "muscle" -> physical.getMuscleMass();
             case "fat" -> physical.getBodyFatMass();
             case "bmi" -> physical.getBmi();
-            case "bodyFatPercentage" -> physical.getBodyFatPercentage();
+            case "bodyfatpercentage" -> physical.getBodyFatPercentage();
             default -> throw new ServiceException("Invalid type specified.");
         };
 
