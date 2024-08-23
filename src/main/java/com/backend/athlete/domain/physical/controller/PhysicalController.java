@@ -33,8 +33,8 @@ public class PhysicalController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @GetMapping("/last")
-    public ResponseEntity<LastGetPhysicalResponse> getLastPhysical() {
-        LastGetPhysicalResponse response = physicalService.findLastPhysical();
+    public ResponseEntity<LastGetPhysicalResponse> getLastPhysical(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
+        LastGetPhysicalResponse response = physicalService.findLastPhysical(userPrincipal);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

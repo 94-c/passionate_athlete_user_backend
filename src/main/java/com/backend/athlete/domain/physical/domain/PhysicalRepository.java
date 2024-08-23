@@ -23,7 +23,7 @@ public interface PhysicalRepository extends JpaRepository<Physical, Long>, Physi
     Physical findTopByUserAndMeasureDateBeforeOrderByMeasureDateDesc(@Param("user") User user, @Param("date") LocalDateTime date);
     Page<Physical> findByUserIdOrderByMeasureDateDesc(Long id, Pageable pageable);
     List<Physical> findPhysicalsByUserIdAndMeasureDate(Long userId, LocalDate measureDate);
-    Physical findTopByOrderByMeasureDateDesc();
+    Physical findTopByUserIdOrderByMeasureDateDesc(Long userId);
     @Query("SELECT p FROM Physical p WHERE p.user.id = :userId AND p.measureDate BETWEEN :startDate AND :endDate ORDER BY p.measureDate DESC LIMIT 1")
     Physical findPhysicalByBodyFatMassChangeInDateRange(@Param("userId") Long userId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 

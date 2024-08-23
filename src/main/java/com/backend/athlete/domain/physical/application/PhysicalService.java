@@ -127,8 +127,9 @@ public class PhysicalService {
         physicalRepository.save(physical);
     }
 
-    public LastGetPhysicalResponse findLastPhysical() {
-        Physical lastPhysical = physicalRepository.findTopByOrderByMeasureDateDesc();
+    public LastGetPhysicalResponse findLastPhysical(CustomUserDetailsImpl userPrincipal) {
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
+        Physical lastPhysical = physicalRepository.findTopByUserIdOrderByMeasureDateDesc(user.getId());
         return LastGetPhysicalResponse.fromEntity(lastPhysical);
     }
 
