@@ -1,6 +1,9 @@
 package com.backend.athlete.domain.auth.application;
 
 import com.backend.athlete.domain.auth.domain.AuthRepository;
+import com.backend.athlete.domain.physical.domain.Physical;
+import com.backend.athlete.domain.physical.domain.PhysicalRepository;
+import com.backend.athlete.domain.physical.dto.request.CreatePhysicalRequest;
 import com.backend.athlete.support.exception.DuplicatePasswordException;
 import com.backend.athlete.support.exception.IsExistUserIddException;
 import com.backend.athlete.support.exception.NotFoundBranchException;
@@ -18,6 +21,7 @@ import com.backend.athlete.domain.auth.dto.response.RegisterResponse;
 import com.backend.athlete.domain.auth.jwt.JwtTokenProvider;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.UserCodeUtils;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +31,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -40,6 +45,7 @@ public class AuthService {
     private final BranchRepository branchRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final PhysicalRepository physicalRepository;
     private final JwtTokenProvider jwtTokenUtil;
 
     public RegisterResponse register(RegisterRequest request) {
@@ -58,6 +64,8 @@ public class AuthService {
         request.setRoleIds(roles);
 
         User registerUser = authRepository.save(RegisterRequest.toEntity(request, branch));
+        Physical initalPhysical = new Physical(registerUser, request.getWeight(), registerUser.getHeight(), LocalDateTime.now());
+        physicalRepository.save(initalPhysical);
 
         return RegisterResponse.fromEntity(registerUser);
     }
@@ -78,6 +86,7 @@ public class AuthService {
         return LoginResponse.fromEntity(userDetails, token);
     }
 
+    @Transactional
     public boolean checkUserIdExists(String userId) {
         return authRepository.existsByUserId(userId);
     }

@@ -37,7 +37,7 @@ public class AttendanceController {
 
     @GetMapping("/daily")
     public ResponseEntity<GetDailyAttendanceResponse> getDailyAttendance(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
-                                                                    @RequestParam(name = "daily", required = false) LocalDate dailyDate) {
+                                                                         @RequestParam(name = "daily", required = false) LocalDate dailyDate) {
         GetDailyAttendanceResponse response = attendanceService.getAttendance(userPrincipal, dailyDate);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
