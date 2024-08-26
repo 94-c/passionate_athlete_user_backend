@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class GetNoticeResponse {
     private Long id;
     private String kind; // 게시판 종류 추가
+    private Long userId;
     private String userName;
     private String title;
     private String content;
@@ -19,9 +20,10 @@ public class GetNoticeResponse {
     private boolean status;
     private String createdDate;
 
-    public GetNoticeResponse(Long id, String kind, String userName, String title, String content, int likeCount, int commentCount, boolean status, String createdDate) {
+    public GetNoticeResponse(Long id, String kind, Long userId, String userName, String title, String content, int likeCount, int commentCount, boolean status, String createdDate) {
         this.id = id;
         this.kind = kind;
+        this.userId = userId;
         this.userName = userName;
         this.title = title;
         this.content = content;
@@ -35,6 +37,7 @@ public class GetNoticeResponse {
         return new GetNoticeResponse(
                 notice.getId(),
                 notice.getKind().getType(),
+                notice.getUser().getId(),
                 notice.getUser().getName(),
                 notice.getTitle(),
                 notice.getContent(),
