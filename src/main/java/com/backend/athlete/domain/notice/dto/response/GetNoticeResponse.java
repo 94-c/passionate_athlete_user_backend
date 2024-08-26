@@ -10,55 +10,38 @@ import java.util.stream.Collectors;
 @Getter
 public class GetNoticeResponse {
     private Long id;
+    private String kind; // 게시판 종류 추가
+    private String userName;
     private String title;
     private String content;
-    private List<String> imagePaths; // 다중 이미지 경로를 위한 필드
-    private Long userId;
-    private String userName;
     private int likeCount;
+    private int commentCount;
     private boolean status;
     private String createdDate;
-    private String modifiedDate;
-    private List<GetNoticeCommentResponse> comments;
-    private String kind; // 게시판 종류 추가
 
-    public GetNoticeResponse(Long id, String title, String content, List<String> imagePaths, Long userId, String userName, int likeCount, boolean status, String createdDate, String modifiedDate, List<GetNoticeCommentResponse> comments, String kind) {
+    public GetNoticeResponse(Long id, String kind, String userName, String title, String content, int likeCount, int commentCount, boolean status, String createdDate) {
         this.id = id;
+        this.kind = kind;
+        this.userName = userName;
         this.title = title;
         this.content = content;
-        this.imagePaths = imagePaths;
-        this.userId = userId;
-        this.userName = userName;
         this.likeCount = likeCount;
+        this.commentCount = commentCount;
         this.status = status;
         this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
-        this.comments = comments;
-        this.kind = kind;
     }
 
-    public static GetNoticeResponse fromEntity(Notice notice, int likeCount) {
-        List<GetNoticeCommentResponse> commentResponses = notice.getComments().stream()
-                .map(GetNoticeCommentResponse::fromEntity)
-                .collect(Collectors.toList());
-
-        List<String> imagePaths = notice.getFiles().stream()
-                .map(File::getFilePath)
-                .collect(Collectors.toList());
-
+    public static GetNoticeResponse fromEntity(Notice notice, int likeCount, int commentCount) {
         return new GetNoticeResponse(
                 notice.getId(),
+                notice.getKind().getType(),
+                notice.getUser().getName(),
                 notice.getTitle(),
                 notice.getContent(),
-                imagePaths,
-                notice.getUser().getId(),
-                notice.getUser().getName(),
                 likeCount,
+                commentCount,
                 notice.isStatus(),
-                notice.getCreatedDate(),
-                notice.getModifiedDate(),
-                commentResponses,
-                notice.getKind().getType()
+                notice.getCreatedDate()
         );
     }
 }
