@@ -20,6 +20,6 @@ public interface WorkoutRecordHistoryRepository extends JpaRepository<WorkoutRec
             "AND e.type = :exerciseType")
     List<GetExerciseTypeLastWeightResponse> findLastWeightsByExerciseType(@Param("userId") Long userId, @Param("exerciseType") ExerciseType exerciseType);
 
-
+    List<WorkoutRecordHistory> findByWorkoutRecord(WorkoutRecord workoutRecord);
 
 }

@@ -26,7 +26,7 @@ public class CreateWorkoutRecordRequest {
     private Boolean success;
     private String recordContent;
     private List<WorkoutHistoryRequest> workoutDetails;
-
+    private Boolean isShared;
     public static WorkoutRecord toEntity(CreateWorkoutRecordRequest request, User user, ScheduledWorkout scheduledWorkout) {
         return new WorkoutRecord(
                 user,
@@ -36,7 +36,8 @@ public class CreateWorkoutRecordRequest {
                 request.getDuration(),
                 request.getRating(),
                 request.getSuccess(),
-                request.getRecordContent()
+                request.getRecordContent(),
+                false
         );
     }
 }

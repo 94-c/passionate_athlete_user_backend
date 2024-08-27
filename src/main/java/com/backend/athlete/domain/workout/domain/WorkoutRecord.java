@@ -56,9 +56,13 @@ public class WorkoutRecord extends BaseTimeEntity {
     @OneToMany(mappedBy = "workoutRecord", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkoutRecordHistory> workoutHistories = new ArrayList<>();
 
+    @Comment("공개 여부")
+    @Column(name = "is_shared")
+    private Boolean isShared;
+
     public WorkoutRecord(User user, WorkoutRecordType exerciseType, ScheduledWorkout scheduledWorkout,
                          Integer rounds, String duration,
-                         String rating, Boolean success, String recordContent) {
+                         String rating, Boolean success, String recordContent, Boolean isShared) {
         this.user = user;
         this.exerciseType = exerciseType;
         this.scheduledWorkout = scheduledWorkout;
@@ -67,6 +71,7 @@ public class WorkoutRecord extends BaseTimeEntity {
         this.rating = rating;
         this.success = success;
         this.recordContent = recordContent;
+        this.isShared = isShared;
     }
 
     public void addWorkoutHistory(WorkoutRecordHistory history) {
@@ -77,5 +82,6 @@ public class WorkoutRecord extends BaseTimeEntity {
     public String getScheduledWorkoutTitle() {
         return scheduledWorkout != null ? scheduledWorkout.getTitle() : null;
     }
+
 }
 

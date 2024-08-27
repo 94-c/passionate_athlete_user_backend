@@ -51,4 +51,7 @@ public interface WorkoutRecordRepository extends JpaRepository<WorkoutRecord, Lo
             @Param("gender") UserGenderType gender,
             Pageable pageable
     );
+
+    Page<WorkoutRecord> findByUserIdAndIsSharedFalse(Long userId, Pageable pageable);
+
 }
