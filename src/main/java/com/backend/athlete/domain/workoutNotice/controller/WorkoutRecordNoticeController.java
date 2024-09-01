@@ -4,6 +4,7 @@ import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.domain.workout.dto.response.GetWorkoutRecordAndHistoryResponse;
 import com.backend.athlete.domain.workoutNotice.application.WorkoutRecordNoticeService;
 import com.backend.athlete.domain.workoutNotice.dto.response.CreateWorkoutRecordNoticeResponse;
+import com.backend.athlete.domain.workoutNotice.dto.response.GetNonSharedWorkoutRecordResponse;
 import com.backend.athlete.support.constant.PageConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,12 +20,12 @@ public class WorkoutRecordNoticeController {
     private final WorkoutRecordNoticeService workoutRecordNoticeService;
 
     @GetMapping("/non-shared")
-    public ResponseEntity<Page<GetWorkoutRecordAndHistoryResponse>> getNonSharedWorkoutRecords(
+    public ResponseEntity<Page<GetNonSharedWorkoutRecordResponse>> getNonSharedWorkoutRecords(
             @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
             @RequestParam(defaultValue = PageConstant.DEFAULT_PAGE, required = false) int page,
             @RequestParam(defaultValue = PageConstant.DEFAULT_PER_PAGE, required = false) int perPage
     ) {
-        Page<GetWorkoutRecordAndHistoryResponse> response = workoutRecordNoticeService.getNonSharedWorkoutRecords(userPrincipal, page, perPage);
+        Page<GetNonSharedWorkoutRecordResponse> response = workoutRecordNoticeService.getNonSharedWorkoutRecords(userPrincipal, page, perPage);
         return ResponseEntity.ok(response);
     }
     @PostMapping

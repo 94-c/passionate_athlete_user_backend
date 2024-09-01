@@ -11,6 +11,7 @@ import com.backend.athlete.domain.workout.dto.response.WorkoutRecordHistoryRespo
 import com.backend.athlete.domain.workoutNotice.domain.WorkoutRecordNotice;
 import com.backend.athlete.domain.workoutNotice.domain.WorkoutRecordNoticeRepository;
 import com.backend.athlete.domain.workoutNotice.dto.response.CreateWorkoutRecordNoticeResponse;
+import com.backend.athlete.domain.workoutNotice.dto.response.GetNonSharedWorkoutRecordResponse;
 import com.backend.athlete.support.util.FindUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,23 +33,14 @@ public class WorkoutRecordNoticeService {
     private final WorkoutRecordNoticeRepository workoutRecordNoticeRepository;
 
     @Transactional(readOnly = true)
-    public Page<GetWorkoutRecordAndHistoryResponse> getNonSharedWorkoutRecords(CustomUserDetailsImpl userPrincipal, int page, int perPage) {
+    public Page<GetNonSharedWorkoutRecordResponse> getNonSharedWorkoutRecords(CustomUserDetailsImpl userPrincipal, int page, int perPage) {
         Pageable pageable = PageRequest.of(page, perPage);
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
         Page<WorkoutRecord> workoutRecords = workoutRecordRepository.findByUserIdAndIsSharedFalse(user.getId(), pageable);
 
-        return workoutRecords.map(workoutRecord -> {
-            List<WorkoutRecordHistory> histories = workoutRecordHistoryRepository.findByWorkoutRecord(workoutRecord);
-            List<WorkoutRecordHistoryResponse> historyResponses = histories.stream()
-                    .map(WorkoutRecordHistoryResponse::fromEntity)
-                    .collect(Collectors.toList());
-
-            return GetWorkoutRecordAndHistoryResponse.fromEntity(workoutRecord, historyResponses);
-        });
+        return workoutRecords.map(GetNonSharedWorkoutRecordResponse::fromEntity);
     }
-
-
 
     @Transactional
     public CreateWorkoutRecordNoticeResponse createWorkoutRecordNotice(Long workoutRecordId, CustomUserDetailsImpl userPrincipal) {
