@@ -43,4 +43,5 @@ jwt:
 file:
   upload-dir: ${user.home}/study-project/image
 
-front_end_url: http://58.79.16.12:3000
+front_end_url: "http://58.79.16.12:3000"
+
