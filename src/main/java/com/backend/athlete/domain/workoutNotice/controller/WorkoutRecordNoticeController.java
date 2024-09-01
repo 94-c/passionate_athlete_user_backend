@@ -5,6 +5,7 @@ import com.backend.athlete.domain.workout.dto.response.GetWorkoutRecordAndHistor
 import com.backend.athlete.domain.workoutNotice.application.WorkoutRecordNoticeService;
 import com.backend.athlete.domain.workoutNotice.dto.response.CreateWorkoutRecordNoticeResponse;
 import com.backend.athlete.domain.workoutNotice.dto.response.GetNonSharedWorkoutRecordResponse;
+import com.backend.athlete.domain.workoutNotice.dto.response.GetWorkoutRecordNoticeAndHistoryResponse;
 import com.backend.athlete.domain.workoutNotice.dto.response.GetWorkoutRecordNoticeResponse;
 import com.backend.athlete.support.constant.PageConstant;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,12 @@ public class WorkoutRecordNoticeController {
             @RequestParam(defaultValue = PageConstant.DEFAULT_PER_PAGE, required = false) int perPage
     ) {
         Page<GetWorkoutRecordNoticeResponse> response = workoutRecordNoticeService.findAllWorkRecordNotices(page, perPage);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GetWorkoutRecordNoticeAndHistoryResponse> getWorkoutRecordNotice(@PathVariable Long id) {
+        GetWorkoutRecordNoticeAndHistoryResponse response = workoutRecordNoticeService.getWorkRecordNotice(id);
         return ResponseEntity.ok(response);
     }
 }

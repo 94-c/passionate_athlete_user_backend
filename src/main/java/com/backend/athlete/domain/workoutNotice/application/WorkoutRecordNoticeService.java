@@ -12,9 +12,11 @@ import com.backend.athlete.domain.workoutNotice.domain.WorkoutRecordNotice;
 import com.backend.athlete.domain.workoutNotice.domain.WorkoutRecordNoticeRepository;
 import com.backend.athlete.domain.workoutNotice.dto.response.CreateWorkoutRecordNoticeResponse;
 import com.backend.athlete.domain.workoutNotice.dto.response.GetNonSharedWorkoutRecordResponse;
+import com.backend.athlete.domain.workoutNotice.dto.response.GetWorkoutRecordNoticeAndHistoryResponse;
 import com.backend.athlete.domain.workoutNotice.dto.response.GetWorkoutRecordNoticeResponse;
 import com.backend.athlete.support.util.FindUtils;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -70,6 +72,16 @@ public class WorkoutRecordNoticeService {
         Page<WorkoutRecordNotice> workoutRecordNotices = workoutRecordNoticeRepository.findAll(pageable);
 
         return workoutRecordNotices.map(GetWorkoutRecordNoticeResponse::fromEntity);
+    }
+
+    public GetWorkoutRecordNoticeAndHistoryResponse getWorkRecordNotice(Long id) {
+        WorkoutRecordNotice workoutRecordNotice = workoutRecordNoticeRepository.findById(id)
+                .orElseThrow(() -> new ServiceException("해당 공유 된 운동이 없습니다."));
+        List<WorkoutRecordHistoryResponse> histories = workoutRecordHistoryRepository.findByWorkoutRecordId(workoutRecordNotice.getWorkoutRecord().getId())
+                .stream()
+                .map(WorkoutRecordHistoryResponse::fromEntity)
+                .collect(Collectors.toList());
+        return GetWorkoutRecordNoticeAndHistoryResponse.fromEntity(workoutRecordNotice, histories);
     }
 
 }
