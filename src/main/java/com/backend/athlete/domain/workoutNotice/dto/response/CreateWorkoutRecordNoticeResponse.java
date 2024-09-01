@@ -12,21 +12,21 @@ import java.util.List;
 @Getter
 public class CreateWorkoutRecordNoticeResponse {
     private Long id;
-    private GetWorkoutRecordAndHistoryResponse workoutInfo;
+    private WorkoutRecord workoutInfo;
     private boolean canShare;
     private LocalDateTime sharedAt;
 
-    public CreateWorkoutRecordNoticeResponse(Long id, GetWorkoutRecordAndHistoryResponse workoutInfo, boolean canShare, LocalDateTime sharedAt) {
+    public CreateWorkoutRecordNoticeResponse(Long id, WorkoutRecord workoutInfo, boolean canShare, LocalDateTime sharedAt) {
         this.id = id;
         this.workoutInfo = workoutInfo;
         this.canShare = canShare;
         this.sharedAt = sharedAt;
     }
 
-    public static CreateWorkoutRecordNoticeResponse fromEntity(WorkoutRecordNotice workoutRecordNotice, WorkoutRecord workoutRecord, List<WorkoutRecordHistoryResponse> historie) {
+    public static CreateWorkoutRecordNoticeResponse fromEntity(WorkoutRecordNotice workoutRecordNotice, WorkoutRecord workoutRecord) {
         return new CreateWorkoutRecordNoticeResponse(
                 workoutRecordNotice.getId(),
-                GetWorkoutRecordAndHistoryResponse.fromEntity(workoutRecord, historie),
+                workoutRecord,
                 workoutRecordNotice.getIsShared(),
                 workoutRecordNotice.getSharedAt()
         );

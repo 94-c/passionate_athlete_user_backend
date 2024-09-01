@@ -44,7 +44,7 @@ public class WorkoutRecordNoticeService {
 
     @Transactional
     public CreateWorkoutRecordNoticeResponse createWorkoutRecordNotice(Long workoutRecordId, CustomUserDetailsImpl userPrincipal) {
-        User user = FindUtils.findByUserId(userPrincipal.getUsername());
+        FindUtils.findByUserId(userPrincipal.getUsername());
 
         WorkoutRecord workoutRecord = workoutRecordRepository.findById(workoutRecordId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 운동 기록을 찾을 수 없습니다."));
@@ -59,13 +59,7 @@ public class WorkoutRecordNoticeService {
 
         workoutRecordNoticeRepository.save(workoutRecordNotice);
 
-        List<WorkoutRecordHistory> histories = workoutRecordHistoryRepository.findByWorkoutRecord(workoutRecord);
-
-        List<WorkoutRecordHistoryResponse> historyResponses = histories.stream()
-                .map(WorkoutRecordHistoryResponse::fromEntity)
-                .collect(Collectors.toList());
-
-        return CreateWorkoutRecordNoticeResponse.fromEntity(workoutRecordNotice, workoutRecord, historyResponses);
+        return CreateWorkoutRecordNoticeResponse.fromEntity(workoutRecordNotice, workoutRecord);
     }
 
 }
