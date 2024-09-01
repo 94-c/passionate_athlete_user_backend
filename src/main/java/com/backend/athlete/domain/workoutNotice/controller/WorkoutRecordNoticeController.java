@@ -5,6 +5,7 @@ import com.backend.athlete.domain.workout.dto.response.GetWorkoutRecordAndHistor
 import com.backend.athlete.domain.workoutNotice.application.WorkoutRecordNoticeService;
 import com.backend.athlete.domain.workoutNotice.dto.response.CreateWorkoutRecordNoticeResponse;
 import com.backend.athlete.domain.workoutNotice.dto.response.GetNonSharedWorkoutRecordResponse;
+import com.backend.athlete.domain.workoutNotice.dto.response.GetWorkoutRecordNoticeResponse;
 import com.backend.athlete.support.constant.PageConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,5 +36,12 @@ public class WorkoutRecordNoticeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-
+    @GetMapping
+    public ResponseEntity<Page<GetWorkoutRecordNoticeResponse>> findAllWorkRecordNotices (
+            @RequestParam(defaultValue = PageConstant.DEFAULT_PAGE, required = false) int page,
+            @RequestParam(defaultValue = PageConstant.DEFAULT_PER_PAGE, required = false) int perPage
+    ) {
+        Page<GetWorkoutRecordNoticeResponse> response = workoutRecordNoticeService.findAllWorkRecordNotices(page, perPage);
+        return ResponseEntity.ok(response);
+    }
 }

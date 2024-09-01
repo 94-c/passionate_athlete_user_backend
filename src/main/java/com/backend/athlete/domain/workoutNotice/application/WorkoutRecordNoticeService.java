@@ -12,6 +12,7 @@ import com.backend.athlete.domain.workoutNotice.domain.WorkoutRecordNotice;
 import com.backend.athlete.domain.workoutNotice.domain.WorkoutRecordNoticeRepository;
 import com.backend.athlete.domain.workoutNotice.dto.response.CreateWorkoutRecordNoticeResponse;
 import com.backend.athlete.domain.workoutNotice.dto.response.GetNonSharedWorkoutRecordResponse;
+import com.backend.athlete.domain.workoutNotice.dto.response.GetWorkoutRecordNoticeResponse;
 import com.backend.athlete.support.util.FindUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -60,6 +61,15 @@ public class WorkoutRecordNoticeService {
         workoutRecordNoticeRepository.save(workoutRecordNotice);
 
         return CreateWorkoutRecordNoticeResponse.fromEntity(workoutRecordNotice, workoutRecord);
+    }
+
+    @Transactional
+    public Page<GetWorkoutRecordNoticeResponse> findAllWorkRecordNotices(int page, int perPage) {
+        Pageable pageable = PageRequest.of(page, perPage);
+
+        Page<WorkoutRecordNotice> workoutRecordNotices = workoutRecordNoticeRepository.findAll(pageable);
+
+        return workoutRecordNotices.map(GetWorkoutRecordNoticeResponse::fromEntity);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.backend.athlete.domain.workoutNotice.domain;
 
 import com.backend.athlete.domain.workout.domain.WorkoutRecord;
+import com.backend.athlete.support.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "workout_record_notice")
-public class WorkoutRecordNotice {
+public class WorkoutRecordNotice extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
