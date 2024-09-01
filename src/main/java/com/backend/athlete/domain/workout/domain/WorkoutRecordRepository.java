@@ -52,6 +52,7 @@ public interface WorkoutRecordRepository extends JpaRepository<WorkoutRecord, Lo
             Pageable pageable
     );
 
-    Page<WorkoutRecord> findByUserIdAndIsSharedFalse(Long userId, Pageable pageable);
+    @Query("SELECT wr FROM WorkoutRecord wr WHERE wr.isShared = false AND wr.user.id = :userId ORDER BY wr.createdAt DESC")
+    Page<WorkoutRecord> findByUserIdAndIsSharedFalse(@Param("userId") Long userId, Pageable pageable);
 
 }

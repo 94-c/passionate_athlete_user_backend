@@ -83,5 +83,9 @@ public class WorkoutRecord extends BaseTimeEntity {
         return scheduledWorkout != null ? scheduledWorkout.getTitle() : null;
     }
 
+    public void setIsShared() {
+        this.isShared = true;
+    }
+
 }
 

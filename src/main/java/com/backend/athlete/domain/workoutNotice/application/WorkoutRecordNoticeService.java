@@ -49,6 +49,8 @@ public class WorkoutRecordNoticeService {
         WorkoutRecord workoutRecord = workoutRecordRepository.findById(workoutRecordId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 운동 기록을 찾을 수 없습니다."));
 
+        workoutRecord.setIsShared();
+
         WorkoutRecordNotice workoutRecordNotice = new WorkoutRecordNotice(
                 workoutRecord,
                 true,

@@ -28,8 +28,8 @@ public class WorkoutRecordNoticeController {
         Page<GetNonSharedWorkoutRecordResponse> response = workoutRecordNoticeService.getNonSharedWorkoutRecords(userPrincipal, page, perPage);
         return ResponseEntity.ok(response);
     }
-    @PostMapping
-    public ResponseEntity<CreateWorkoutRecordNoticeResponse> createWorkoutRecordNotice(Long workoutRecordId,
+    @PostMapping("/{workoutRecordId}")
+    public ResponseEntity<CreateWorkoutRecordNoticeResponse> createWorkoutRecordNotice(@PathVariable Long workoutRecordId,
                                                                                        @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
         CreateWorkoutRecordNoticeResponse response = workoutRecordNoticeService.createWorkoutRecordNotice(workoutRecordId, userPrincipal);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
