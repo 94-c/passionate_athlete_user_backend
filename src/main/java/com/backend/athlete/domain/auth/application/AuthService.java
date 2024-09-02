@@ -64,7 +64,7 @@ public class AuthService {
         request.setRoleIds(roles);
 
         User registerUser = authRepository.save(RegisterRequest.toEntity(request, branch));
-        Physical initalPhysical = new Physical(registerUser, request.getWeight(), registerUser.getHeight(), LocalDateTime.now());
+        Physical initalPhysical = new Physical(registerUser, request.getWeight(), registerUser.getHeight(), 0.0, 0.0, LocalDateTime.now(), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
         physicalRepository.save(initalPhysical);
 
         return RegisterResponse.fromEntity(registerUser);

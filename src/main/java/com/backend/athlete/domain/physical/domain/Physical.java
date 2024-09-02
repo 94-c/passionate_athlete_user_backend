@@ -73,14 +73,6 @@ public class Physical extends BaseTimeEntity {
     @Comment("체지방량 변화")
     private Double bodyFatMassChange;
 
-    // 초기 회원 가입 시 기본 데이터 입력
-    public Physical(User user, Double weight, Double height,LocalDateTime measureDate) {
-        this.user = user;
-        this.weight = weight;
-        this.height = height;
-        this.measureDate = measureDate;
-    }
-
     public Physical(User user, Double weight, Double height, Double muscleMass, Double bodyFatMass, LocalDateTime measureDate, Double bmi, Double bodyFatPercentage, Double visceralFatPercentage, Double bmr, Double weightChange, Double heightChange, Double muscleMassChange, Double bodyFatMassChange) {
         this.user = user;
         this.weight = weight;
