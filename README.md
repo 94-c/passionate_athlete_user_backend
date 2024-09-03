@@ -1,6 +1,9 @@
 # Passionate_Athlete (운동 기록 웹 프로젝트)
 
 이 리포지토리는 `Passionate Athlete` 애플리케이션의 회원 백엔드 API 서비스 입니다.
+- 모놀리식 아키텍처로 개발 진행
+- 개발 기간 : 2024년 6월 ~ 2024년 9월 4일 (초기 베타 기준)
+- 개발 인력 : 1명
 
 
 ## Development Stack
