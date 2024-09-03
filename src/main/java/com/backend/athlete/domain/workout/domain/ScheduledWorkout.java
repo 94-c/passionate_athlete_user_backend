@@ -49,13 +49,16 @@ public class ScheduledWorkout {
     @OneToMany(mappedBy = "scheduledWorkout", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ScheduledWorkoutRating> scheduledWorkoutRatings = new ArrayList<>();
 
-    public ScheduledWorkout(String title, LocalDateTime scheduledDateTime, String time, String notes, WorkoutType workoutType, WorkoutMode workoutMode) {
+    @Comment("라운드")
+    private Integer round;
+    public ScheduledWorkout(String title, LocalDateTime scheduledDateTime, String time, String notes, WorkoutType workoutType, WorkoutMode workoutMode, Integer round) {
         this.title = title;
         this.scheduledDateTime = scheduledDateTime;
         this.time = time;
         this.notes = notes;
         this.workoutType = workoutType;
         this.workoutMode = workoutMode;
+        this.round = round;
     }
 
     public void addWorkoutInfo(ScheduledWorkoutInfo scheduledWorkoutInfo) {

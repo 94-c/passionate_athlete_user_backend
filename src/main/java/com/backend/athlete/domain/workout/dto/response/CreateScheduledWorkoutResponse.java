@@ -21,9 +21,10 @@ public class CreateScheduledWorkoutResponse {
     private WorkoutMode workoutMode;
     private List<WorkoutInfoResponse> workoutInfos;
     private List<WorkoutRatingResponse> workoutRatings;
+    private Integer round;
 
     public CreateScheduledWorkoutResponse(Long id, String title, LocalDateTime date, String time, String notes, WorkoutType workoutType, WorkoutMode workoutMode,
-                                          List<WorkoutInfoResponse> workoutInfos, List<WorkoutRatingResponse> workoutRatings) {
+                                          List<WorkoutInfoResponse> workoutInfos, List<WorkoutRatingResponse> workoutRatings, Integer round) {
         this.id = id;
         this.title = title;
         this.date = date;
@@ -33,6 +34,7 @@ public class CreateScheduledWorkoutResponse {
         this.workoutMode = workoutMode;
         this.workoutInfos = workoutInfos;
         this.workoutRatings = workoutRatings;
+        this.round = round;
     }
 
     public static CreateScheduledWorkoutResponse fromEntity(ScheduledWorkout scheduledWorkout) {
@@ -53,7 +55,8 @@ public class CreateScheduledWorkoutResponse {
                 scheduledWorkout.getWorkoutType(),
                 scheduledWorkout.getWorkoutMode(),
                 workoutInfos,
-                workoutRatings
+                workoutRatings,
+                scheduledWorkout.getRound()
         );
     }
 }

@@ -20,7 +20,7 @@ public class CreateScheduledWorkoutRequest {
     private WorkoutMode workoutMode;
     private List<WorkoutInfoRequest> workoutInfos;
     private List<WorkoutRatingRequest> workoutRatings;
-
+    private Integer round;
     public static ScheduledWorkout toEntity(CreateScheduledWorkoutRequest request) {
         return new ScheduledWorkout(
                 request.getTitle(),
@@ -28,7 +28,8 @@ public class CreateScheduledWorkoutRequest {
                 request.getTime(),
                 request.getNotes(),
                 request.getWorkoutType(),
-                request.getWorkoutMode()
+                request.getWorkoutMode(),
+                request.getRound()
         );
     }
 }
