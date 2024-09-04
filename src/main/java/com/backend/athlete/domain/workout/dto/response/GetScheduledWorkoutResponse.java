@@ -23,11 +23,11 @@ public class GetScheduledWorkoutResponse {
     private WorkoutMode workoutMode;
     private List<WorkoutInfoResponse> workoutInfos;
     private Map<String, List<WorkoutRatingResponse>> workoutRatings;
-
+    private Integer round;
     public GetScheduledWorkoutResponse(Long id, String title, LocalDateTime date, String time, String notes,
                                        WorkoutType workoutType, WorkoutMode workoutMode,
                                        List<WorkoutInfoResponse> workoutInfos,
-                                       Map<String, List<WorkoutRatingResponse>> workoutRatings) {
+                                       Map<String, List<WorkoutRatingResponse>> workoutRatings, Integer round) {
         this.id = id;
         this.title = title;
         this.date = date;
@@ -37,6 +37,7 @@ public class GetScheduledWorkoutResponse {
         this.workoutMode = workoutMode;
         this.workoutInfos = workoutInfos;
         this.workoutRatings = workoutRatings;
+        this.round = round;
     }
 
     public static GetScheduledWorkoutResponse fromEntity(ScheduledWorkout scheduledWorkout) {
@@ -59,7 +60,8 @@ public class GetScheduledWorkoutResponse {
                 scheduledWorkout.getWorkoutType(),
                 scheduledWorkout.getWorkoutMode(),
                 workoutInfos,
-                workoutRatings
+                workoutRatings,
+                scheduledWorkout.getRound()
         );
     }
 }
