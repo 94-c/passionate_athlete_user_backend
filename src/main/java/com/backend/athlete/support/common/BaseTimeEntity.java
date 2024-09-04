@@ -7,6 +7,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Getter
@@ -30,18 +32,17 @@ public class BaseTimeEntity {
 
     @PrePersist
     public void onPrePersist(){
-        LocalDateTime now = LocalDateTime.now();
-        this.createdAt = now;
-        this.modifiedAt = now;
+        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        this.createdAt = now.toLocalDateTime();
+        this.modifiedAt = now.toLocalDateTime();
         this.createdDate = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         this.modifiedDate = this.createdDate;
     }
 
     @PreUpdate
     public void onPreUpdate(){
-        LocalDateTime now = LocalDateTime.now();
-        this.modifiedAt = now;
+        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        this.modifiedAt = now.toLocalDateTime();
         this.modifiedDate = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
-
 }

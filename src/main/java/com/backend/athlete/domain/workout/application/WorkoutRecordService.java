@@ -15,6 +15,7 @@ import com.backend.athlete.domain.workout.dto.response.*;
 import com.backend.athlete.support.exception.NotFoundException;
 import com.backend.athlete.support.util.FindUtils;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -56,13 +57,13 @@ public class WorkoutRecordService {
     private ScheduledWorkout validateScheduledWorkout(WorkoutRecordType exerciseType, Long scheduledWorkoutId) {
         if (exerciseType == WorkoutRecordType.MAIN) {
             if (scheduledWorkoutId == null) {
-                throw new IllegalArgumentException("본운동의 경우 스케줄 ID가 필수입니다.");
+                throw new ServiceException("본운동의 경우 스케줄 ID가 필수입니다.");
             }
             return scheduledWorkoutRepository.findById(scheduledWorkoutId)
                     .orElseThrow(() -> new NotFoundException("오늘의 운동을 찾을 수가 없습니다.", HttpStatus.NOT_FOUND));
         } else {
             if (scheduledWorkoutId != null) {
-                throw new IllegalArgumentException("변형 또는 추가 운동의 경우 스케줄 ID가 없어야 합니다.");
+                throw new ServiceException("변형 또는 추가 운동의 경우 스케줄 ID가 없어야 합니다.");
             }
             return null;
         }
