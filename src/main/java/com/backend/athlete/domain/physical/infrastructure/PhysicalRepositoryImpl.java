@@ -6,6 +6,8 @@ import com.backend.athlete.domain.physical.domain.QPhysical;
 import com.backend.athlete.domain.user.domain.QUser;
 import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -40,6 +42,10 @@ public class PhysicalRepositoryImpl implements PhysicalRepositoryCustom {
         return booleanBuilder;
     }
 
+    private BooleanExpression notZeroOrNaN(NumberPath<Double> path) {
+        return path.ne(0.0).and(path.isNotNull()).and(path.ne(Double.NaN));
+    }
+
     @Override
     public List<Physical> findPhysicalRankings(LocalDate startDate, LocalDate endDate, String gender, int limit) {
         QPhysical physical = QPhysical.physical;
@@ -61,6 +67,7 @@ public class PhysicalRepositoryImpl implements PhysicalRepositoryCustom {
                 .join(user.branch, branch)
                 .where(booleanBuilder)
                 .where(physical.id.in(subquery))
+                .where(notZeroOrNaN(physical.bodyFatMassChange))
                 .orderBy(physical.bodyFatMassChange.asc())
                 .limit(limit)
                 .fetch();
