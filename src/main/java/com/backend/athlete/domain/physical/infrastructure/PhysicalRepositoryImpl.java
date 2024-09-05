@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional(readOnly = true)
@@ -42,8 +43,8 @@ public class PhysicalRepositoryImpl implements PhysicalRepositoryCustom {
         return booleanBuilder;
     }
 
-    private BooleanExpression notZeroOrNaN(NumberPath<Double> path) {
-        return path.ne(0.0).and(path.isNotNull()).and(path.ne(Double.NaN));
+    private BooleanExpression notZeroAndNotNaN(NumberPath<Double> path) {
+        return path.ne(0.0).and(path.isNotNull());
     }
 
     @Override
@@ -67,10 +68,13 @@ public class PhysicalRepositoryImpl implements PhysicalRepositoryCustom {
                 .join(user.branch, branch)
                 .where(booleanBuilder)
                 .where(physical.id.in(subquery))
-                .where(notZeroOrNaN(physical.bodyFatMassChange))
+                .where(notZeroAndNotNaN(physical.bodyFatMassChange))
                 .orderBy(physical.bodyFatMassChange.asc())
                 .limit(limit)
-                .fetch();
+                .fetch()
+                .stream()
+                .filter(p -> !Double.isNaN(p.getBodyFatMassChange()))
+                .collect(Collectors.toList());
     }
 }
 
