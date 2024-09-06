@@ -20,6 +20,7 @@ import java.time.YearMonth;
 @RequiredArgsConstructor
 public class ReportController {
     private final ReportService reportService;
+
     @GetMapping("/weekly")
     public ResponseEntity<GetWeeklyAttendanceResponse> getWeeklyAttendance(
             @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,

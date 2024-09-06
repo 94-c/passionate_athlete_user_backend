@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/notice-type")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/notice-type")
 public class NoticeTypeController {
     private final NoticeTypeService noticeTypeService;
 

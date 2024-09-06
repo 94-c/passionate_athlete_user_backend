@@ -9,11 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface ScheduledWorkoutRepository extends JpaRepository<ScheduledWorkout, Long> {
-    List<ScheduledWorkout> findByScheduledDateTimeBetween(LocalDateTime start, LocalDateTime end);
-
+public interface ScheduledWorkoutRepository extends JpaRepository<ScheduledWorkout, Long>, ScheduledWorkoutQueryRepository{
     List<ScheduledWorkout> findByScheduledDateTimeBetween(LocalDate start, LocalDate end);
 
-    @Query("SELECT sw FROM ScheduledWorkout sw WHERE DATE(sw.scheduledDateTime) = :date")
-    Optional<ScheduledWorkout> findByDate(@Param("date") LocalDate date);
 }

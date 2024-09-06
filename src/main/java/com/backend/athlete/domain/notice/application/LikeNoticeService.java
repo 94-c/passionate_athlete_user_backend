@@ -10,17 +10,15 @@ import com.backend.athlete.domain.notice.dto.response.GetLikeNoticeResponse;
 import com.backend.athlete.support.exception.NotFoundException;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FindUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@RequiredArgsConstructor
 public class LikeNoticeService {
     private final LikeRepository likeRepository;
-    public LikeNoticeService(LikeRepository likeRepository) {
-        this.likeRepository = likeRepository;
-    }
 
     @Transactional
     public CreateLikeNoticeResponse likeNotice(Long noticeId, CustomUserDetailsImpl userPrincipal) {

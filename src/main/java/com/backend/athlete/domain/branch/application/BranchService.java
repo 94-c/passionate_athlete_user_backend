@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BranchService {
     private final BranchRepository branchRepository;
+
     public List<FindAllBranchResponse> getAllBranches() {
         return branchRepository.findAll().stream()
                 .map(FindAllBranchResponse::fromEntity)

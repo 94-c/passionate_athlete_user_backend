@@ -16,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PhysicalInfoController {
     private final PhysicalInfoService physicalInfoService;
+
     @GetMapping
     public ResponseEntity<List<GetPhysicalInfoResponse>> getAllPhysicalInfo() {
         List<GetPhysicalInfoResponse> response = physicalInfoService.getPhysicalInfo();

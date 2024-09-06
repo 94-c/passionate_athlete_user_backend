@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AttendanceService {
     private final AttendanceRepository attendanceRepository;
+
     public CreateAttendanceResponse createAttendanceEvent(CustomUserDetailsImpl userPrincipal, CreateAttendanceRequest request) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
 

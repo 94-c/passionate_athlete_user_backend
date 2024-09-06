@@ -29,6 +29,7 @@ public class NoticeService {
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
     private final NoticeTypeRepository noticeTypeRepository;
+
     @Transactional(readOnly = true)
     public Page<GetNoticeResponse> searchNotices(PageSearchNoticeRequest request, int page, int perPage, Long kindId, boolean status) {
         Pageable pageable = PageRequest.of(page, perPage);

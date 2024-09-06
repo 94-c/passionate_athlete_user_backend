@@ -13,9 +13,6 @@ import java.util.List;
 @RequestMapping("/api/v1/branches")
 @RequiredArgsConstructor
 public class BranchController {
-    /**
-     * 지점명 가져오기
-     */
     private final BranchService branchService;
 
     @GetMapping

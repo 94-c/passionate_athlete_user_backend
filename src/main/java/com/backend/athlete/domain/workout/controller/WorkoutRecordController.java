@@ -22,8 +22,8 @@ import java.time.YearMonth;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/workout-records")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/workout-records")
 public class WorkoutRecordController {
     private final WorkoutRecordService workoutRecordService;
 
@@ -40,9 +40,9 @@ public class WorkoutRecordController {
                                                 @RequestParam("rating") String rating,
                                                 @RequestParam(defaultValue = PageConstant.DEFAULT_PAGE, required = false) int page,
                                                 @RequestParam(defaultValue = PageConstant.DEFAULT_PER_PAGE, required = false) int perPage) {
-        Page<WorkoutRecordStatisticsResponse> response = workoutRecordService.getMainWorkoutRecordsByDateRangeAndGender(date, gender, rating, page, perPage);
-        PagedResponse<WorkoutRecordStatisticsResponse> pagedResponse = PagedResponse.fromPage(response);
-        return ResponseEntity.status(HttpStatus.OK).body(pagedResponse);
+        Page<WorkoutRecordStatisticsResponse> workoutRecordStatisticsResponses = workoutRecordService.getMainWorkoutRecordsByDateRangeAndGender(date, gender, rating, page, perPage);
+        PagedResponse<WorkoutRecordStatisticsResponse> response = PagedResponse.fromPage(workoutRecordStatisticsResponses);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/rankings/by-date")
@@ -54,9 +54,9 @@ public class WorkoutRecordController {
             @RequestParam(defaultValue = PageConstant.DEFAULT_PAGE, required = false) int page,
             @RequestParam(defaultValue = PageConstant.DEFAULT_PER_PAGE, required = false) int perPage) {
 
-        Page<WorkoutRecordStatisticsResponse> response = workoutRecordService.getWorkoutRankingsByDate(startDate, endDate, gender, rating, page, perPage);
-        PagedResponse<WorkoutRecordStatisticsResponse> pagedResponse = PagedResponse.fromPage(response);
-        return ResponseEntity.status(HttpStatus.OK).body(pagedResponse);
+        Page<WorkoutRecordStatisticsResponse> workoutRecordStatisticsResponses = workoutRecordService.getWorkoutRankingsByDate(startDate, endDate, gender, rating, page, perPage);
+        PagedResponse<WorkoutRecordStatisticsResponse> response = PagedResponse.fromPage(workoutRecordStatisticsResponses);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/monthly")

@@ -3,18 +3,16 @@ package com.backend.athlete.domain.notice.application;
 import com.backend.athlete.domain.notice.domain.NoticeType;
 import com.backend.athlete.domain.notice.domain.NoticeTypeRepository;
 import com.backend.athlete.domain.notice.dto.response.GetNoticeTypeResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class NoticeTypeService {
     private final NoticeTypeRepository noticeTypeRepository;
-
-    public NoticeTypeService(NoticeTypeRepository noticeTypeRepository) {
-        this.noticeTypeRepository = noticeTypeRepository;
-    }
 
     public List<GetNoticeTypeResponse> getNoticeTypes() {
         List<NoticeType> noticeTypes = noticeTypeRepository.findAll();

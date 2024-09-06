@@ -12,10 +12,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/notices/{noticeId}/likes")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/notices/{noticeId}/likes")
 public class LikeNoticeController {
     private final LikeNoticeService likeNoticeService;
+
     @PostMapping
     public ResponseEntity<CreateLikeNoticeResponse> likeNotice(@PathVariable Long noticeId,
                                                                @AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {

@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/workout-statics")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/workout-statics")
 public class WorkoutStaticsController {
     private final WorkoutStaticsService workoutStaticsService;
 

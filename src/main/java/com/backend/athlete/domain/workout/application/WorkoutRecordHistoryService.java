@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class WorkoutRecordHistoryService {
     private final WorkoutRecordRepository workoutRecordRepository;
     private final WorkoutRecordHistoryRepository workoutRecordHistoryRepository;
+
     public GetWorkoutRecordAndHistoryResponse getRecordWithHistories(Long workoutRecordId) {
         WorkoutRecord workoutRecord = workoutRecordRepository.findById(workoutRecordId)
                 .orElseThrow(() -> new ServiceException("해당 운동 기록이 없습니다."));

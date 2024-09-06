@@ -18,12 +18,6 @@ import java.time.YearMonth;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
-
-    /**
-     * 1. 회원 회원가입
-     * 2. 회원 로그인
-     * 3. 아이디 중복 체크
-     */
     private final AuthService authService;
 
     @PostMapping("/register")

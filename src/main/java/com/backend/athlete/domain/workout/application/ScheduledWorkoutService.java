@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public class ScheduledWorkoutService {
     private final ScheduledWorkoutRepository scheduledWorkoutRepository;
     private final ExerciseRepository exerciseRepository;
+
     @Transactional
     public CreateScheduledWorkoutResponse saveScheduledWorkout(CreateScheduledWorkoutRequest request) {
         ScheduledWorkout scheduledWorkout = CreateScheduledWorkoutRequest.toEntity(request);

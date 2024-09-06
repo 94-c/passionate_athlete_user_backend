@@ -39,7 +39,6 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-
     private final AuthRepository authRepository;
     private final RoleRepository roleRepository;
     private final BranchRepository branchRepository;

@@ -21,13 +21,8 @@ import java.time.YearMonth;
 @RequestMapping("/api/v1/attendances")
 @RequiredArgsConstructor
 public class AttendanceController {
-
-    /**
-     * 일별 출석 조회
-     * 월별 출석 조회
-     * 연속 출석 조회
-     */
     private final AttendanceService attendanceService;
+
     @PostMapping
     public ResponseEntity<CreateAttendanceResponse> dailyAttendance(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
                                                                     @RequestBody CreateAttendanceRequest request) {

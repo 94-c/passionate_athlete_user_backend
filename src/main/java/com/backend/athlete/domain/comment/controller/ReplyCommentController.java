@@ -8,6 +8,7 @@ import com.backend.athlete.domain.comment.dto.response.GetReplyCommentResponse;
 import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.constant.PageConstant;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,20 +16,18 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/comments/{commentId}/replies")
 public class ReplyCommentController {
     private final ReplyCommentService replyCommentService;
 
-    public ReplyCommentController(ReplyCommentService replyCommentService) {
-        this.replyCommentService = replyCommentService;
-    }
     @GetMapping
     public ResponseEntity<PagedResponse<GetReplyCommentResponse>> getReplies(@PathVariable Long commentId,
                                                                              @RequestParam(defaultValue = PageConstant.DEFAULT_PAGE, required = false) int page,
                                                                              @RequestParam(defaultValue = PageConstant.DEFAULT_PER_PAGE, required = false) int perPage) {
         Page<GetReplyCommentResponse> repliesPage = replyCommentService.getReplies(commentId, page, perPage);
-        PagedResponse<GetReplyCommentResponse> pagedResponse = PagedResponse.fromPage(repliesPage);
-        return ResponseEntity.ok(pagedResponse);
+        PagedResponse<GetReplyCommentResponse> response = PagedResponse.fromPage(repliesPage);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping

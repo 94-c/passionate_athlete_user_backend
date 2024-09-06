@@ -16,8 +16,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/notices")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/notices")
 public class NoticeController {
     private final NoticeService noticeService;
 

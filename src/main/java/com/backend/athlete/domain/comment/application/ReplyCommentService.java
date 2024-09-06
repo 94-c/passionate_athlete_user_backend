@@ -12,6 +12,7 @@ import com.backend.athlete.domain.comment.dto.response.GetReplyCommentResponse;
 import com.backend.athlete.support.exception.NotFoundException;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.support.util.FindUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,14 +21,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ReplyCommentService {
     private final CommentRepository commentRepository;
     private final NoticeRepository noticeRepository;
-
-    public ReplyCommentService(CommentRepository commentRepository, NoticeRepository noticeRepository) {
-        this.commentRepository = commentRepository;
-        this.noticeRepository = noticeRepository;
-    }
 
     public Page<GetReplyCommentResponse> getReplies(Long commentId, int page, int perPage) {
         Pageable pageable = PageRequest.of(page, perPage, Sort.by(Sort.Direction.DESC, "createdDate"));

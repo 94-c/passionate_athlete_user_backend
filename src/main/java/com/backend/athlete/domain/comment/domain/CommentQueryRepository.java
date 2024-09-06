@@ -10,11 +10,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface CommentRepository extends JpaRepository<Comment, Long>, CommentRepositoryCustom, CommentQueryRepository {
-    List<Comment> findByNoticeId(Long id);
-    Optional<Comment> findByIdAndParentId(Long id, Long parentId);
-    Page<Comment> findByParent(Comment parent, Pageable pageable);
-    Optional<Comment> findByIdAndNoticeId(Long id, Long noticeId);
-    int countByNoticeId(Long id);
+public interface CommentQueryRepository {
+    @Query("SELECT c FROM Comment c LEFT JOIN FETCH c.replies WHERE c.notice.id = :noticeId")
+    Page<Comment> findByNoticeIdWithReplies(@Param("noticeId") Long noticeId, Pageable pageable);
 }
 

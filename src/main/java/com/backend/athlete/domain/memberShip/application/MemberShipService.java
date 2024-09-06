@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class MemberShipService {
-
     private final MemberShipRepository memberShipRepository;
     private final UserRepository userRepository;
     private final MemberShipHistoryRepository memberShipHistoryRepository;

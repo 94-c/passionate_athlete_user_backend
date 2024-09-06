@@ -28,6 +28,7 @@ public class WorkoutStaticsService {
     private final WorkoutRecordRepository workoutRecordRepository;
     private final AttendanceRepository attendanceRepository;
     private final WorkoutRecordHistoryRepository workoutRecordHistoryRepository;
+
     public GetWorkoutStatisticsResponse getWorkoutStatistics(CustomUserDetailsImpl userPrincipal) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
         long totalDuration = getTotalWorkoutDuration(user);

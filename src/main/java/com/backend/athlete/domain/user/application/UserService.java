@@ -21,10 +21,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
     private final BranchRepository branchRepository;
 
     public GetUserResponse getUserInfo(CustomUserDetailsImpl userPrincipal) {
