@@ -11,6 +11,7 @@ import lombok.Setter;
 public class CreateCommentRequest {
     @NotNull(message = "댓글 내용을 입력 해주세요.")
     private String content;
+
     public static Comment toEntity(CreateCommentRequest request, Notice notice, User user) {
         return new Comment(user, notice, request.getContent());
     }

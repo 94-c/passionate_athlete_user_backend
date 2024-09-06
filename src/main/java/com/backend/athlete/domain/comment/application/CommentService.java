@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final NoticeRepository noticeRepository;
+
     @Transactional(readOnly = true)
     public Page<GetCommentResponse> findAllComments(Long noticeId, int page, int perPage) {
         Pageable pageable = PageRequest.of(page, perPage, Sort.by(Sort.Direction.DESC, "createdDate"));

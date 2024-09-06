@@ -9,6 +9,7 @@ import com.backend.athlete.domain.comment.dto.response.UpdateCommentResponse;
 import com.backend.athlete.support.common.response.PagedResponse;
 import com.backend.athlete.support.constant.PageConstant;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +17,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/notices/{noticeId}/comments")
 public class CommentController {
-
     private final CommentService commentService;
-
-    public CommentController(CommentService commentService) {
-        this.commentService = commentService;
-    }
 
     @GetMapping
     public ResponseEntity<PagedResponse<GetCommentResponse>> getComments(@PathVariable Long noticeId,
@@ -47,12 +44,14 @@ public class CommentController {
                                                                @PathVariable Long id,
                                                                @RequestBody UpdateCommentRequest request) {
         UpdateCommentResponse response = commentService.updateComment(userPrincipal, id, request);
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/{commentId}")
     public ResponseEntity<GetCommentResponse> getComment(@PathVariable Long noticeId, @PathVariable Long commentId) {
         GetCommentResponse response = commentService.getComment(noticeId, commentId);
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -60,7 +59,8 @@ public class CommentController {
     public ResponseEntity<Void> deleteComment(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal,
                                               @PathVariable Long id) {
         commentService.deleteComment(userPrincipal, id);
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.noContent().build();
     }
 
 
