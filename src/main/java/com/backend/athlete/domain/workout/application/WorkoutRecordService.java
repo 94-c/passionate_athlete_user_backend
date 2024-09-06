@@ -6,6 +6,7 @@ import com.backend.athlete.domain.exercise.domain.ExerciseRepository;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.backend.athlete.domain.workout.domain.*;
+import com.backend.athlete.domain.workout.domain.data.WorkoutRecordCalendarData;
 import com.backend.athlete.domain.workout.domain.data.WorkoutRecordData;
 import com.backend.athlete.domain.workout.domain.type.WorkoutMode;
 import com.backend.athlete.domain.workout.domain.type.WorkoutRecordType;
@@ -153,11 +154,14 @@ public class WorkoutRecordService {
     @Transactional
     public GetDailyWorkoutRecordResponse getDailyWorkoutRecord(LocalDate date, CustomUserDetailsImpl userPrincipal) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
-        List<WorkoutRecord> records = workoutRecordRepository.findByUserAndCreatedAtBetween(
-                user, date.atStartOfDay(), date.plusDays(1).atStartOfDay());
+        LocalDateTime adjustedStartDate = date.atTime(15, 0);
+        LocalDateTime adjustedEndDate = date.plusDays(1).atTime(14, 59, 59, 999999999);
 
-        List<WorkoutRecordData> recordDTOs = records.stream()
-                .map(WorkoutRecordData::new)
+        List<WorkoutRecord> records = workoutRecordRepository.findByUserAndCreatedAtBetween(
+                user, adjustedStartDate, adjustedEndDate);
+
+        List<WorkoutRecordCalendarData> recordDTOs = records.stream()
+                .map(WorkoutRecordCalendarData::new)
                 .toList();
 
         return new GetDailyWorkoutRecordResponse(recordDTOs);
