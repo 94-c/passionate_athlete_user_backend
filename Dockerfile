@@ -7,11 +7,8 @@ COPY gradle/ gradle/
 COPY build.gradle settings.gradle ./
 COPY src src/
 
-# List files in the current directory (for debugging)
-RUN ls -al
-
-# Build the application without running the tests, with detailed logs
-RUN gradle build -x test --no-daemon --stacktrace --info
+# Build the application without running the tests
+RUN gradle build -x test --no-daemon
 
 # Stage 2: Create the Docker image
 FROM openjdk:17-jdk-slim
@@ -25,7 +22,6 @@ COPY --from=build /app/build/libs/*.jar app.jar
 
 # Expose the application port (9081)
 EXPOSE 9081
-
 
 # Run the Spring Boot application
 ENTRYPOINT ["java", "-jar", "app.jar"]
