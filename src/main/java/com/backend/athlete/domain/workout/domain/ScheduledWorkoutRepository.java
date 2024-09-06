@@ -10,6 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ScheduledWorkoutRepository extends JpaRepository<ScheduledWorkout, Long>, ScheduledWorkoutQueryRepository{
-    List<ScheduledWorkout> findByScheduledDateTimeBetween(LocalDate start, LocalDate end);
+    List<ScheduledWorkout> findByScheduledDateTimeBetween(LocalDateTime start, LocalDateTime end);
 
 }
