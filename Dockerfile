@@ -7,8 +7,11 @@ COPY gradle/ gradle/
 COPY build.gradle settings.gradle ./
 COPY src src/
 
-# Build the application without running the tests
-RUN gradle build -x test --no-daemon
+# List files in the current directory (for debugging)
+RUN ls -al
+
+# Build the application without running the tests, with detailed logs
+RUN gradle build -x test --no-daemon --stacktrace --info
 
 # Stage 2: Create the Docker image
 FROM openjdk:17-jdk-slim
