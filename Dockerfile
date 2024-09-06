@@ -26,5 +26,6 @@ COPY --from=build /app/build/libs/*.jar app.jar
 # Expose the application port (9081)
 EXPOSE 9081
 
+
 # Run the Spring Boot application
 ENTRYPOINT ["java", "-jar", "app.jar"]
