@@ -4,9 +4,11 @@ import com.backend.athlete.domain.branch.domain.QBranch;
 import com.backend.athlete.domain.physical.domain.Physical;
 import com.backend.athlete.domain.physical.domain.QPhysical;
 import com.backend.athlete.domain.user.domain.QUser;
+import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
@@ -76,5 +78,6 @@ public class PhysicalRepositoryImpl implements PhysicalRepositoryCustom {
                 .filter(p -> !Double.isNaN(p.getBodyFatMassChange()))
                 .collect(Collectors.toList());
     }
+
 }
 

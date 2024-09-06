@@ -103,5 +103,16 @@ public class Physical extends BaseTimeEntity {
         this.bodyFatPercentage = newBodyFatMass / newWeight * 100;
     }
 
+    public void updateFuturePhysical(Physical previousPhysical) {
+        if (previousPhysical != null) {
+            this.weightChange = this.weight - previousPhysical.getWeight();
+            this.muscleMassChange = this.muscleMass - previousPhysical.getMuscleMass();
+            this.bodyFatMassChange = this.bodyFatMass - previousPhysical.getBodyFatMass();
+        } else {
+            this.weightChange = null;
+            this.muscleMassChange = null;
+            this.bodyFatMassChange = null;
+        }
+    }
 }
 

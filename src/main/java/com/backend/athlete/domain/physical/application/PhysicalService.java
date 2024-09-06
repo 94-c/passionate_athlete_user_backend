@@ -38,17 +38,22 @@ public class PhysicalService {
     public CreatePhysicalResponse savePhysical(CustomUserDetailsImpl userPrincipal, CreatePhysicalRequest request) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
 
-        LocalDate today = LocalDate.now();
-        LocalDateTime todayStart = today.atStartOfDay();
-        request.setMeasureDate(LocalDateTime.now());
+        LocalDateTime measureDate = request.getMeasureDate(); // 사용자가 입력한 측정 날짜를 사용합니다.
+        LocalDate measureDateOnly = measureDate.toLocalDate(); // 날짜 부분만 추출
+        LocalDateTime measureDateStart = measureDateOnly.atStartOfDay(); // 자정 시작 시간
 
-        boolean existsSave = physicalRepository.existsByUserAndMeasureDate(user, today);
+        // 사용자가 입력한 날짜로 데이터를 저장합니다.
+        request.setMeasureDate(measureDate);
+
+        boolean existsSave = physicalRepository.existsByUserAndMeasureDate(user, measureDateOnly);
         if (existsSave) {
-            throw new NotFoundException("하루에 한번만 입력 하실 수 있습니다." , HttpStatus.NOT_FOUND);
+            throw new NotFoundException("하루에 한번만 입력 하실 수 있습니다.", HttpStatus.NOT_FOUND);
         }
 
-        Physical previousPhysical = physicalRepository.findFirstByUserAndMeasureDateBeforeOrderByMeasureDateDesc(user, todayStart);
+        // 입력된 날짜 이전의 가장 최신 데이터를 가져옵니다.
+        Physical previousPhysical = physicalRepository.findFirstByUserAndMeasureDateBeforeOrderByMeasureDateDesc(user, measureDateStart);
 
+        // 측정 데이터를 계산합니다.
         double bmi = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMI(request.getWeight(), request.getHeight()));
         request.setBmi(bmi);
 
@@ -61,6 +66,7 @@ public class PhysicalService {
         double bmr = MathUtils.roundToTwoDecimalPlaces(PhysicalUtils.calculateBMR(request.getWeight(), request.getHeight(), 30, user.getGender().toString()));
         request.setBmr(bmr);
 
+        // 이전 데이터와 비교하여 변화량을 계산합니다.
         double weightChange = previousPhysical != null ? request.getWeight() - previousPhysical.getWeight() : 0.0;
         double heightChange = previousPhysical != null ? request.getHeight() - previousPhysical.getHeight() : 0.0;
         double muscleMassChange = previousPhysical != null ? request.getMuscleMass() - previousPhysical.getMuscleMass() : 0.0;
@@ -73,14 +79,31 @@ public class PhysicalService {
 
         Physical savePhysical = CreatePhysicalRequest.toEntity(request, user);
 
+        // 새로운 데이터를 저장합니다.
         savePhysical = physicalRepository.save(savePhysical);
 
+        // 사용자의 신체 정보 업데이트 (만약 현재의 신체 정보와 다를 경우)
         if (!Objects.equals(user.getHeight(), request.getHeight()) || !Objects.equals(user.getWeight(), request.getWeight())) {
             user.updatePhysicalAttributes(request.getWeight(), request.getHeight());
             userRepository.save(user);
         }
 
+        // 사용자가 입력한 날짜 이후에 기록된 최신 데이터를 찾아 변화량을 업데이트합니다.
+        updateFuturePhysicalRecords(user, measureDate);
+
         return CreatePhysicalResponse.fromEntity(savePhysical);
+    }
+
+    private void updateFuturePhysicalRecords(User user, LocalDateTime measureDate) {
+        List<Physical> futurePhysicals = physicalRepository.findByUserAndMeasureDateAfterOrderByMeasureDateAsc(user, measureDate);
+
+        Physical previousPhysical = physicalRepository.findFirstByUserAndMeasureDateBeforeOrderByMeasureDateDesc(user, measureDate);
+
+        for (Physical futurePhysical : futurePhysicals) {
+            futurePhysical.updateFuturePhysical(previousPhysical);
+            previousPhysical = futurePhysical; // 현재를 이전으로 설정
+            physicalRepository.save(futurePhysical); // 업데이트된 데이터를 저장
+        }
     }
 
     @Transactional
@@ -189,4 +212,17 @@ public class PhysicalService {
         return physicalRepository.findByUserId(user.getId(), pageable)
                 .map(physical -> GetPhysicalHistoryResponse.fromEntity(physical, type));
     }
+
+    public List<GetUserPhysicalDatesResponse> getUserPhysicalDates(CustomUserDetailsImpl userPrincipal) {
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
+
+        List<LocalDateTime> dateTimes = physicalRepository.findMeasureDatesByUser(user);
+
+        return dateTimes.stream()
+                .map(LocalDateTime::toLocalDate)
+                .map(GetUserPhysicalDatesResponse::new)
+                .collect(Collectors.toList());
+    }
+
+
 }

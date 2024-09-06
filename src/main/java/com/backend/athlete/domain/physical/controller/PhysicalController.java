@@ -32,6 +32,13 @@ public class PhysicalController {
         CreatePhysicalResponse response = physicalService.savePhysical(userPrincipal, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    @GetMapping("/date")
+    public ResponseEntity<List<GetUserPhysicalDatesResponse>> getUserPhysicalDates(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
+        List<GetUserPhysicalDatesResponse> response = physicalService.getUserPhysicalDates(userPrincipal);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/last")
     public ResponseEntity<LastGetPhysicalResponse> getLastPhysical(@AuthenticationPrincipal CustomUserDetailsImpl userPrincipal) {
         LastGetPhysicalResponse response = physicalService.findLastPhysical(userPrincipal);
