@@ -133,8 +133,6 @@ public class WorkoutRecordService {
         return records.map(WorkoutRecordStatisticsResponse::fromEntity);
     }
 
-
-
     @Transactional
     public GetMonthlyWorkoutResponse getMonthlyWorkoutCounts(YearMonth month, CustomUserDetailsImpl userPrincipal) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
@@ -144,12 +142,27 @@ public class WorkoutRecordService {
         List<WorkoutRecord> workoutRecords = workoutRecordRepository.findByUserAndCreatedAtBetween(user, startDate, endDate);
 
         List<LocalDate> presentDays = workoutRecords.stream()
-                .map(record -> record.getCreatedAt().toLocalDate())
+                .map(record -> {
+                    LocalDateTime createdAt = record.getCreatedAt();
+                    if (createdAt.getHour() < 15) {
+                        return createdAt.toLocalDate().minusDays(1);
+                    } else {
+                        return createdAt.toLocalDate();
+                    }
+                })
                 .distinct()
                 .collect(Collectors.toList());
 
+        LocalDateTime now = LocalDateTime.now();
+        if (now.getHour() < 15) {
+            presentDays = presentDays.stream()
+                    .filter(date -> date.isBefore(now.toLocalDate()))
+                    .collect(Collectors.toList());
+        }
+
         return new GetMonthlyWorkoutResponse(presentDays.size(), presentDays);
     }
+
 
     @Transactional
     public GetDailyWorkoutRecordResponse getDailyWorkoutRecord(LocalDate date, CustomUserDetailsImpl userPrincipal) {

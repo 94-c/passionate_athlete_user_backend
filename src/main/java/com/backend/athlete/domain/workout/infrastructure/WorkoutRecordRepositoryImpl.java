@@ -81,11 +81,11 @@ public class WorkoutRecordRepositoryImpl implements WorkoutRecordRepositoryCusto
 
         return factory.selectFrom(workoutRecord)
                 .where(workoutRecord.user.eq(user)
-                        .and(workoutRecord.createdAt.between(startDate, endDate)))
+                        .and(workoutRecord.createdAt.between(
+                                startDate.withHour(15).withMinute(0).withSecond(0),
+                                endDate.withHour(14).withMinute(59).withSecond(59).withNano(999999999))))
                 .fetch();
     }
-
-
 }
 
 
