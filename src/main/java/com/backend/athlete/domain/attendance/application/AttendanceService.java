@@ -63,6 +63,7 @@ public class AttendanceService {
 
         LocalDate startDate = month.atDay(1);
         LocalDate endDate = month.atEndOfMonth();
+        int totalDaysInMonth = month.lengthOfMonth();
 
         List<Attendance> attendances = attendanceRepository.findByUserAndAttendanceDateBetween(user, startDate, endDate);
 
@@ -70,7 +71,7 @@ public class AttendanceService {
                 .map(Attendance::getAttendanceDate)
                 .collect(Collectors.toList());
 
-        return new GetMonthlyAttendanceResponse(presentDays.size(), presentDays);
+        return new GetMonthlyAttendanceResponse(presentDays.size(), presentDays, totalDaysInMonth);
     }
 
 
