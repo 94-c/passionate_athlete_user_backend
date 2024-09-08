@@ -7,10 +7,11 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.springframework.web.client.RestTemplate: DEBUG
 
+spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/athlete
-    username: root
-    password:
+    url: jdbc:mysql://58.79.16.12:3306/athlete
+    username: athlete
+    password: athlete
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     open-in-view: false
@@ -42,4 +43,4 @@ jwt:
 file:
   upload-dir: ${user.home}/study-project/image
 
-front_end_url: http://58.79.16.12:3000
+front_end_url: http://localhost:3000
