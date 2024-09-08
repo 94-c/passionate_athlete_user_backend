@@ -27,7 +27,7 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailService userDetailsService;
 
-    @Value("${front_end_url}")
+    @Value(value = "${front_end_url}")
     private String front_end_url;
 
     public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,

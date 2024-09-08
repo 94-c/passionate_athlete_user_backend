@@ -43,4 +43,4 @@ jwt:
 file:
   upload-dir: ${user.home}/study-project/image
 
-front_end_url: "http://passionathlete.com"
+front_end_url: http://passionathlete.com
