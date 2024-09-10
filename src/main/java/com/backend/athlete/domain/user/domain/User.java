@@ -89,6 +89,12 @@ public class User extends BaseTimeEntity {
         this.phoneNumber = phoneNumber;
     }
 
+    public User(String userId, String name, String phoneNumber) {
+        this.userId = userId;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+    }
+
     public void updateUser(String password, UserGenderType gender, Double weight, Double height, Branch branch, String birthDate, String phoneNumber) {
         this.password = password;
         this.gender = gender;
@@ -113,4 +119,7 @@ public class User extends BaseTimeEntity {
         this.roles.add(role);
     }
 
+    public void setPassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
 }

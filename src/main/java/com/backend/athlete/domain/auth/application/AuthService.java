@@ -1,9 +1,10 @@
 package com.backend.athlete.domain.auth.application;
 
 import com.backend.athlete.domain.auth.domain.AuthRepository;
+import com.backend.athlete.domain.auth.dto.request.ResetPasswordRequest;
+import com.backend.athlete.domain.auth.dto.request.VerifyUserRequest;
 import com.backend.athlete.domain.physical.domain.Physical;
 import com.backend.athlete.domain.physical.domain.PhysicalRepository;
-import com.backend.athlete.domain.physical.dto.request.CreatePhysicalRequest;
 import com.backend.athlete.support.exception.DuplicatePasswordException;
 import com.backend.athlete.support.exception.IsExistUserIddException;
 import com.backend.athlete.support.exception.NotFoundBranchException;
@@ -95,6 +96,24 @@ public class AuthService {
         return authRepository.existsByPhoneNumber(phoneNumber);
     }
 
+    public boolean verifyUser(VerifyUserRequest request) {
+        return authRepository.findByUserId(request.getUserId())
+                .filter(user -> user.getName().equals(request.getName()))
+                .filter(user -> user.getPhoneNumber().equals(request.getPhoneNumber()))
+                .isPresent();
+    }
+
+    public boolean resetPassword(ResetPasswordRequest request) {
+        return authRepository.findByUserId(request.getUserId())
+                .map(user -> {
+                    user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+                    authRepository.save(user);
+                    return true;
+                })
+                .orElse(false);
+    }
+
+
     private String generateUserCode() {
         return UserCodeUtils.generateRandomString();
     }
@@ -122,5 +141,7 @@ public class AuthService {
         Optional<Role> roleOptional = roleRepository.findByName(UserRoleType.USER);
         return roleOptional.orElseThrow(() -> new NotFoundRoleException(HttpStatus.NOT_FOUND));
     }
+
+
 
 }

@@ -1,9 +1,7 @@
 package com.backend.athlete.domain.auth.controller;
 
 import com.backend.athlete.domain.auth.application.AuthService;
-import com.backend.athlete.domain.auth.dto.request.CheckUserIdRequest;
-import com.backend.athlete.domain.auth.dto.request.LoginRequest;
-import com.backend.athlete.domain.auth.dto.request.RegisterRequest;
+import com.backend.athlete.domain.auth.dto.request.*;
 import com.backend.athlete.domain.auth.dto.response.LoginResponse;
 import com.backend.athlete.domain.auth.dto.response.RegisterResponse;
 import jakarta.validation.Valid;
@@ -41,6 +39,18 @@ public class AuthController {
     @GetMapping("/check-user-phone")
     public ResponseEntity<Boolean> checkUserPhone(@RequestParam(name = "phoneNumber") String phoneNumber) {
         boolean response = authService.checkUserPhoneExists(phoneNumber);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/verify-user")
+    public ResponseEntity<Boolean> verifyUser(@RequestBody VerifyUserRequest request) {
+        boolean response = authService.verifyUser(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Boolean> resetPassword(@RequestBody ResetPasswordRequest request) {
+        boolean response = authService.resetPassword(request);
         return ResponseEntity.ok(response);
     }
 
