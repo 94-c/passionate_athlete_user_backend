@@ -2,6 +2,7 @@ package com.backend.athlete.domain.auth.controller;
 
 import com.backend.athlete.domain.auth.application.AuthService;
 import com.backend.athlete.domain.auth.dto.request.*;
+import com.backend.athlete.domain.auth.dto.response.FindUserIdResponse;
 import com.backend.athlete.domain.auth.dto.response.LoginResponse;
 import com.backend.athlete.domain.auth.dto.response.RegisterResponse;
 import jakarta.validation.Valid;
@@ -54,4 +55,9 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/find-user-id")
+    public ResponseEntity<FindUserIdResponse> findUserId(@RequestBody FindUserIdRequest request) {
+        FindUserIdResponse response = authService.findUserId(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }

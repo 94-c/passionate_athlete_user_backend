@@ -1,22 +1,17 @@
 package com.backend.athlete.domain.auth.application;
 
 import com.backend.athlete.domain.auth.domain.AuthRepository;
-import com.backend.athlete.domain.auth.dto.request.ResetPasswordRequest;
-import com.backend.athlete.domain.auth.dto.request.VerifyUserRequest;
+import com.backend.athlete.domain.auth.dto.request.*;
+import com.backend.athlete.domain.auth.dto.response.FindUserIdResponse;
 import com.backend.athlete.domain.physical.domain.Physical;
 import com.backend.athlete.domain.physical.domain.PhysicalRepository;
-import com.backend.athlete.support.exception.DuplicatePasswordException;
-import com.backend.athlete.support.exception.IsExistUserIddException;
-import com.backend.athlete.support.exception.NotFoundBranchException;
-import com.backend.athlete.support.exception.NotFoundRoleException;
+import com.backend.athlete.support.exception.*;
 import com.backend.athlete.domain.branch.domain.Branch;
 import com.backend.athlete.domain.branch.domain.BranchRepository;
 import com.backend.athlete.domain.user.domain.Role;
 import com.backend.athlete.domain.user.domain.RoleRepository;
 import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.type.UserRoleType;
-import com.backend.athlete.domain.auth.dto.request.LoginRequest;
-import com.backend.athlete.domain.auth.dto.request.RegisterRequest;
 import com.backend.athlete.domain.auth.dto.response.LoginResponse;
 import com.backend.athlete.domain.auth.dto.response.RegisterResponse;
 import com.backend.athlete.domain.auth.jwt.JwtTokenProvider;
@@ -143,5 +138,13 @@ public class AuthService {
     }
 
 
+    public FindUserIdResponse findUserId(FindUserIdRequest request) {
+        return authRepository.findByNameAndPhoneNumberAndBirthDate(
+                        request.getName(),
+                        request.getPhoneNumber(),
+                        request.getBirthDate()
+                ).map(FindUserIdResponse::fromEntity)
+                .orElseThrow(() -> new NotFoundException("입력하신 정보와 일치하는 아이디가 없습니다.", HttpStatus.NOT_FOUND));
+    }
 
 }
