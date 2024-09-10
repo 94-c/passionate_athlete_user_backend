@@ -90,6 +90,11 @@ public class AuthService {
         return authRepository.existsByUserId(userId);
     }
 
+    @Transactional
+    public boolean checkUserPhoneExists(String phoneNumber) {
+        return authRepository.existsByPhoneNumber(phoneNumber);
+    }
+
     private String generateUserCode() {
         return UserCodeUtils.generateRandomString();
     }

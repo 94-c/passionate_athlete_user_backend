@@ -33,8 +33,15 @@ public class AuthController {
     }
 
     @GetMapping("/check-userid")
-    public ResponseEntity<Boolean> checkUserId(@RequestParam(name = "userId") String userId) {boolean exists = authService.checkUserIdExists(userId);
-        return ResponseEntity.ok(exists);
+    public ResponseEntity<Boolean> checkUserId(@RequestParam(name = "userId") String userId) {
+        boolean response = authService.checkUserIdExists(userId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/check-user-phone")
+    public ResponseEntity<Boolean> checkUserPhone(@RequestParam(name = "phoneNumber") String phoneNumber) {
+        boolean response = authService.checkUserPhoneExists(phoneNumber);
+        return ResponseEntity.ok(response);
     }
 
 }
