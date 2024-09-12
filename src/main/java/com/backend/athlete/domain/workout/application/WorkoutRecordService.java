@@ -1,5 +1,7 @@
 package com.backend.athlete.domain.workout.application;
 
+import com.backend.athlete.domain.attendance.domain.AttendanceRepository;
+import com.backend.athlete.domain.attendance.dto.request.CreateAttendanceRequest;
 import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailsImpl;
 import com.backend.athlete.domain.exercise.domain.Exercise;
 import com.backend.athlete.domain.exercise.domain.ExerciseRepository;
@@ -40,8 +42,9 @@ public class WorkoutRecordService {
     private final WorkoutRecordRepository workoutRecordRepository;
     private final ScheduledWorkoutRepository scheduledWorkoutRepository;
     private final ExerciseRepository exerciseRepository;
+    private final AttendanceRepository attendanceRepository;
 
-    @Transactional
+
     public CreateWorkoutRecordResponse saveWorkoutRecord(CreateWorkoutRecordRequest request, CustomUserDetailsImpl userPrincipal) {
         User user = FindUtils.findByUserId(userPrincipal.getUsername());
         WorkoutRecordType exerciseType = request.getExerciseType();
@@ -52,8 +55,25 @@ public class WorkoutRecordService {
 
         saveWorkoutHistory(request, user, savedWorkoutRecord);
 
+        LocalDateTime now = LocalDateTime.now();
+        LocalTime cutoffTime = LocalTime.of(15, 0);
+
+        LocalDate eventDate = now.toLocalTime().isBefore(cutoffTime) ? now.toLocalDate().minusDays(1) : now.toLocalDate();
+
+        markAttendanceIfNotExists(user, eventDate);
+
         return CreateWorkoutRecordResponse.fromEntity(savedWorkoutRecord);
     }
+
+
+    private void markAttendanceIfNotExists(User user, LocalDate eventDate) {
+        if (attendanceRepository.findByUserIdAndAttendanceDate(user.getId(), eventDate).isEmpty()) {
+            CreateAttendanceRequest attendanceRequest = new CreateAttendanceRequest(eventDate);
+
+            attendanceRepository.save(CreateAttendanceRequest.toEntity(attendanceRequest, user));
+        }
+    }
+
 
     private ScheduledWorkout validateScheduledWorkout(WorkoutRecordType exerciseType, Long scheduledWorkoutId) {
         if (exerciseType == WorkoutRecordType.MAIN) {
@@ -179,5 +199,7 @@ public class WorkoutRecordService {
 
         return new GetDailyWorkoutRecordResponse(recordDTOs);
     }
+
+
 
 }

@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class CreateWorkoutRecordRequest {
     private String recordContent;
     private List<WorkoutHistoryRequest> workoutDetails;
     private Boolean isShared;
+
     public static WorkoutRecord toEntity(CreateWorkoutRecordRequest request, User user, ScheduledWorkout scheduledWorkout) {
         return new WorkoutRecord(
                 user,

@@ -12,12 +12,15 @@ public class CreateAttendanceRequest {
 
     private LocalDate eventDate;
 
-    protected CreateAttendanceRequest() {}
+    public CreateAttendanceRequest(LocalDate eventDate) {
+        this.eventDate = eventDate;
+    }
 
     public static Attendance toEntity(CreateAttendanceRequest request, User user) {
+        LocalDate eventDate = request.getEventDate() != null ? request.getEventDate() : LocalDate.now();
         return new Attendance(
                 user,
-                request.getEventDate()
+                eventDate
         );
     }
 
