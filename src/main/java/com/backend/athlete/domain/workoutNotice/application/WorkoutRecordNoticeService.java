@@ -20,6 +20,7 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,12 +68,13 @@ public class WorkoutRecordNoticeService {
 
     @Transactional
     public Page<GetWorkoutRecordNoticeResponse> findAllWorkRecordNotices(int page, int perPage) {
-        Pageable pageable = PageRequest.of(page, perPage);
+        Pageable pageable = PageRequest.of(page, perPage, Sort.by(Sort.Direction.DESC, "sharedAt"));
 
         Page<WorkoutRecordNotice> workoutRecordNotices = workoutRecordNoticeRepository.findAll(pageable);
 
         return workoutRecordNotices.map(GetWorkoutRecordNoticeResponse::fromEntity);
     }
+
 
     public GetWorkoutRecordNoticeAndHistoryResponse getWorkRecordNotice(Long id) {
         WorkoutRecordNotice workoutRecordNotice = workoutRecordNoticeRepository.findById(id)
