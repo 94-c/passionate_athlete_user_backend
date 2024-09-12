@@ -12,4 +12,5 @@ import java.util.List;
 
 public interface WorkoutRecordHistoryRepository extends JpaRepository<WorkoutRecordHistory, Long>, WorkoutRecordHistoryQueryRepository {
     List<WorkoutRecordHistory> findByWorkoutRecordId(Long workoutRecordId);
+    void deleteByWorkoutRecord(WorkoutRecord workoutRecord);
 }

@@ -15,6 +15,8 @@ import com.backend.athlete.domain.workout.domain.type.WorkoutRecordType;
 import com.backend.athlete.domain.workout.dto.request.CreateWorkoutRecordRequest;
 import com.backend.athlete.domain.workout.dto.request.WorkoutHistoryRequest;
 import com.backend.athlete.domain.workout.dto.response.*;
+import com.backend.athlete.domain.workoutNotice.domain.WorkoutRecordNoticeCommentRepository;
+import com.backend.athlete.domain.workoutNotice.domain.WorkoutRecordNoticeRepository;
 import com.backend.athlete.support.exception.NotFoundException;
 import com.backend.athlete.support.util.FindUtils;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +35,6 @@ import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +44,9 @@ public class WorkoutRecordService {
     private final ScheduledWorkoutRepository scheduledWorkoutRepository;
     private final ExerciseRepository exerciseRepository;
     private final AttendanceRepository attendanceRepository;
+    private final WorkoutRecordNoticeRepository workoutRecordNoticeRepository;
+    private final WorkoutRecordHistoryRepository   workoutRecordHistoryRepository;
+    private final WorkoutRecordNoticeCommentRepository  workoutRecordNoticeCommentRepository;
 
 
     public CreateWorkoutRecordResponse saveWorkoutRecord(CreateWorkoutRecordRequest request, CustomUserDetailsImpl userPrincipal) {
@@ -200,6 +204,39 @@ public class WorkoutRecordService {
         return new GetDailyWorkoutRecordResponse(recordDTOs);
     }
 
+
+    @Transactional
+    public void deleteWorkoutRecord(CustomUserDetailsImpl userPrincipal, Long recordId) {
+        User user = FindUtils.findByUserId(userPrincipal.getUsername());
+        WorkoutRecord workoutRecord = workoutRecordRepository.findById(recordId)
+                .orElseThrow(() -> new NotFoundException("운동 기록을 찾을 수 없습니다. ID: " + recordId, HttpStatus.NOT_FOUND));
+
+        if (!workoutRecord.getUser().getId().equals(user.getId())) {
+            throw new SecurityException("해당 운동 기록을 삭제할 권한이 없습니다.");
+        }
+
+        workoutRecordHistoryRepository.deleteByWorkoutRecord(workoutRecord);
+
+        workoutRecordNoticeRepository.findByWorkoutRecord(workoutRecord)
+                .ifPresent(notice -> {
+                    workoutRecordNoticeCommentRepository.deleteByNotice(notice);
+                    workoutRecordNoticeRepository.delete(notice);
+                });
+
+        workoutRecordRepository.delete(workoutRecord);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime createdDateTime = LocalDateTime.parse(workoutRecord.getCreatedDate(), formatter);
+
+        LocalDateTime startDate = createdDateTime.toLocalDate().atStartOfDay();
+        LocalDateTime endDate = startDate.plusDays(1).minusSeconds(1);
+
+        boolean exists = workoutRecordRepository.existsByUserAndCreatedDateBetween(user.getId(), startDate, endDate) > 0;
+
+        if (!exists) {
+            attendanceRepository.deleteByUserAndAttendanceDate(user, createdDateTime.toLocalDate());
+        }
+    }
 
 
 }

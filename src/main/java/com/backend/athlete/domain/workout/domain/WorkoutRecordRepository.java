@@ -1,5 +1,6 @@
 package com.backend.athlete.domain.workout.domain;
 
+import com.backend.athlete.domain.user.domain.User;
 import com.backend.athlete.domain.user.domain.type.UserGenderType;
 import com.backend.athlete.domain.workout.infrastructure.WorkoutRecordRepositoryCustom;
 import org.springframework.data.domain.Page;
@@ -17,5 +18,4 @@ public interface WorkoutRecordRepository extends JpaRepository<WorkoutRecord, Lo
     Optional<WorkoutRecord> findTopByUserIdOrderByDurationDesc(Long userId);
     List<WorkoutRecord> findByUserIdAndCreatedAtBetween(Long userId, LocalDateTime start, LocalDateTime end);
     int countByUserId(Long userId);
-
 }

@@ -13,5 +13,5 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     List<Attendance> findByUserAndAttendanceDateBetween(User user, LocalDate startDate, LocalDate endDate);
     List<Attendance> findAllByUserIdOrderByAttendanceDateAsc(Long userId);
     long countByUserIdAndAttendanceDateBetween(Long userId, LocalDate start, LocalDate end);
-
+    void deleteByUserAndAttendanceDate(User user, LocalDate attendanceDate);
 }
