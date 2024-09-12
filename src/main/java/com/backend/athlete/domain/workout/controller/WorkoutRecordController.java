@@ -38,6 +38,7 @@ public class WorkoutRecordController {
         workoutRecordService.deleteWorkoutRecord(userPrincipal, recordId);
         return ResponseEntity.ok("운동 기록이 성공적으로 삭제되었습니다.");
     }
+
     @GetMapping("/statistics")
     public ResponseEntity<PagedResponse<WorkoutRecordStatisticsResponse>> getMainWorkoutRecordsByDateRangeAndGender(
                                                 @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
