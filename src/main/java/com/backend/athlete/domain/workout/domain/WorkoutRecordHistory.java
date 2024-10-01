@@ -2,6 +2,7 @@ package com.backend.athlete.domain.workout.domain;
 
 import com.backend.athlete.domain.exercise.domain.Exercise;
 import com.backend.athlete.domain.user.domain.User;
+import com.backend.athlete.domain.workout.domain.type.WeightUnit;
 import com.backend.athlete.support.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -34,7 +35,11 @@ public class WorkoutRecordHistory extends BaseTimeEntity {
     @Comment("운동")
     private Exercise exercise;
 
-    @Comment("무게")
+    @Enumerated(EnumType.STRING)
+    @Comment("무게 단위")
+    private WeightUnit unit;
+
+    @Comment("무게 값")
     private String weight;
 
     @Comment("라운드")
@@ -43,9 +48,10 @@ public class WorkoutRecordHistory extends BaseTimeEntity {
     @Comment("등급")
     private String rating;
 
-    public WorkoutRecordHistory(User user, Exercise exercise, String weight, Integer rounds, String rating) {
+    public WorkoutRecordHistory(User user, Exercise exercise, WeightUnit unit, String weight, Integer rounds, String rating) {
         this.user = user;
         this.exercise = exercise;
+        this.unit = unit;
         this.weight = weight;
         this.rounds = rounds;
         this.rating = rating;
