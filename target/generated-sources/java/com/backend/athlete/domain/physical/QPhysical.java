@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.physical;
+package com.backend.athlete.user.physical;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -46,7 +46,7 @@ public class QPhysical extends EntityPathBase<Physical> {
 
     public final NumberPath<Double> muscleMass = createNumber("muscleMass", Double.class);
 
-    public final com.backend.athlete.domain.user.QUser user;
+    public final com.backend.athlete.user.user.QUser user;
 
     public final NumberPath<Double> visceralFatPercentage = createNumber("visceralFatPercentage", Double.class);
 
@@ -70,7 +70,7 @@ public class QPhysical extends EntityPathBase<Physical> {
 
     public QPhysical(Class<? extends Physical> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new com.backend.athlete.domain.user.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.backend.athlete.user.user.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

@@ -1,9 +1,9 @@
 package com.backend.athlete.support.util;
 
-import com.backend.athlete.domain.notice.domain.Notice;
-import com.backend.athlete.domain.notice.domain.NoticeRepository;
-import com.backend.athlete.domain.user.domain.User;
-import com.backend.athlete.domain.user.domain.UserRepository;
+import com.backend.athlete.user.notice.domain.Notice;
+import com.backend.athlete.user.notice.domain.NoticeRepository;
+import com.backend.athlete.user.user.domain.User;
+import com.backend.athlete.user.user.domain.UserRepository;
 import com.backend.athlete.support.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

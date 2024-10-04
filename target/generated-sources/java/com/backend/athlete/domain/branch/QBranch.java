@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.branch;
+package com.backend.athlete.user.branch;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -35,7 +35,7 @@ public class QBranch extends EntityPathBase<Branch> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final com.backend.athlete.domain.user.QUser manager;
+    public final com.backend.athlete.user.user.QUser manager;
 
     //inherited
     public final StringPath modifiedDate = _super.modifiedDate;
@@ -46,7 +46,7 @@ public class QBranch extends EntityPathBase<Branch> {
 
     public final StringPath postalCode = createString("postalCode");
 
-    public final SetPath<com.backend.athlete.domain.user.User, com.backend.athlete.domain.user.QUser> users = this.<com.backend.athlete.domain.user.User, com.backend.athlete.domain.user.QUser>createSet("users", com.backend.athlete.domain.user.User.class, com.backend.athlete.domain.user.QUser.class, PathInits.DIRECT2);
+    public final SetPath<com.backend.athlete.user.user.User, com.backend.athlete.user.user.QUser> users = this.<com.backend.athlete.user.user.User, com.backend.athlete.user.user.QUser>createSet("users", com.backend.athlete.user.user.User.class, com.backend.athlete.user.user.QUser.class, PathInits.DIRECT2);
 
     public QBranch(String variable) {
         this(Branch.class, forVariable(variable), INITS);
@@ -66,7 +66,7 @@ public class QBranch extends EntityPathBase<Branch> {
 
     public QBranch(Class<? extends Branch> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.manager = inits.isInitialized("manager") ? new com.backend.athlete.domain.user.QUser(forProperty("manager"), inits.get("manager")) : null;
+        this.manager = inits.isInitialized("manager") ? new com.backend.athlete.user.user.QUser(forProperty("manager"), inits.get("manager")) : null;
     }
 
 }

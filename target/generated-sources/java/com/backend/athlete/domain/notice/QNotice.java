@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.notice;
+package com.backend.athlete.user.notice;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -24,7 +24,7 @@ public class QNotice extends EntityPathBase<Notice> {
 
     public final com.backend.athlete.support.common.QBaseTimeEntity _super = new com.backend.athlete.support.common.QBaseTimeEntity(this);
 
-    public final ListPath<com.backend.athlete.domain.comment.Comment, com.backend.athlete.domain.comment.QComment> comments = this.<com.backend.athlete.domain.comment.Comment, com.backend.athlete.domain.comment.QComment>createList("comments", com.backend.athlete.domain.comment.Comment.class, com.backend.athlete.domain.comment.QComment.class, PathInits.DIRECT2);
+    public final ListPath<com.backend.athlete.user.comment.Comment, com.backend.athlete.user.comment.QComment> comments = this.<com.backend.athlete.user.comment.Comment, com.backend.athlete.user.comment.QComment>createList("comments", com.backend.athlete.user.comment.Comment.class, com.backend.athlete.user.comment.QComment.class, PathInits.DIRECT2);
 
     public final StringPath content = createString("content");
 
@@ -46,7 +46,7 @@ public class QNotice extends EntityPathBase<Notice> {
 
     public final StringPath title = createString("title");
 
-    public final com.backend.athlete.domain.user.QUser user;
+    public final com.backend.athlete.user.user.QUser user;
 
     public QNotice(String variable) {
         this(Notice.class, forVariable(variable), INITS);
@@ -66,7 +66,7 @@ public class QNotice extends EntityPathBase<Notice> {
 
     public QNotice(Class<? extends Notice> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new com.backend.athlete.domain.user.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.backend.athlete.user.user.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

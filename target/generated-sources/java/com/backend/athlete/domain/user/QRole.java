@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.user;
+package com.backend.athlete.user.user;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -21,7 +21,7 @@ public class QRole extends EntityPathBase<Role> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final EnumPath<com.backend.athlete.domain.user.domain.type.UserRoleType> name = createEnum("name", com.backend.athlete.domain.user.domain.type.UserRoleType.class);
+    public final EnumPath<com.backend.athlete.user.user.domain.type.UserRoleType> name = createEnum("name", com.backend.athlete.user.user.domain.type.UserRoleType.class);
 
     public QRole(String variable) {
         super(Role.class, forVariable(variable));

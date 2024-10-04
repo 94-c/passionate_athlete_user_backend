@@ -1,9 +1,9 @@
 package com.backend.athlete.support.config;
 
-import com.backend.athlete.domain.auth.jwt.JwtAuthenticationEntryPoint;
-import com.backend.athlete.domain.auth.jwt.JwtAuthenticationFilter;
-import com.backend.athlete.domain.auth.jwt.JwtTokenProvider;
-import com.backend.athlete.domain.auth.jwt.service.CustomUserDetailService;
+import com.backend.athlete.user.auth.jwt.JwtAuthenticationEntryPoint;
+import com.backend.athlete.user.auth.jwt.JwtAuthenticationFilter;
+import com.backend.athlete.user.auth.jwt.JwtTokenProvider;
+import com.backend.athlete.user.auth.jwt.service.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -64,7 +64,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList("http://58.79.16.12:3000", "http://www.passionathlete.com", "http://localhost:3000"));
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
-        configuration.setAllowCredentials(true); // true로 설정 시 보안상의 위험을 고려해야 함
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.workout;
+package com.backend.athlete.user.workout;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -34,9 +34,9 @@ public class QAthlete extends EntityPathBase<Athlete> {
 
     public final NumberPath<Integer> round = createNumber("round", Integer.class);
 
-    public final EnumPath<com.backend.athlete.domain.athlete.type.AthleteSuccessType> type = createEnum("type", com.backend.athlete.domain.athlete.type.AthleteSuccessType.class);
+    public final EnumPath<com.backend.athlete.user.athlete.type.AthleteSuccessType> type = createEnum("type", com.backend.athlete.user.athlete.type.AthleteSuccessType.class);
 
-    public final com.backend.athlete.domain.user.QUser user;
+    public final com.backend.athlete.user.user.QUser user;
 
     public QAthlete(String variable) {
         this(Athlete.class, forVariable(variable), INITS);
@@ -56,7 +56,7 @@ public class QAthlete extends EntityPathBase<Athlete> {
 
     public QAthlete(Class<? extends Athlete> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new com.backend.athlete.domain.user.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.backend.athlete.user.user.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.notice;
+package com.backend.athlete.user.notice;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -34,7 +34,7 @@ public class QLike extends EntityPathBase<Like> {
 
     public final QNotice notice;
 
-    public final com.backend.athlete.domain.user.QUser user;
+    public final com.backend.athlete.user.user.QUser user;
 
     public QLike(String variable) {
         this(Like.class, forVariable(variable), INITS);
@@ -55,7 +55,7 @@ public class QLike extends EntityPathBase<Like> {
     public QLike(Class<? extends Like> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.notice = inits.isInitialized("notice") ? new QNotice(forProperty("notice"), inits.get("notice")) : null;
-        this.user = inits.isInitialized("user") ? new com.backend.athlete.domain.user.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.backend.athlete.user.user.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

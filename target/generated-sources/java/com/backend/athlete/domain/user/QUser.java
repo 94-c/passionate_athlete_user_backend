@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.user;
+package com.backend.athlete.user.user;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -24,14 +24,14 @@ public class QUser extends EntityPathBase<User> {
 
     public final com.backend.athlete.support.common.QBaseTimeEntity _super = new com.backend.athlete.support.common.QBaseTimeEntity(this);
 
-    public final com.backend.athlete.domain.branch.QBranch branch;
+    public final com.backend.athlete.user.branch.QBranch branch;
 
     public final StringPath code = createString("code");
 
     //inherited
     public final StringPath createdDate = _super.createdDate;
 
-    public final EnumPath<com.backend.athlete.domain.user.domain.type.UserGenderType> gender = createEnum("gender", com.backend.athlete.domain.user.domain.type.UserGenderType.class);
+    public final EnumPath<com.backend.athlete.user.user.domain.type.UserGenderType> gender = createEnum("gender", com.backend.athlete.user.user.domain.type.UserGenderType.class);
 
     public final NumberPath<Double> height = createNumber("height", Double.class);
 
@@ -46,7 +46,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final SetPath<Role, QRole> roles = this.<Role, QRole>createSet("roles", Role.class, QRole.class, PathInits.DIRECT2);
 
-    public final EnumPath<com.backend.athlete.domain.user.domain.type.UserStatusType> status = createEnum("status", com.backend.athlete.domain.user.domain.type.UserStatusType.class);
+    public final EnumPath<com.backend.athlete.user.user.domain.type.UserStatusType> status = createEnum("status", com.backend.athlete.user.user.domain.type.UserStatusType.class);
 
     public final StringPath userId = createString("userId");
 
@@ -70,7 +70,7 @@ public class QUser extends EntityPathBase<User> {
 
     public QUser(Class<? extends User> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.branch = inits.isInitialized("branch") ? new com.backend.athlete.domain.branch.QBranch(forProperty("branch"), inits.get("branch")) : null;
+        this.branch = inits.isInitialized("branch") ? new com.backend.athlete.user.branch.QBranch(forProperty("branch"), inits.get("branch")) : null;
     }
 
 }

@@ -1,7 +1,7 @@
 package com.backend.athlete.support.handler;
 
 import com.backend.athlete.support.exception.ExceptionResponse;
-import com.backend.athlete.domain.auth.jwt.exception.JwtException;
+import com.backend.athlete.user.auth.jwt.exception.JwtException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

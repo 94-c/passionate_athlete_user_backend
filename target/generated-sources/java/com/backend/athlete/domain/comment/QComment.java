@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.comment;
+package com.backend.athlete.user.comment;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -34,13 +34,13 @@ public class QComment extends EntityPathBase<Comment> {
     //inherited
     public final StringPath modifiedDate = _super.modifiedDate;
 
-    public final com.backend.athlete.domain.notice.QNotice notice;
+    public final com.backend.athlete.user.notice.QNotice notice;
 
     public final QComment parent;
 
     public final ListPath<Comment, QComment> replies = this.<Comment, QComment>createList("replies", Comment.class, QComment.class, PathInits.DIRECT2);
 
-    public final com.backend.athlete.domain.user.QUser user;
+    public final com.backend.athlete.user.user.QUser user;
 
     public QComment(String variable) {
         this(Comment.class, forVariable(variable), INITS);
@@ -60,9 +60,9 @@ public class QComment extends EntityPathBase<Comment> {
 
     public QComment(Class<? extends Comment> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.notice = inits.isInitialized("notice") ? new com.backend.athlete.domain.notice.QNotice(forProperty("notice"), inits.get("notice")) : null;
+        this.notice = inits.isInitialized("notice") ? new com.backend.athlete.user.notice.QNotice(forProperty("notice"), inits.get("notice")) : null;
         this.parent = inits.isInitialized("parent") ? new QComment(forProperty("parent"), inits.get("parent")) : null;
-        this.user = inits.isInitialized("user") ? new com.backend.athlete.domain.user.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.backend.athlete.user.user.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

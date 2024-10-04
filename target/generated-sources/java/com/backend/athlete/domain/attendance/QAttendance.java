@@ -1,4 +1,4 @@
-package com.backend.athlete.domain.attendance;
+package com.backend.athlete.user.attendance;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -26,7 +26,7 @@ public class QAttendance extends EntityPathBase<Attendance> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final com.backend.athlete.domain.user.QUser user;
+    public final com.backend.athlete.user.user.QUser user;
 
     public QAttendance(String variable) {
         this(Attendance.class, forVariable(variable), INITS);
@@ -46,7 +46,7 @@ public class QAttendance extends EntityPathBase<Attendance> {
 
     public QAttendance(Class<? extends Attendance> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new com.backend.athlete.domain.user.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.backend.athlete.user.user.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }
