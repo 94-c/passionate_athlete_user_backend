@@ -6,5 +6,6 @@ public enum WeightUnit {
     METER,     // 미터
     KM,        // 킬로미터
     MILE,      // 마일
-    CALORIE    // 칼로리
+    CALORIE,   // 칼로리
+    EA, // 개수
 }
